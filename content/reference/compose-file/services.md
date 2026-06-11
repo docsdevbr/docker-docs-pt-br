@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/reference/compose-file/services.md
-source_revision: 9fe8e768d1e8f8ad4c56b9068fb045afe3185bb8
+source_revision: 80faf488d21a7598b8101185bfa5ce5e38b4915b
 translation_status: wip
 
 linkTitle: Serviços
@@ -31,8 +31,8 @@ weight: 20
 Um arquivo Compose deve declarar um elemento de nível superior `services` como
 um mapa cujas chaves são representações em string de nomes de serviços e cujos
 valores são definições de serviços.
-Uma definição de serviço contém a configuração que é aplicada a cada contêiner
-de serviço.
+Uma definição de serviço contém a configuração aplicada a cada contêiner de
+serviço.
 
 Cada serviço também pode incluir uma seção `build`, que define como criar a
 imagem Docker para o serviço.
@@ -42,7 +42,7 @@ Se não for usada, a seção `build` é ignorada e o arquivo Compose ainda é
 considerado válido.
 O suporte à criação é um aspecto opcional da Especificação do Compose e é
 descrito em detalhes na documentação da
-[Especificação do Compose Build](build.md).
+[Especificação da Build do Compose](build.md).
 
 Cada serviço define restrições e requisitos de tempo de execução para executar
 seus contêineres.
@@ -51,7 +51,7 @@ estratégia de implantação para melhor atender às necessidades dos contêiner
 com os recursos disponíveis.
 O suporte à implantação é um aspecto opcional da Especificação do Compose e é
 descrito em detalhes na documentação da
-[Especificação do Compose Deploy](deploy.md).
+[Especificação do Deploy do Compose](deploy.md).
 Caso não seja implementada, a seção `deploy` é ignorada e o arquivo Compose
 ainda é considerado válido.
 
@@ -69,7 +69,7 @@ services:
       - "8080:80"
 
   db:
-    image: postgres:13
+    image: postgres:18
     environment:
       POSTGRES_USER: example
       POSTGRES_DB: exampledb
@@ -409,7 +409,7 @@ When using `registry:`, the credential spec is read from the Windows registry on
 the daemon's host. A registry value with the given name must be located in:
 
 ```bash
-    HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization\Containers\CredentialSpecs
+HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization\Containers\CredentialSpecs
 ```
 
 The following example loads the credential spec from a value named `my-credential-spec`
@@ -464,12 +464,12 @@ services:
   redis:
     image: redis
   db:
-    image: postgres
+    image: postgres:18
 ```
 
 Compose guarantees dependency services have been started before
 starting a dependent service.
-Compose waits for dependency services to be "ready" before
+With short syntax, Compose does not wait for dependency services to be "healthy" before
 starting a dependent service.
 
 #### Long syntax
@@ -479,7 +479,7 @@ expressed in the short form.
 
 - `restart`: When set to `true` Compose restarts this service after it updates the dependency service.
   This applies to an explicit restart controlled by a Compose operation, and excludes automated restart by the container runtime
-  after the container dies. Introduced in Docker Compose version [2.17.0](/manuals/compose/releases/release-notes.md#2170).
+  after the container dies. Introduced in Docker Compose version [2.17.0](https://github.com/docker/compose/releases/tag/v2.17.0).
 
 - `condition`: Sets the condition under which dependency is considered satisfied
   - `service_started`: An equivalent of the short syntax described previously
@@ -489,7 +489,7 @@ expressed in the short form.
   - `service_completed_successfully`: Specifies that a dependency is expected to run
     to successful completion before starting a dependent service.
 - `required`: When set to `false` Compose only warns you when the dependency service isn't started or available. If it's not defined
-    the default value of `required` is `true`. Introduced in Docker Compose version [2.20.0](/manuals/compose/releases/release-notes.md#2200).
+    the default value of `required` is `true`. Introduced in Docker Compose version [2.20.0](https://github.com/docker/compose/releases/tag/v2.20.0).
 
 Service dependencies cause the following behaviors:
 
@@ -516,7 +516,7 @@ services:
   redis:
     image: redis
   db:
-    image: postgres
+    image: postgres:18
 ```
 
 Compose guarantees dependency services are started before
@@ -816,6 +816,8 @@ extends:
 - `service`: Defines the name of the service being referenced as a base, for example `web` or `database`.
 - `file`: The location of a Compose configuration file defining that service.
 
+`extends` is not supported when deploying with `docker stack deploy`.
+
 #### Restrictions
 
 When a service is referenced using `extends`, it can declare dependencies on other resources. These dependencies may be explicitly defined through attributes like `volumes`, `networks`, `configs`, `secrets`, `links`, `volumes_from`, or `depends_on`. Alternatively, dependencies can reference another service using the `service:{name}` syntax in namespace declarations such as `ipc`, `pid`, or `network_mode`.
@@ -1022,7 +1024,7 @@ extra_hosts:
   - "myhostv6=[::1]"
 ```
 
-The separator `=` is preferred, but `:` can also be used. Introduced in Docker Compose version [2.24.1](/manuals/compose/releases/release-notes.md#2241). For example:
+The separator `=` is preferred, but `:` can also be used. Introduced in Docker Compose version [2.24.1](https://github.com/docker/compose/releases/tag/v2.24.1). For example:
 
 ```yml
 extra_hosts:
@@ -1108,7 +1110,7 @@ healthcheck:
   start_interval: 5s
 ```
 
-`interval`, `timeout`, `start_period`, and `start_interval` are [specified as durations](extension.md#specifying-durations). Introduced in Docker Compose version [2.20.2](/manuals/compose/releases/release-notes.md#2202)
+`interval`, `timeout`, `start_period`, and `start_interval` are [specified as durations](extension.md#specifying-durations). Introduced in Docker Compose version [2.20.2](https://github.com/docker/compose/releases/tag/v2.20.2)
 
 `test` defines the command Compose runs to check container health. It can be
 either a string or a list. If it's a list, the first item must be either `NONE`, `CMD` or `CMD-SHELL`.
@@ -1365,6 +1367,9 @@ If either is omitted, Compose automatically generates the environment variable n
 
 `network_mode` sets a service container's network mode.
 
+- `bridge`: Connects the container to Docker's default bridge network instead of
+  a project-specific network. Containers on the default bridge network cannot
+  resolve each other by service name . Instead, use a user-defined network for DNS resolution.
 - `none`: Turns off all container networking.
 - `host`: Gives the container raw access to the host's network interface.
 - `service:{name}`: Gives the container access to the specified container by referring to its service name.
@@ -1373,6 +1378,7 @@ If either is omitted, Compose automatically generates the environment variable n
 For more information container networks, see the [Docker Engine documentation](/manuals/engine/network/_index.md#container-networks).
 
 ```yml
+    network_mode: "bridge"
     network_mode: "host"
     network_mode: "none"
     network_mode: "service:[service name]"
@@ -1485,7 +1491,7 @@ services:
     image: alpine
     command: ip link show
     networks:
-  back-tier:
+      back-tier:
         interface_name: eth0
 ```
 
@@ -1682,6 +1688,10 @@ in the form:
 - `CONTAINER` is `port | range`.
 - `PROTOCOL` restricts ports to a specified protocol either `tcp` or `udp`(optional). Default is `tcp`.
 
+> [!WARNING]
+>
+> If you do not specify a host IP (such as `127.0.0.1`), Docker binds to all interfaces (`0.0.0.0`), bypassing host firewall rules. This can expose the container directly to the internet if the host has a public IP address. For more information, see [Port publishing and mapping](/manuals/engine/network/port-publishing.md).
+
 Ports can be either a single value or a range. `HOST` and `CONTAINER` must use equivalent ranges.
 
 You can either specify both ports (`HOST:CONTAINER`), or just the container port. In the latter case,
@@ -1689,6 +1699,8 @@ the container runtime automatically allocates any unassigned port of the host.
 
 `HOST:CONTAINER` should always be specified as a (quoted) string, to avoid conflicts
 with [YAML base-60 float](https://yaml.org/type/float.html).
+
+
 
 IPv6 addresses can be enclosed in square brackets.
 
@@ -1723,7 +1735,7 @@ expressed in the short form.
 - `published`: The publicly exposed port. It is defined as a string and can be set as a range using syntax `start-end`. It means the actual port is assigned a remaining available port, within the set range.
 - `host_ip`: The host IP mapping. If it is not set, it binds to all network interfaces (`0.0.0.0`).
 - `protocol`: The port protocol (`tcp` or `udp`). Defaults to `tcp`.
-- `app_protocol`: The application protocol (TCP/IP level 4 / OSI level 7) this port is used for. This is optional and can be used as a hint for Compose to offer richer behavior for protocols that it understands. Introduced in Docker Compose version [2.26.0](/manuals/compose/releases/release-notes.md#2260).
+- `app_protocol`: The application protocol (TCP/IP level 4 / OSI level 7) this port is used for. This is optional and can be used as a hint for Compose to offer richer behavior for protocols that it understands. Introduced in Docker Compose version [2.26.0](https://github.com/docker/compose/releases/tag/v2.26.0).
 - `mode`: Specifies how the port is published in a Swarm setup. If set to `host`, it publishes the port on every node in Swarm. If set to `ingress`, it allows load balancing across the nodes in Swarm. Defaults to `ingress`.
 - `name`: A human-readable name for the port, used to document its usage within the service.
 
@@ -1889,7 +1901,7 @@ Optionally, limit the number of restart retries the Docker daemon attempts.
 ```
 
 You can find more detailed information on restart policies in the
-[Restart Policies (--restart)](/reference/cli/docker/container/run.md#restart)
+[Restart Policies (--restart)](/reference/cli/docker/container/run/#restart)
 section of the Docker run reference page.
 
 ### `runtime`
@@ -1961,31 +1973,40 @@ the service's containers.
   The default value is world-readable permissions (mode `0444`).
   The writable bit must be ignored if set. The executable bit may be set.
 
-Note that support for `uid`, `gid`, and `mode` attributes are not implemented in Docker Compose when the source of the secret is a [`file`](secrets.md). This is because bind-mounts used under the hood don't allow uid remapping.
+Note that support for `uid`, `gid`, and `mode` attributes are only implemented in Docker Compose when the source of the secret is [`environment`](secrets.md). When the source is a [`file`](secrets.md), Compose uses a bind-mount under the hood which doesn't allow `uid` remapping, and these attributes are silently ignored.
 
-The following example sets the name of the `server-certificate` secret file to `server.cert`
-within the container, sets the mode to `0440` (group-readable), and sets the user and group
-to `103`. The value of `server-certificate` is set
-to the contents of the file `./server.cert`.
+The following example sets the name of the `my-token` secret file within the container,
+sets the mode to `0440` (group-readable), and sets the user and group to `103`.
+The value of `my-token` is read from the `MY_TOKEN` environment variable.
 
 ```yml
 services:
   frontend:
     image: example/webapp
     secrets:
-      - source: server-certificate
-        target: server.cert
+      - source: my-token
         uid: "103"
         gid: "103"
         mode: 0o440
 secrets:
-  server-certificate:
-    file: ./server.cert
+  my-token:
+    environment: "MY_TOKEN"
 ```
 
 ### `security_opt`
 
 `security_opt` overrides the default labeling scheme for each container.
+
+Options accept either `option=value` or `option:value` syntax. For boolean options
+such as `no-new-privileges`, the value may be omitted entirely, in which case the
+option is treated as enabled. The following syntaxes are all equivalent:
+
+```yml
+security_opt:
+  - no-new-privileges
+  - no-new-privileges=true
+  - no-new-privileges:true
+```
 
 ```yml
 security_opt:
@@ -1993,7 +2014,7 @@ security_opt:
   - label=role:ROLE
 ```
 
-For further default labeling schemes you can override, see [Security configuration](/reference/cli/docker/container/run.md#security-opt).
+For further default labeling schemes you can override, see [Security configuration](/reference/cli/docker/container/run/#security-opt).
 
 ### `shm_size`
 
@@ -2003,7 +2024,7 @@ It's specified as a [byte value](extension.md#specifying-byte-values).
 ### `stdin_open`
 
 `stdin_open` configures a service's container to run with an allocated stdin. This is the same as running a container with the
-`-i` flag. For more information, see [Keep stdin open](/reference/cli/docker/container/run.md#interactive).
+`-i` flag. For more information, see [Keep stdin open](/reference/cli/docker/container/run/#interactive).
 
 Supported values are `true` or `false`.
 
@@ -2058,7 +2079,7 @@ sysctls:
 You can only use sysctls that are namespaced in the kernel. Docker does not
 support changing sysctls inside a container that also modify the host system.
 For an overview of supported sysctls, refer to [configure namespaced kernel
-parameters (sysctls) at runtime](/reference/cli/docker/container/run.md#sysctl).
+parameters (sysctls) at runtime](/reference/cli/docker/container/run/#sysctl).
 
 ### `tmpfs`
 
@@ -2090,7 +2111,7 @@ services:
 ### `tty`
 
 `tty` configures a service's container to run with a TTY. This is the same as running a container with the
-`-t` or `--tty` flag. For more information, see [Allocate a pseudo-TTY](/reference/cli/docker/container/run.md#tty).
+`-t` or `--tty` flag. For more information, see [Allocate a pseudo-TTY](/reference/cli/docker/container/run/#tty).
 
 Supported values are `true` or `false`.
 
@@ -2216,9 +2237,9 @@ expressed in the short form.
   - `subpath`: Path inside a volume to mount instead of the volume root.
 - `tmpfs`: Configures additional tmpfs options:
   - `size`: The size for the tmpfs mount in bytes (either numeric or as bytes unit).
-  - `mode`: The file mode for the tmpfs mount as Unix permission bits as an octal number. Introduced in Docker Compose version [2.14.0](/manuals/compose/releases/release-notes.md#2260).
+  - `mode`: The file mode for the tmpfs mount as Unix permission bits as an octal number. Introduced in Docker Compose version [2.14.0](https://github.com/docker/compose/releases/tag/v2.14.0).
 - `image`: Configures additional image options:
-  - `subpath`: Path inside the source image to mount instead of the image root. Available in [Docker Compose version 2.35.0](/manuals/compose/releases/release-notes.md#2350)
+  - `subpath`: Path inside the source image to mount instead of the image root. Available in [Docker Compose version 2.35.0](https://github.com/docker/compose/releases/tag/v2.35.0)
 - `consistency`: The consistency requirements of the mount. Available values are platform specific.
 
 > [!TIP]
