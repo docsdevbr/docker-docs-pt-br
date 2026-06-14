@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/manuals/desktop/setup/install/windows-permission-requirements.md
-source_revision: 5fb0fb25fdb00e8019576245f80acc194efa2ce4
+source_revision: f0e4e4790191aaee83f9375dce56ada3971c6773
 translation_status: ready
 
 description: >-
@@ -19,10 +19,6 @@ description: >-
 keywords: docker desktop, windows, segurança, instalação
 title: Entenda os requisitos de permissão para o Windows
 linkTitle: Requisitos de permissão do Windows
-aliases:
-- /desktop/windows/privileged-helper/
-- /desktop/windows/permission-requirements/
-- /desktop/install/windows-permission-requirements/
 weight: 40
 ---
 
