@@ -140,7 +140,7 @@ Nesta seção, você aprendeu como atualizar e reconstruir uma imagem, bem como
 como parar e remover um contêiner.
 
 Informações relacionadas:
-- [Referência da CLI do Docker](/reference/cli/docker/)
+  - [Referência da CLI do Docker](/reference/cli/docker/)
 
 ## Próximos passos
 

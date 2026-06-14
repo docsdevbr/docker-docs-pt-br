@@ -10,45 +10,68 @@
 # The original work was translated from English into Brazilian Portuguese.
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
-title: Share the application
+source_url: https://github.com/docker/docs/blob/main/content/get-started/workshop/04_sharing_app.md
+source_revision: 934faffc71240d2141d2d5c8d3b2b10420615729
+translation_status: ready
+
+title: Compartilhe a aplicação
 weight: 40
-linkTitle: "Part 3: Share the application"
-keywords: get started, setup, orientation, quickstart, intro, concepts, containers,
-  docker desktop, docker hub, sharing
-description: Sharing your image you built for your example application so you can
-  run it else where and other developers can use it
+linkTitle: "Parte 3: Compartilhe a aplicação"
+keywords: >-
+  primeiros passos, configuração, orientação, início rápido, introdução,
+  conceitos, contêineres, docker desktop, docker hub, compartilhamento
+description: >-
+  Compartilhe a imagem que você criou para a sua aplicação de exemplo para que
+  você possa executá-la em outro lugar e outras pessoas desenvolvedoras possam
+  usá-la.
 aliases:
- - /get-started/part3/
- - /get-started/04_sharing_app/
- - /guides/workshop/04_sharing_app/
+  - /get-started/part3/
+  - /get-started/04_sharing_app/
+  - /guides/workshop/04_sharing_app/
 ---
-Now that you've built an image, you can share it. To share Docker images, you have to use a Docker
-registry. The default registry is Docker Hub and is where all of the images you've used have come from.
 
-> **Docker ID**
+Agora que você criou uma imagem, pode compartilhá-la.
+Para compartilhar imagens Docker, você precisa usar um registro Docker.
+O registro padrão é o Docker Hub, de onde vieram todas as imagens que você usou.
+
+> **ID Docker**
 >
-> A Docker ID lets you access Docker Hub, which is the world's largest library and community for container images. Create a [Docker ID](https://hub.docker.com/signup) for free if you don't have one.
+> Um ID Docker permite que você acesse o Docker Hub, que é a maior biblioteca e
+> comunidade do mundo para imagens de contêineres.
+> Crie um [ID Docker](https://hub.docker.com/signup) gratuitamente, caso ainda
+> não tenha um.
 
-## Create a repository
+## Crie um repositório
 
-To push an image, you first need to create a repository on Docker Hub.
+Para enviar uma imagem, primeiro você precisa criar um repositório no Docker
+Hub.
 
-1. [Sign up](https://www.docker.com/pricing?utm_source=docker&utm_medium=webreferral&utm_campaign=docs_driven_upgrade) or Sign in to [Docker Hub](https://hub.docker.com).
+1. [Cadastre-se](https://www.docker.com/pricing?ref=Docs&refAction=DocsSharingApp)
+   ou faça login no [Docker Hub](https://hub.docker.com).
 
-2. Select the **Create Repository** button.
+2. Selecione o botão **Create Repository**.
 
-3. For the repository name, use `getting-started`. Make sure the **Visibility** is **Public**.
+3. Para o nome do repositório, use `getting-started`.
+   Certifique-se de que a **Visibility** esteja definida como **Public**.
 
-4. Select **Create**.
+4. Selecione **Create**.
 
-In the following image, you can see an example Docker command from Docker Hub. This command will push to this repository.
+Na imagem a seguir, você pode ver um exemplo de comando Docker do Docker Hub.
+Este comando enviará a imagem para este repositório.
 
-![Docker command with push example](images/push-command.webp)
+![Exemplo do comando Docker com push](images/push-command.webp)
 
-## Push the image
+## Envie a imagem
 
-1. In the command line, run the `docker push` command that you see on Docker
-   Hub. Note that your command will have your Docker ID, not "docker". For example, `docker push YOUR-USER-NAME/getting-started`.
+Vamos tentar enviar a imagem para o Docker Hub.
+
+1. Na linha de comando, execute o seguinte comando:
+
+   ```console
+   docker push docker/getting-started
+   ```
+
+   Você verá um erro como este:
 
    ```console
    $ docker push docker/getting-started
@@ -56,91 +79,56 @@ In the following image, you can see an example Docker command from Docker Hub. T
    An image does not exist locally with the tag: docker/getting-started
    ```
 
-    Why did it fail? The push command was looking for an image named `docker/getting-started`, but
-    didn't find one. If you run `docker image ls`, you won't see one either.
+   Essa falha é esperada porque ainda não foi criada uma tag para a imagem
+   corretamente.
+   O Docker está procurando por uma imagem com o nome `docker/getting-started`,
+   mas sua imagem local continua nomeada como `getting-started`.
 
-    To fix this, you need to tag your existing image you've built to give it another name.
-
-2. Sign in to Docker Hub using the command `docker login -u YOUR-USER-NAME`.
-
-3. Use the `docker tag` command to give the `getting-started` image a new name. Replace `YOUR-USER-NAME` with your Docker ID.
+   Você pode confirmar isso executando:
 
    ```console
-   $ docker tag getting-started YOUR-USER-NAME/getting-started
+   docker image ls
    ```
 
-4. Now run the `docker push` command again. If you're copying the value from
-   Docker Hub, you can drop the `tagname` part, as you didn't add a tag to the
-   image name. If you don't specify a tag, Docker uses a tag called `latest`.
+2. Para corrigir isso, primeiro faça o login no Docker Hub usando seu ID Docker:
+   `docker login -u SEU-NOME-DE-USUÁRIO`.
+3. Use o comando `docker tag` para dar um novo nome à imagem `getting-started`.
+   Substitua `SEU-NOME-DE-USUÁRIO` pelo seu ID Docker.
 
    ```console
-   $ docker push YOUR-USER-NAME/getting-started
+   $ docker tag getting-started SEU-NOME-DE-USUÁRIO/getting-started
    ```
 
-## Run the image on a new instance
-
-Now that your image has been built and pushed into a registry, try running your app on a brand
-new instance that has never seen this container image. To do this, you will use Play with Docker.
-
-> [!NOTE]
->
-> Play with Docker uses the amd64 platform. If you are using an ARM based Mac with Apple silicon, you will need to rebuild the image to be compatible with Play with Docker and push the new image to your repository.
->
-> To build an image for the amd64 platform, use the `--platform` flag.
-> ```console
-> $ docker build --platform linux/amd64 -t YOUR-USER-NAME/getting-started .
-> ```
->
-> Docker buildx also supports building multi-platform images. To learn more, see [Multi-platform images](/manuals/build/building/multi-platform.md).
-
-1. Open your browser to [Play with Docker](https://labs.play-with-docker.com/).
-
-2. Select **Login** and then select **docker** from the drop-down list.
-
-3. Sign in with your Docker Hub account and then select **Start**.
-
-4. Select the **ADD NEW INSTANCE** option on the left side bar. If you don't see it, make your browser a little wider. After a few seconds, a terminal window opens in your browser.
-
-    ![Play with Docker add new instance](images/pwd-add-new-instance.webp)
-
-5. In the terminal, start your freshly pushed app.
+4. Agora, execute o comando `docker push` novamente.
+   Se você estiver copiando o valor do Docker Hub, pode omitir a parte
+   `tagname`, pois você não adicionou uma tag ao nome da imagem.
+   Se você não especificar uma tag, o Docker usa uma tag chamada `latest`.
 
    ```console
-   $ docker run -dp 0.0.0.0:3000:3000 YOUR-USER-NAME/getting-started
+   $ docker push SEU-NOME-DE-USUÁRIO/getting-started
    ```
 
-    You should see the image get pulled down and eventually start up.
+## Execute a imagem em uma nova instância
 
-    > [!TIP]
-    >
-    > You may have noticed that this command binds the port mapping to a
-    > different IP address. Previous `docker run` commands published ports to
-    > `127.0.0.1:3000` on the host. This time, you're using `0.0.0.0`.
-    >
-    > Binding to `127.0.0.1` only exposes a container's ports to the loopback
-    > interface. Binding to `0.0.0.0`, however, exposes the container's port
-    > on all interfaces of the host, making it available to the outside world.
-    >
-    > For more information about how port mapping works, see
-    > [Networking](/manuals/engine/network/_index.md#published-ports).
+Agora que sua imagem foi criada e enviada para um registro, você pode executar
+sua aplicação em qualquer máquina que tenha o Docker instalado.
+Experimente baixar e executar sua imagem em outro computador ou em uma instância
+na nuvem.
 
-6. Select the 3000 badge when it appears.
+## Resumo
 
-   If the 3000 badge doesn't appear, you can select **Open Port** and specify `3000`.
+Nesta seção, você aprendeu como compartilhar suas imagens enviando-as para um
+registro.
+Em seguida, você acessou uma nova instância e conseguiu executar a imagem
+recém-enviada.
+Isso é bastante comum em pipelines de CI, onde a pipeline cria a imagem e a
+envia para um registro, e então o ambiente de produção pode usar a versão mais
+recente da imagem.
 
-## Summary
-
-In this section, you learned how to share your images by pushing them to a
-registry. You then went to a brand new instance and were able to run the freshly
-pushed image. This is quite common in CI pipelines, where the pipeline will
-create the image and push it to a registry and then the production environment
-can use the latest version of the image.
-
-Related information:
-
- - [docker CLI reference](/reference/cli/docker/)
- - [Multi-platform images](/manuals/build/building/multi-platform.md)
- - [Docker Hub overview](/manuals/docker-hub/_index.md)
+Informações relacionadas:
+  - [Referência da CLI do Docker](/reference/cli/docker/)
+  - [Imagens multiplataforma](/manuals/build/building/multi-platform.md)
+  - [Visão geral do Docker Hub](/manuals/docker-hub/_index.md)
 
 ## Next steps
 
