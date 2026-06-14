@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/manuals/desktop/setup/install/windows-install.md
-source_revision: bb31dcd85dde0eea9c4398252f92855016dc82db
+source_revision: f0e4e4790191aaee83f9375dce56ada3971c6773
 translation_status: ready
 
 description: >-
@@ -28,15 +28,9 @@ linkTitle: Windows
 weight: 30
 aliases:
   - /desktop/windows/install/
-  - /docker-ee-for-windows/install/
-  - /docker-for-windows/install-windows-home/
   - /docker-for-windows/install/
-  - /ee/docker-ee/windows/docker-ee/
   - /engine/installation/windows/
   - /engine/installation/windows/docker-ee/
-  - /install/windows/docker-ee/
-  - /install/windows/ee-preview/
-  - /installation/windows/
   - /desktop/win/configuring-wsl/
   - /desktop/install/windows-install/
 ---
