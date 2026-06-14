@@ -9,8 +9,13 @@
 # Documentation licensed under the Apache License, Version 2.0.
 # The original work was translated from English into Brazilian Portuguese.
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
+
+source_url: https://github.com/docker/docs/blob/main/content/includes/compose/configure-watch.md
+source_revision: e3aa78b72c9faf56e97896681c33425cafc1c847
+translation_status: ready
 ---
 
-1. Add `watch` sections to one or more services in `compose.yaml`.
-2. Run `docker compose up --watch` to build and launch a Compose project and start the file watch mode.
-3. Edit service source files using your preferred IDE or editor.
+1. Adicione seções `watch` a um ou mais serviços no arquivo `compose.yaml`.
+2. Execute `docker compose up --watch` para construir e iniciar um projeto
+   Compose e ativar o modo de monitoramento de arquivos.
+3. Edite os arquivos de origem do serviço usando sua IDE ou editor preferido.
