@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/get-started/docker-concepts/the-basics/what-is-a-registry.md
-source_revision: e7e28c4386ee99ceb49c33c0300f4a19ba0b8a60
+source_revision: f425f09df7ddad2704068719e72791965cc6b557
 translation_status: ready
 
 title: O que é um registro?
@@ -22,9 +22,9 @@ description: >-
   Esta página conceitual explicará o que é um registro, explorará sua
   interoperabilidade e fará você interagir com registros.
 aliases:
-- /guides/walkthroughs/run-hub-images/
-- /guides/walkthroughs/publish-your-image/
-- /guides/docker-concepts/the-basics/what-is-a-registry/
+  - /guides/walkthroughs/run-hub-images/
+  - /guides/walkthroughs/publish-your-image/
+  - /guides/docker-concepts/the-basics/what-is-a-registry/
 ---
 
 {{< youtube-embed 2WDl10Wv5rs >}}
@@ -68,27 +68,19 @@ Cada repositório contém uma ou mais imagens de contêiner.
 O diagrama a seguir mostra o relacionamento entre um registro, repositórios e
 imagens.
 
-```goat {class="text-sm"}
-+---------------------------------------+
-|               Registro                |
-|---------------------------------------|
-|                                       |
-|    +-----------------------------+    |
-|    |       Repositório A         |    |
-|    |-----------------------------|    |
-|    |   Imagem: projeto-a:v1.0    |    |
-|    |   Imagem: projeto-a:v2.0    |    |
-|    +-----------------------------+    |
-|                                       |
-|    +-----------------------------+    |
-|    |       Repositório B         |    |
-|    |-----------------------------|    |
-|    |   Imagem: projeto-b:v1.0    |    |
-|    |   Imagem: projeto-b:v1.1    |    |
-|    |   Imagem: projeto-b:v2.0    |    |
-|    +-----------------------------+    |
-|                                       |
-+---------------------------------------+
+```mermaid
+flowchart TB
+  subgraph Registro
+    subgraph A["Repositório A"]
+      A1["projeto-a:v1.0"]
+      A2["projeto-a:v2.0"]
+    end
+    subgraph B["Repositório B"]
+      B1["projeto-b:v1.0"]
+      B2["projeto-b:v1.1"]
+      B3["projeto-b:v2.0"]
+    end
+  end
 ```
 
 > [!TIP]
