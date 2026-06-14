@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/get-started/docker-concepts/building-images/writing-a-dockerfile.md
-source_revision: c5b3cb60ad63dca4d6fc7cf19c001ba893b0c6b2
+source_revision: 0ed6c96eb61fc593788a8baa7a718ade6d7a1f42
 translation_status: ready
 
 title: Escrevendo um Dockerfile
@@ -198,14 +198,6 @@ Agora que você tem o projeto, pode criar o `Dockerfile`.
 > construção, como executar como um usuário não root e sobre construções em
 > vários estágios.
 
-> **Crie contêineres de novos projetos rapidamente com `docker init`**
->
-> O comando `docker init` analisará seu projeto e criará rapidamente um
-> `Dockerfile`, um `compose.yaml` e um `.dockerignore`, ajudando você a começar.
-> Como aqui você está aprendendo especificamente sobre Dockerfiles, você não o
-> usará agora.
-> Mas, [saiba mais sobre ele aqui](/reference/cli/docker/init/).
-
 ## Recursos adicionais
 
 Para saber mais sobre como escrever um Dockerfile, visite os seguintes recursos:
@@ -213,7 +205,10 @@ Para saber mais sobre como escrever um Dockerfile, visite os seguintes recursos:
 - [Referência do Dockerfile](/reference/dockerfile/)
 - [Melhores práticas do Dockerfile](/develop/develop-images/dockerfile_best-practices/)
 - [Imagens base](/build/building/base-images/)
-- [Começando com `docker init`](/reference/cli/docker/init/)
+- [Gordon](/ai/gordon/) — O assistente de IA do Docker pode gerar um Dockerfile
+  para o seu projeto.
+  Peça ao Gordon para analisar seu código e sugerir um Dockerfile otimizado para
+  sua linguagem e framework.
 
 ## Próximos passos
 
