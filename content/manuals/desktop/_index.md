@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/manuals/desktop/_index.md
-source_revision: 997b3b5f906047c9a72b9b0ea7010a45c4ccbb0f
+source_revision: f0e4e4790191aaee83f9375dce56ada3971c6773
 translation_status: ready
 
 title: Docker Desktop
@@ -31,39 +31,33 @@ grid:
     Instale o Docker Desktop no [Mac](/desktop/setup/install/mac-install/),
     [Windows](/desktop/setup/install/windows-install/) ou
     [Linux](/desktop/setup/install/linux/).
-  icon: download
+  icon: arrow-down-tray
 - title: Aprenda sobre o Docker Desktop
   description: Navegue pelo Docker Desktop.
-  icon: feature_search
+  icon: magnifying-glass
   link: /desktop/use-desktop/
 - title: Explore seus principais recursos
   description: >-
     Encontre informações sobre [Rede](/desktop/features/networking/),
     [Docker VMM](/desktop/features/vmm/), [WSL](/desktop/features/wsl/) e muito
     mais.
-  icon: category
+  icon: squares-2x2
 - title: Consulte as notas de lançamento
   description: Saiba mais sobre novos recursos, melhorias e correções de falhas.
-  icon: note_add
+  icon: document-plus
   link: /desktop/release-notes/
 - title: Navegue pelas perguntas frequentes comuns
   description: >-
     Explore as perguntas frequentes gerais ou as perguntas frequentes para
     plataformas específicas.
-  icon: help
+  icon: question-mark-circle
   link: /desktop/troubleshoot-and-support/faqs/general/
 - title: Dê feedback
   description: >-
     Forneça feedback sobre o Docker Desktop ou sobre os recursos do Docker
     Desktop.
-  icon: sms
+  icon: chat-bubble-left
   link: /desktop/troubleshoot-and-support/feedback/
-aliases:
-- /desktop/opensource/
-- /docker-for-mac/dashboard/
-- /docker-for-mac/opensource/
-- /docker-for-windows/dashboard/
-- /docker-for-windows/opensource/
 ---
 
 O Docker Desktop é uma aplicação de instalação com um clique para seu ambiente
