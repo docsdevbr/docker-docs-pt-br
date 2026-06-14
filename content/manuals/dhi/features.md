@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/manuals/dhi/features.md
-source_revision: f2376b6b91dbad52c3b4d90ea5f4eb01e1ea3302
+source_revision: 1c519b2a8f5213d5733993f0ec17269cfdcb7f5d
 translation_status: ready
 
 title: Recursos das Imagens Docker Reforçadas
@@ -213,4 +213,4 @@ Para obter detalhes completos, consulte o
 
 - [Explore como as imagens DHI são criadas e muito mais](/dhi/explore/)
 - [Comece a usar DHIs](/dhi/get-started/)
-- [Entre em contato com o Docker para obter o DHI Enterprise](https://www.docker.com/pricing/contact-sales/)
+- <a href="https://www.docker.com/pricing/contact-sales/" id="dkr_docs_cs_dhi_features" class="link" rel="noopener">Entre em contato com o Docker para obter o DHI Enterprise</a>
