@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/manuals/dhi/_index.md
-source_revision: 322a7cf2e87b76291ed9e756d610623b07326e29
+source_revision: 140b37a933df935fdf2d1b0616b0df4d77704ad7
 translation_status: ready
 
 title: Imagens Docker Reforçadas
@@ -20,9 +20,6 @@ weight: 8
 params:
   sidebar:
     group: Supply chain security
-    badge:
-      color: green
-      text: New
   grid_sections:
     - title: Início rápido
       description: >-
@@ -66,6 +63,11 @@ params:
         muito mais.
       icon: link
       link: /dhi/resources/
+    - title: Notas de lançamento
+      description: >-
+        Novos recursos, melhorias e alterações nas Imagens Docker Reforçadas.
+      icon: newspaper
+      link: /dhi/release-notes/platform/
 ---
 
 As Imagens Docker Reforçadas (DHI) fornecem imagens de contêiner, gráficos Helm
