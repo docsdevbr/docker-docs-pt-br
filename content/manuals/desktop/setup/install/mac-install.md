@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/manuals/desktop/setup/install/mac-install.md
-source_revision: e7e28c4386ee99ceb49c33c0300f4a19ba0b8a60
+source_revision: f0e4e4790191aaee83f9375dce56ada3971c6773
 translation_status: ready
 
 description: >-
@@ -27,15 +27,11 @@ title: Instale o Docker Desktop no Mac
 linkTitle: Mac
 weight: 10
 aliases:
-- /desktop/mac/install/
-- /docker-for-mac/install/
-- /engine/installation/mac/
-- /installation/mac/
-- /docker-for-mac/apple-m1/
-- /docker-for-mac/apple-silicon/
-- /desktop/mac/apple-silicon/
-- /desktop/install/mac-install/
-- /desktop/install/mac/
+  - /desktop/mac/install/
+  - /docker-for-mac/install/
+  - /engine/installation/mac/
+  - /desktop/install/mac-install/
+  - /desktop/install/mac/
 ---
 
 > **Termos do Docker Desktop**
