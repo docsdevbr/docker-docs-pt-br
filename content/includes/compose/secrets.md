@@ -9,6 +9,15 @@
 # Documentation licensed under the Apache License, Version 2.0.
 # The original work was translated from English into Brazilian Portuguese.
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
+
+source_url: https://github.com/docker/docs/blob/main/content/includes/compose/secrets.md
+source_revision: e3aa78b72c9faf56e97896681c33425cafc1c847
+translation_status: ready
 ---
 
-Docker Compose provides a way for you to use secrets without having to use environment variables to store information. If you’re injecting passwords and API keys as environment variables, you risk unintentional information exposure. Services can only access secrets when explicitly granted by a `secrets` attribute within the `services` top-level element.
+O Docker Compose permite usar segredos sem precisar usar variáveis de ambiente
+para armazenar informações.
+Se você estiver injetando senhas e chaves de API como variáveis de ambiente,
+pode expor informações acidentalmente.
+Os serviços só podem acessar segredos quando explicitamente autorizados por um
+atributo `secrets` dentro do elemento de nível superior `services`.
