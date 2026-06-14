@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/manuals/engine/security/rootless/_index.md
-source_revision: 89344f43f19c68ef2d6941de0a5633ff6f1754e5
+source_revision: 2d7809c7a74ba1e99609a44f421a15cbf8a4a4bc
 translation_status: ready
 
 description: >-
@@ -37,6 +37,10 @@ Isso é semelhante ao [modo `userns-remap`](../userns-remap.md), exceto que no
 modo `userns-remap`, o próprio daemon é executado com privilégios de root,
 enquanto no modo rootless, tanto o daemon quanto o contêiner são executados sem
 privilégios de root.
+
+Os dois modos também diferem na forma como mapeiam os UIDs e GIDs do contêiner
+para o host: consulte [mapeamento de UID/GID](uid-gid-mapping/) para obter
+detalhes.
 
 O modo rootless não usa binários com bits `SETUID` ou capacidades de arquivo,
 exceto `newuidmap` e `newgidmap`, que são necessários para permitir que vários
