@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/get-started/resources.md
-source_revision: 254f1d0835a007b0b782f04b087d5b7a478a51df
+source_revision: 2c03c2dcd1b42c0ac923b955da8d68cc28f46d8a
 translation_status: ready
 
 title: Recursos educacionais
@@ -42,6 +42,10 @@ em compartilhar seu conhecimento sobre Docker com outras pessoas.
 
 * [Operational AI with Docker](https://www.amazon.com/Operational-AI-Docker-services-Kubernetes/dp/1807301095),
   Ajeet Singh Raina e Harsh Manvar, abril de 2026.
+* [Docker and Kubernetes Security](https://www.dockersecurity.io/), Mohammad-Ali
+  A'râbi, outubro de 2025.
+  Obtenha 50% de desconto na versão em PDF com o código `AHOYCAPTAIN` em
+  [buy.DockerSecurity.io](https://buy.dockersecurity.io/).
 * [Learn Docker in a Month of Lunches](https://www.manning.com/books/learn-docker-in-a-month-of-lunches),
   de Elton Stoneman.
   Use o código `stonemanpc` para obter 40% de desconto.
