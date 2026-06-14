@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/manuals/desktop/setup/install/mac-permission-requirements.md
-source_revision: 5dd8bad4e7fc71927c6a9e8b27d266d0651842b3
+source_revision: f0e4e4790191aaee83f9375dce56ada3971c6773
 translation_status: ready
 
 description: >-
@@ -21,10 +21,7 @@ keywords: docker desktop, mac, segurança, instalação, permissões
 title: Entenda os requisitos de permissão para o Docker Desktop no Mac
 linkTitle: Requisitos de permissão do Mac
 aliases:
-- /docker-for-mac/privileged-helper/
-- /desktop/mac/privileged-helper/
-- /desktop/mac/permission-requirements/
-- /desktop/install/mac-permission-requirements/
+  - /desktop/mac/permission-requirements/
 weight: 20
 ---
 
