@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/manuals/engine/install/fedora.md
-source_revision: 1043de9461886112de180b2dd401d102afe8c700
+source_revision: 39adf04805cce61a88737beead94ac2a7549b475
 translation_status: ready
 
 description: >-
@@ -26,10 +26,10 @@ linkTitle: Fedora
 weight: 40
 toc_max: 4
 aliases:
-- /engine/installation/fedora/
-- /engine/installation/linux/fedora/
-- /engine/installation/linux/docker-ce/fedora/
-- /install/linux/docker-ce/fedora/
+  - /engine/installation/fedora/
+  - /engine/installation/linux/fedora/
+  - /engine/installation/linux/docker-ce/fedora/
+  - /install/linux/docker-ce/fedora/
 download-url-base: https://download.docker.com/linux/fedora
 ---
 
@@ -46,7 +46,6 @@ seguintes versões do Fedora:
 
 - Fedora 44
 - Fedora 43
-- Fedora 42
 
 ### Desinstale versões antigas
 
