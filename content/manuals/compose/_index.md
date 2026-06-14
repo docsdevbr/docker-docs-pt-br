@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/manuals/compose/_index.md
-source_revision: ee71c80562c0edf1177ed79a8d67ddcd83a726e4
+source_revision: f0e4e4790191aaee83f9375dce56ada3971c6773
 translation_status: ready
 
 title: Docker Compose
@@ -67,11 +67,8 @@ grid:
     icon: question-mark-circle
     link: /compose/faq
 aliases:
-  - /compose/cli-command/
-  - /compose/networking/swarm/
   - /compose/overview/
   - /compose/swarm/
-  - /compose/completion/
   - /compose/releases/migrate/
 ---
 
