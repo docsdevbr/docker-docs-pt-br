@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/manuals/engine/security/rootless/troubleshoot.md
-source_revision: 8ca7f1bdb2064b4f4c47f425fdd614e061623dad
+source_revision: d46d9def55f9269e04d352f95bb375a53fe1ad5a
 translation_status: ready
 
 description: Solução de problemas no modo rootless
@@ -368,30 +368,75 @@ posterior.
 
 #### Rede lenta
 
-O Docker em modo rootless usa o
-[slirp4netns](https://github.com/rootless-containers/slirp4netns) como pilha de
-rede padrão, caso a versão 0.4.0 ou posterior do slirp4netns esteja instalada.
-Se o slirp4netns não estiver instalado, o Docker usa o
-[VPNKit](https://github.com/moby/vpnkit).
-A instalação do slirp4netns pode melhorar a taxa de transferência da rede.
+O Docker em modo rootless usa uma pilha TCP/IP executada em modo de usuário,
+como:
+- [slirp4netns](https://github.com/rootless-containers/slirp4netns)
+  (padrão quando o slirp4netns está instalado)
+- [pasta](https://passt.top/passt/about/)
+- [VPNKit](https://github.com/moby/vpnkit)
+- [gvisor-tap-vsock](https://github.com/containers/gvisor-tap-vsock)
+  (padrão quando nenhum dos anteriores está instalado)
 
-Para mais informações sobre os drivers de rede do RootlessKit, consulte a
-[documentação do RootlessKit](https://github.com/rootless-containers/rootlesskit/blob/v3.0.0/docs/network.md).
+A pilha TCP/IP no modo de usuário é geralmente mais lenta do que no modo kernel,
+e o desempenho pode variar dependendo do driver de rede usado.
 
-Além disso, alterar o valor do MTU também pode melhorar a taxa de transferência.
-O valor do MTU pode ser especificado criando o arquivo
+Consulte a
+[documentação do RootlessKit](https://github.com/rootless-containers/rootlesskit/blob/v3.0.0/docs/network.md)
+para obter mais informações.
+
+##### Solução alternativa 1: ignore a pilha TCP/IP em modo de usuário
+
+Use `docker run --net=host` para ignorar a pilha TCP/IP em modo de usuário.
+
+Isso é aplicável a partir da Docker Engine v29.5.
+
+No entanto, isso exige que o contêiner compartilhe o namespace de rede do host,
+o que pode não ser desejável por motivos de segurança.
+
+##### Solução alternativa 2: desative a pilha TCP/IP em modo de usuário
+
+Alternativamente, você pode usar o driver de rede `lxc-user-nic` (experimental)
+para desativar completamente a pilha TCP/IP em modo de usuário.
+
+No entanto, isso requer a configuração de `/etc/lxc/lxc-usernet` para habilitar
+o auxiliar privilegiado.
+
+```bash
+sudo apt-get install -y lxc
+sudo mkdir -p /etc/lxc
+cat <<EOF | sudo tee /etc/lxc/lxc-usernet
+# USERNAME TYPE BRIDGE COUNT
+$USER veth lxcbr0 10
+EOF
+```
+
+Além disso, certifique-se de que o daemon com privilégios de root não esteja em
+execução, pois suas regras de iptables podem interferir com o driver
+`lxc-user-nic`.
+
+```console
+$ systemctl is-active docker.service
+inactive
+
+$ systemctl is-active docker.socket
+inactive
+```
+
+O driver de rede pode ser especificado criando o arquivo
 `~/.config/systemd/user/docker.service.d/override.conf` com o seguinte conteúdo:
 
 ```systemd
 [Service]
-Environment="DOCKERD_ROOTLESS_ROOTLESSKIT_MTU=<inteiro>"
+Environment="DOCKERD_ROOTLESS_ROOTLESSKIT_NET=lxc-user-nic"
+# Opcional: especifique o MTU (pode afetar a taxa de transferência)
+# Environment="DOCKERD_ROOTLESS_ROOTLESSKIT_MTU=<INTEGER>"
 ```
 
 Em seguida, reinicie o daemon:
 
-```console
-$ systemctl --user daemon-reload
-$ systemctl --user restart docker
+```bash
+systemctl --user daemon-reload
+systemctl --user restart docker
 ```
 
 #### `docker run -p` não propaga endereços IP de origem
