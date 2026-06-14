@@ -9,6 +9,14 @@
 # Documentation licensed under the Apache License, Version 2.0.
 # The original work was translated from English into Brazilian Portuguese.
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
+
+source_url: https://github.com/docker/docs/blob/main/content/includes/compose/include.md
+source_revision: e3aa78b72c9faf56e97896681c33425cafc1c847
+translation_status: ready
 ---
 
-With `include`, you can incorporate a separate `compose.yaml` file directly in your current `compose.yaml` file. This makes it easy to modularize complex applications into sub-Compose files, which in turn enables application configurations to be made simpler and more explicit.
+Com `include`, você pode incorporar um arquivo `compose.yaml` separado
+diretamente no seu arquivo `compose.yaml` atual.
+Isso facilita a modularização de aplicações complexas em subarquivos Compose, o
+que, por sua vez, permite que as configurações da aplicação sejam simplificadas
+e se tornem mais explícitas.
