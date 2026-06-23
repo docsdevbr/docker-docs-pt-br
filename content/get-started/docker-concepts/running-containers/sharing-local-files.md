@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/get-started/docker-concepts/running-containers/sharing-local-files.md
-source_revision: 489c7318152adb6958dfd02c3743f3c6b28279b6
+source_revision: dcfd3df3cb473376da57941a966eaedc6724d4d1
 translation_status: ready
 
 title: Compartilhando arquivos locais com contêineres
@@ -265,13 +265,13 @@ bind mount:
    diretório `/usr/local/apache2/htdocs/`.
    Depois, selecione **Open file editor**.
 
-   ![Uma captura de tela do painel do Docker Desktop mostrando os arquivos montados em um contêiner](images/mounted-files.webp?border=true)
+   ![Uma captura de tela do painel do Docker Desktop mostrando os arquivos montados no contêiner](images/mounted-files.webp?border=true)
 
 2. Exclua o arquivo no host e verifique se ele também foi excluído no contêiner.
    Você verá que os arquivos não existem mais em **Files** no painel do Docker
    Desktop.
 
-   ![Uma captura de tela do painel do Docker Desktop mostrando os arquivos excluídos dentro de um contêiner](images/deleted-files.webp?border=true)
+   ![Uma captura de tela do painel do Docker Desktop mostrando os arquivos excluídos no contêiner](images/deleted-files.webp?border=true)
 
 3. Recrie o arquivo HTML no sistema host e veja que ele reaparece na guia
    **Files** em **Containers** no painel do Docker Desktop.
