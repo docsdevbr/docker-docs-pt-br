@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/manuals/engine/security/rootless/troubleshoot.md
-source_revision: d46d9def55f9269e04d352f95bb375a53fe1ad5a
+source_revision: 6d759c748296cebc31784228d90403a0f5913643
 translation_status: ready
 
 description: Solução de problemas no modo rootless
@@ -110,6 +110,15 @@ weight: 30
   [Roteamento de pacotes ping](./tips.md#roteamento-de-pacotes-ping).
 * Para expor portas TCP/UDP privilegiadas (< 1024), consulte
   [Expondo portas privilegiadas](./tips.md#expondo-portas-privilegiadas).
+* O `IPAddress` exibido no `docker inspect` está contido no namespace de rede do
+  RootlessKit.
+  Isso significa que o endereço IP não é acessível a partir do host sem entrar
+  no namespace de rede (usando `nsenter`).
+* O encaminhamento de portas com `docker run -p` não propaga endereços IP de
+  origem por padrão.
+  Consulte
+  [`docker run -p` não propaga endereços IP de origem](#docker-run--p-não-propaga-endereços-ip-de-origem)
+  para habilitar a propagação do IP de origem.
 * Montagens NFS como "data-root" do Docker não são suportadas.
   Essa limitação não é específica do modo rootless.
 
@@ -117,12 +126,10 @@ weight: 30
 
 #### Até a Docker Engine v29.5
 
-* O `IPAddress` exibido em `docker inspect` está dentro do namespace de rede do
-  RootlessKit.
-  Isso significa que o endereço IP não é acessível a partir do host sem usar o
-  `nsenter` para acessar o namespace de rede.
-* A rede do host (`docker run --net=host`) também está dentro do namespace do
-  RootlessKit.
+* A rede do host (`docker run --net=host`) estava isolada em um namespace dentro
+  do RootlessKit.
+  Isso significava que as portas em escuta por contêineres com `--net=host` não
+  eram acessíveis a partir do namespace de rede do host real.
 
 ## Solução de problemas
 
@@ -361,10 +368,9 @@ posterior.
 
 #### `--net=host` não escuta portas no namespace de rede do host
 
-Esse era o comportamento esperado até a Docker Engine v29.5, já que o daemon
-estava em um namespace dentro do namespace de rede do RootlessKit.
-Use `docker run -p` em vez disso ou atualize para a Docker Engine v29.5 ou
-posterior.
+Esse é um comportamento esperado, pois o daemon está encapsulado no namespace de
+rede do RootlessKit.
+Use `docker run -p` em vez disso.
 
 #### Rede lenta
 
