@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/manuals/dhi/_index.md
-source_revision: 140b37a933df935fdf2d1b0616b0df4d77704ad7
+source_revision: b4f08ba8de3b2c904002aa2cc75f7a249bbbb9cd
 translation_status: ready
 
 title: Imagens Docker Reforçadas
@@ -59,8 +59,7 @@ params:
       link: /dhi/troubleshoot/
     - title: Recursos adicionais
       description: >-
-        Guias, posts de blog, catálogo do Docker Hub, repositórios do GitHub e
-        muito mais.
+        Guias, catálogo do Docker Hub, repositórios do GitHub e muito mais.
       icon: link
       link: /dhi/resources/
     - title: Notas de lançamento
