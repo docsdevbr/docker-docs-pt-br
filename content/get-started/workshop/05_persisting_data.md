@@ -10,106 +10,142 @@
 # The original work was translated from English into Brazilian Portuguese.
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
-title: Persist the DB
+source_url: https://github.com/docker/docs/blob/main/content/get-started/workshop/05_persisting_data.md
+source_revision: 01416dc32ac571844519d118a64601a10a268d2b
+translation_status: ready
+
+title: Persista o banco de dados
 weight: 50
-linkTitle: "Part 4: Persist the DB"
-keywords: get started, setup, orientation, quickstart, intro, concepts, containers,
-  docker desktop
-description: Making your DB persistent in your application
+linkTitle: "Parte 4: Persista o banco de dados"
+keywords: >-
+  primeiros passos, configuração, orientação, início rápido, introdução,
+  conceitos, contêineres, docker desktop
+description: Tornando seu banco de dados persistente em sua aplicação.
 aliases:
- - /get-started/05_persisting_data/
- - /guides/workshop/05_persisting_data/
+  - /get-started/05_persisting_data/
+  - /guides/workshop/05_persisting_data/
 ---
-In case you didn't notice, your todo list is empty every single time
-you launch the container. Why is this? In this part, you'll dive into how the container is working.
 
-## The container's filesystem
+Caso você não tenha percebido, sua lista de tarefas está vazia toda vez que você
+inicia o contêiner.
+Por quê?
+Nesta parte, você vai entender como o contêiner funciona.
 
-When a container runs, it uses the various layers from an image for its filesystem.
-Each container also gets its own "scratch space" to create/update/remove files. Any
-changes won't be seen in another container, even if they're using the same image.
+## O sistema de arquivos do contêiner
 
-### See this in practice
+Quando um contêiner é executado, ele usa as várias camadas de uma imagem para
+seu sistema de arquivos.
+Cada contêiner também recebe seu próprio "espaço temporário" para criar,
+atualizar e remover arquivos.
+Quaisquer alterações feitas não serão visíveis em outro contêiner, mesmo que
+ambos estejam usando a mesma imagem.
 
-To see this in action, you're going to start two containers. In one container,
-you'll create a file. In the other container, you'll check whether that same
-file exists.
+### Veja isso na prática
 
-1. Start an Alpine container and create a new file in it.
+Para ver isso em ação, você iniciará dois contêineres.
+Em um contêiner, você criará um arquivo.
+No outro contêiner, você verificará se o mesmo arquivo existe.
 
-    ```console
-    $ docker run --rm alpine touch greeting.txt
-    ```
+1. Inicie um contêiner Alpine e crie um novo arquivo nele.
 
-    > [!TIP]
-    > Any commands you specify after the image name (in this case, `alpine`)
-    > are executed inside the container. In this case, the command `touch
-    > greeting.txt` puts a file named `greeting.txt` on the container's filesystem.
+   ```console
+   $ docker run --rm alpine touch greeting.txt
+   ```
 
-2. Run a new Alpine container and use the `stat` command to check whether the file exists.
+   > [!TIP]
+   >
+   > Quaisquer comandos que você especificar após o nome da imagem (neste caso,
+   > `alpine`) são executados dentro do contêiner.
+   > Neste caso, o comando `touch greeting.txt` cria um arquivo chamado
+   > `greeting.txt` no sistema de arquivos do contêiner.
+
+2. Execute um novo contêiner Alpine e use o comando `stat` para verificar se o
+   arquivo existe.
 
    ```console
    $ docker run --rm alpine stat greeting.txt
    ```
 
-   You should see output similar to the following that indicates the file does not exist in the new container.
+   Você deverá ver uma saída semelhante à seguinte, que indica que o arquivo não
+   existe no novo contêiner.
 
    ```console
    stat: can't stat 'greeting.txt': No such file or directory
    ```
 
-The `greeting.txt` file created by the first container did not exist in the
-second container. That is because the writeable "top layer" of each container
-is isolated. Even though both containers shared the same underlying layers that
-make up the base image, the writable layer is unique to each container.
+O arquivo `greeting.txt` criado pelo primeiro contêiner não existia no segundo
+contêiner.
+Isso ocorre porque a "camada superior" gravável de cada contêiner é isolada.
+Embora ambos os contêineres compartilhem as mesmas camadas subjacentes que
+compõem a imagem base, a camada gravável é exclusiva de cada contêiner.
 
-## Container volumes
+## Volumes de contêiner
 
-With the previous experiment, you saw that each container starts from the image definition each time it starts.
-While containers can create, update, and delete files, those changes are lost when you remove the container
-and Docker isolates all changes to that container. With volumes, you can change all of this.
+No experimento anterior, você viu que cada contêiner inicia a partir da
+definição da imagem sempre que é iniciado.
+Embora os contêineres possam criar, atualizar e excluir arquivos, essas
+alterações são perdidas quando você remove o contêiner, e o Docker isola todas
+as alterações feitas nesse contêiner.
+Com volumes, você pode mudar tudo isso.
 
-[Volumes](/manuals/engine/storage/volumes.md) provide the ability to connect specific filesystem paths of
-the container back to the host machine. If you mount a directory in the container, changes in that
-directory are also seen on the host machine. If you mount that same directory across container restarts, you'd see
-the same files.
+Os [Volumes](/manuals/engine/storage/volumes.md) permitem conectar caminhos
+específicos do sistema de arquivos do contêiner de volta à máquina host.
+Se você montar um diretório no contêiner, as alterações nesse diretório também
+serão vistas na máquina host.
+Se você montar o mesmo diretório em reinicializações do contêiner, verá os
+mesmos arquivos.
 
-There are two main types of volumes. You'll eventually use both, but you'll start with volume mounts.
+Existem dois tipos principais de volumes.
+Você eventualmente usará ambos, mas começará com as montagens de volume.
 
-## Persist the todo data
+## Persista os dados da lista de tarefas
 
-By default, the todo app stores its data in a SQLite database at
-`/etc/todos/todo.db` in the container's filesystem. If you're not familiar with SQLite, no worries! It's simply a relational database that stores all the data in a single file. While this isn't the best for large-scale applications,
-it works for small demos. You'll learn how to switch this to a different database engine later.
+Por padrão, a aplicação de tarefas armazena seus dados em um banco de dados
+SQLite em `/etc/todos/todo.db` no sistema de arquivos do contêiner.
+Se você não tiver familiaridade com o SQLite, não se preocupe!
+É simplesmente um banco de dados relacional que armazena todos os dados em um
+único arquivo.
+Embora isso não seja o ideal para aplicações de grande escala, funciona para
+pequenas demonstrações.
+Você aprenderá como mudar para um mecanismo de banco de dados diferente mais
+tarde.
 
-With the database being a single file, if you can persist that file on the host and make it available to the
-next container, it should be able to pick up where the last one left off. By creating a volume and attaching
-(often called "mounting") it to the directory where you stored the data, you can persist the data. As your container
-writes to the `todo.db` file, it will persist the data to the host in the volume.
+Como o banco de dados é um único arquivo, se você puder persistir esse arquivo
+no host e torná-lo disponível para o próximo contêiner, ele poderá continuar de
+onde o anterior parou.
+Criando um volume e anexando-o (geralmente chamado de "montagem") ao diretório
+onde você armazenou os dados, você pode persistir os dados.
+À medida que seu contêiner grava no arquivo `todo.db`, ele persistirá os dados
+no volume do host.
 
-As mentioned, you're going to use a volume mount. Think of a volume mount as an opaque bucket of data.
-Docker fully manages the volume, including the storage location on disk. You only need to remember the
-name of the volume.
+Como mencionado, você usará uma montagem de volume.
+Pense em um volume montado como um recipiente opaco de dados.
+O Docker gerencia totalmente o volume, incluindo o local de armazenamento no
+disco.
+Você só precisa se lembrar do nome do volume.
 
-### Create a volume and start the container
+### Crie um volume e iniciar o contêiner
 
-You can create the volume and start the container using the CLI or Docker Desktop's graphical interface.
+Você pode criar o volume e iniciar o contêiner usando a CLI ou a interface
+gráfica do Docker Desktop.
 
 {{< tabs >}}
 {{< tab name="CLI" >}}
 
-1. Create a volume by using the `docker volume create` command.
+1. Crie um volume usando o comando `docker volume create`.
 
    ```console
    $ docker volume create todo-db
    ```
 
-2. Stop and remove the todo app container once again with `docker rm -f <id>`,
-   as it is still running without using the persistent volume.
+2. Pare e remova o contêiner da aplicação de tarefas novamente com
+   `docker rm -f <id>`, pois ele continua em execução sem usar o volume
+   persistente.
 
-3. Start the todo app container, but add the `--mount` option to specify a
-   volume mount. Give the volume a name, and mount it to `/etc/todos` in the
-   container, which captures all files created at the path.
+3. Inicie o contêiner da aplicação de tarefas, mas adicione a opção `--mount`
+   para especificar uma montagem de volume.
+   Use o volume chamado `todo-db` e monte-o em `/etc/todos` no contêiner, que
+   captura todos os arquivos criados nesse caminho.
 
    ```console
    $ docker run -dp 127.0.0.1:3000:3000 --mount type=volume,src=todo-db,target=/etc/todos getting-started
@@ -117,74 +153,84 @@ You can create the volume and start the container using the CLI or Docker Deskto
 
    > [!NOTE]
    >
-   > If you're using Git Bash, you must use different syntax for this command.
+   > Se você estiver usando o Git Bash, deverá usar uma sintaxe diferente para
+   > este comando.
    >
    > ```console
    > $ docker run -dp 127.0.0.1:3000:3000 --mount type=volume,src=todo-db,target=//etc/todos getting-started
    > ```
    >
-   > For more details about Git Bash's syntax differences, see
-   > [Working with Git Bash](/desktop/troubleshoot-and-support/troubleshoot/topics/#docker-commands-failing-in-git-bash).
+   > Para obter mais detalhes sobre as diferenças de sintaxe do Git Bash,
+   > consulte
+   > [Trabalhando com Git Bash](/desktop/troubleshoot-and-support/troubleshoot/topics/#docker-commands-failing-in-git-bash).
 
 {{< /tab >}}
 {{< tab name="Docker Desktop" >}}
 
-To create a volume:
+Para criar um volume:
 
-1. Select **Volumes** in Docker Desktop.
-2. In **Volumes**, select **Create**.
-3. Specify `todo-db` as the volume name, and then select **Create**.
+1. Selecione **Volumes** no Docker Desktop.
+2. Em **Volumes**, selecione **Create**.
+3. Especifique `todo-db` como o nome do volume e selecione **Create**.
 
-To stop and remove the app container:
+Para parar e remover o contêiner da aplicação:
 
-1. Select **Containers** in Docker Desktop.
-2. Select **Delete** in the **Actions** column for the container.
+1. Selecione **Containers** no Docker Desktop.
+2. Selecione **Delete** na coluna **Actions** do contêiner.
 
-To start the todo app container with the volume mounted:
+Para iniciar o contêiner da aplicação de tarefas com o volume montado:
 
-1. Select the search box at the top of Docker Desktop.
-2. In the search window, select the **Images** tab.
-3. In the search box, specify the image name, `getting-started`.
+1. Selecione a caixa de pesquisa na parte superior do Docker Desktop.
+2. Na janela de pesquisa, selecione a guia **Images**.
+3. Na caixa de pesquisa, especifique o nome da imagem, `getting-started`.
 
    > [!TIP]
    >
-   >  Use the search filter to filter images and only show **Local images**.
+   > Use o filtro de pesquisa para filtrar as imagens e exibir apenas
+   > **Imagens locais**.
 
-4. Select your image and then select **Run**.
-5. Select **Optional settings**.
-6. In **Host port**, specify the port, for example, `3000`.
-7. In **Host path**, specify the name of the volume, `todo-db`.
-8. In **Container path**, specify `/etc/todos`.
-9. Select **Run**.
+4. Selecione sua imagem e selecione **Run**.
+5. Selecione **Optional settings**.
+6. Em **Host port**, especifique a porta, por exemplo, `3000`.
+7. Em **Host path**, especifique o nome do volume, `todo-db`.
+8. Em **Container path**, especifique `/etc/todos`.
+9. Selecione **Run**.
 
 {{< /tab >}}
 {{< /tabs >}}
 
-### Verify that the data persists
+### Verifique se os dados persistem
 
-1. Once the container starts up, open the app and add a few items to your todo list.
+1. Assim que o contêiner iniciar, abra a aplicação e adicione alguns itens à sua
+   lista de tarefas.
 
-    ![Items added to todo list](images/items-added.webp)
+   ![Itens adicionados à lista de tarefas](images/items-added.webp)
 
-2. Stop and remove the container for the todo app. Use Docker Desktop or `docker ps` to get the ID and then `docker rm -f <id>` to remove it.
+2. Pare e remova o contêiner da aplicação de tarefas.
+   Use o Docker Desktop ou `docker ps` para obter o ID e, em seguida,
+   `docker rm -f <id>` para removê-lo.
 
-3. Start a new container using the previous steps.
+3. Inicie um novo contêiner seguindo os passos anteriores.
 
-4. Open the app. You should see your items still in your list.
+4. Abra a aplicação.
+   Você ainda deverá ver seus itens na sua lista.
 
-5. Go ahead and remove the container when you're done checking out your list.
+5. Quando terminar de verificar sua lista, remova o contêiner.
 
-You've now learned how to persist data.
+Agora você aprendeu como persistir dados.
 
-## Dive into the volume
+## Explore o volume
 
-A lot of people frequently ask "Where is Docker storing my data when I use a volume?" If you want to know,
-you can use the `docker volume inspect` command.
+Muitas pessoas perguntam frequentemente: "Onde o Docker armazena meus dados
+quando uso um volume?"
+Se você quiser saber, você pode usar o comando `docker volume inspect`.
 
 ```console
 $ docker volume inspect todo-db
 ```
-You should see output like the following:
+
+Você deverá ver uma saída semelhante à seguinte:
+
 ```console
 [
     {
@@ -199,20 +245,22 @@ You should see output like the following:
 ]
 ```
 
-The `Mountpoint` is the actual location of the data on the disk. Note that on most machines, you will
-need to have root access to access this directory from the host.
+O `Mountpoint` é a localização real dos dados no disco.
+Observe que, na maioria das máquinas, você precisará de acesso root para acessar
+este diretório a partir do host.
 
-## Summary
+## Resumo
 
-In this section, you learned how to persist container data.
+Nesta seção, você aprendeu como persistir dados de contêineres.
 
-Related information:
+Informações relacionadas:
 
- - [docker CLI reference](/reference/cli/docker/)
+ - [Referência da CLI do docker](/reference/cli/docker/)
  - [Volumes](/manuals/engine/storage/volumes.md)
 
-## Next steps
+## Próximos passos
 
-Next, you'll learn how you can develop your app more efficiently using bind mounts.
+A seguir, você aprenderá como desenvolver sua aplicação de forma mais eficiente
+usando bind mounts.
 
 {{< button text="Use bind mounts" url="06_bind_mounts.md" >}}
