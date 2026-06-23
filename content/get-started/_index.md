@@ -14,8 +14,8 @@ source_url: https://github.com/docker/docs/blob/main/content/get-started/_index.
 source_revision: ee71c80562c0edf1177ed79a8d67ddcd83a726e4
 translation_status: ready
 
-title: Comece
-keywords: Docker, comece
+title: Primeiros passos
+keywords: docker, primeiros passos
 description: Comece a usar o Docker.
 layout: wide
 params:
