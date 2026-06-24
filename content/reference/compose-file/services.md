@@ -12,7 +12,7 @@
 
 source_url: https://github.com/docker/docs/blob/main/content/reference/compose-file/services.md
 source_revision: 80faf488d21a7598b8101185bfa5ce5e38b4915b
-translation_status: wip
+translation_status: ready
 
 linkTitle: Serviços
 title: Defina serviços no Docker Compose
@@ -343,7 +343,7 @@ comando vazio.
 
 O valor também pode ser uma lista, semelhante à
 [sintaxe exec-form](/reference/dockerfile.md#exec-form)
-utilizada pelo [Dockerfile](/reference/dockerfile.md#exec-form).
+usada pelo [Dockerfile](/reference/dockerfile.md#exec-form).
 
 ### `configs`
 
@@ -628,7 +628,7 @@ device_cgroup_rules:
 ### `devices`
 
 `devices` define uma lista de mapeamentos de dispositivos para contêineres
-criados, no formato `HOST_PATH:CONTAINER_PATH[:CGROUP_PERMISSIONS]`.
+criados, no formato `CAMINHO_NO_HOST:CAMINHO_NO_CONTÊINER[:PERMISSÕES_DO_CGROUP]`.
 
 ```yml
 devices:
@@ -1130,7 +1130,7 @@ security_opt:
 - label=user:USER
 ```
 
-Caso a sintaxe de lista seja utilizada, as seguintes chaves também devem ser
+Caso a sintaxe de lista seja usada, as seguintes chaves também devem ser
 tratadas como sequências: `dns`, `dns_search`, `env_file`, `tmpfs`.
 Ao contrário dos campos de sequência mencionados anteriormente, duplicatas
 resultantes da mesclagem não são removidas.
@@ -1162,7 +1162,7 @@ interface de rede do contêiner (`/etc/hosts` no Linux).
 
 #### Sintaxe curta
 
-A sintaxe curta utiliza strings simples em uma lista.
+A sintaxe curta usa strings simples em uma lista.
 Os valores devem definir o nome do host e o endereço IP para hosts adicionais no
 formato `HOSTNAME=IP`.
 
@@ -1393,7 +1393,7 @@ Os valores suportados dependem da plataforma.
 Você pode usar um array ou um mapa.
 
 Recomenda-se usar a notação de DNS reverso para evitar conflitos entre seus
-rótulos e aqueles utilizados por outros softwares.
+rótulos e aqueles usados por outros softwares.
 
 ```yml
 labels:
@@ -1429,7 +1429,7 @@ arquivo externo ou de uma lista de arquivos.
 Isso oferece uma maneira prática de gerenciar múltiplos rótulos sem
 sobrecarregar o arquivo do Compose.
 
-O arquivo utiliza um formato de chave-valor, semelhante ao `env_file`.
+O arquivo usa um formato de chave-valor, semelhante ao `env_file`.
 É possível especificar vários arquivos como uma lista.
 Ao usar múltiplos arquivos, eles são processados na ordem em que aparecem na
 lista.
@@ -1520,7 +1520,7 @@ na [Especificação de Deploy](deploy.md#memory).
 ### `mem_reservation`
 
 `mem_reservation` configura uma reserva na quantidade de memória que um
-container pode alocar, definida como uma string que expressa um
+contêiner pode alocar, definida como uma string que expressa um
 [valor em bytes](extension.md#specifying-byte-values).
 
 Quando definido, `mem_reservation` deve ser consistente com o atributo
@@ -1570,7 +1570,10 @@ para o disco.
 
 {{< summary-bar feature_name="Compose models" >}}
 
-`models` defines which AI models the service should use at runtime. Each referenced model must be defined under the [`models` top-level element](models.md).
+`models` define quais modelos de IA o serviço deve utilizar em tempo de
+execução.
+Cada modelo referenciado deve ser definido no
+[elemento de nível superior `models`](models.md).
 
 ```yaml
 services:
@@ -1586,34 +1589,46 @@ services:
         model_var: MODEL
 ```
 
-When a service is linked to a model, Docker Compose injects environment variables to pass connection details and model identifiers to the container. This allows the application to locate and communicate with the model dynamically at runtime, without hard-coding values.
+Quando um serviço está vinculado a um modelo, o Docker Compose injeta variáveis
+de ambiente para passar detalhes de conexão e identificadores do modelo para o
+contêiner.
+Isso permite que a aplicação localize e se comunique com o modelo dinamicamente
+em tempo de execução, sem a necessidade de definir valores fixos no código.
 
-#### Long syntax
+#### Sintaxe longa
 
-The long syntax gives you more control over the environment variable names.
+A sintaxe longa oferece maior controle sobre os nomes das variáveis de ambiente.
 
-- `endpoint_var` sets the name of the environment variable that holds the model runner’s URL.
-- `model_var` sets the name of the environment variable that holds the model identifier.
+- `endpoint_var` define o nome da variável de ambiente que armazena a URL do
+  executor do modelo.
+- `model_var` define o nome da variável de ambiente que armazena o identificador
+  do modelo.
 
-If either is omitted, Compose automatically generates the environment variable names based on the model key using the following rules:
+Se qualquer um deles for omitido, o Compose gera automaticamente os nomes das
+variáveis de ambiente com base na chave do modelo, seguindo estas regras:
 
- - Convert the model key to uppercase
- - Replace any '-' characters with '_'
- - Append `_URL` for the endpoint variable
+- Converte a chave do modelo para letras maiúsculas.
+- Substitui quaisquer caracteres '-' por '_'.
+- Acrescenta `_URL` para a variável de endpoint.
 
 ### `network_mode`
 
-`network_mode` sets a service container's network mode.
+`network_mode` define o modo de rede de um contêiner de serviço.
 
-- `bridge`: Connects the container to Docker's default bridge network instead of
-  a project-specific network. Containers on the default bridge network cannot
-  resolve each other by service name . Instead, use a user-defined network for DNS resolution.
-- `none`: Turns off all container networking.
-- `host`: Gives the container raw access to the host's network interface.
-- `service:{name}`: Gives the container access to the specified container by referring to its service name.
-- `container:{name}`: Gives the container access to the specified container by referring to its container ID.
+- `bridge`: conecta o contêiner à rede bridge padrão do Docker em vez de a uma
+  rede específica do projeto.
+  Contêineres na rede bridge padrão não conseguem resolver reciprocamente pelo
+  nome do serviço.
+  Em vez disso, use uma rede definida pela pessoa usuária para resolução DNS.
+- `none`: desativa toda a rede do contêiner.
+- `host`: concede ao contêiner acesso direto à interface de rede do host.
+- `service:{nome}`: concede ao contêiner acesso ao contêiner especificado
+  referenciando seu nome de serviço.
+- `container:{nome}`: concede ao contêiner acesso ao contêiner especificado
+  referenciando seu ID de contêiner.
 
-For more information container networks, see the [Docker Engine documentation](/manuals/engine/network/_index.md#container-networks).
+Para mais informações sobre redes de contêineres, consulte a
+[documentação da Docker Engine](/manuals/engine/network/_index.md#container-networks).
 
 ```yml
     network_mode: "bridge"
@@ -1622,8 +1637,8 @@ For more information container networks, see the [Docker Engine documentation](/
     network_mode: "service:[service name]"
 ```
 
-When set, the [`networks`](#networks) attribute is not allowed and Compose rejects any
-Compose file containing both attributes.
+Quando definido, o atributo [`networks`](#networks) não é permitido, e o Compose
+rejeita qualquer arquivo Compose que contenha ambos os atributos.
 
 ### `networks`
 
@@ -1636,19 +1651,22 @@ services:
       - some-network
       - other-network
 ```
-For more information about the `networks` top-level element, see [Networks](networks.md).
 
-#### Implicit default network
+Para mais informações sobre o elemento de nível superior `networks`, consulte
+[Networks](networks.md).
 
-If `networks` is empty or absent from the Compose file, Compose considers an implicit definition for the service to be
-connected to the `default` network:
+#### Rede padrão implícita
+
+Se `networks` estiver vazio ou ausente do arquivo Compose, o Compose considera
+uma definição implícita para que o serviço seja conectado à rede `default`:
 
 ```yml
 services:
   some-service:
     image: foo
 ```
-This example is actually equivalent to:
+
+Este exemplo é, na verdade, equivalente a:
 
 ```yml
 services:
@@ -1658,18 +1676,23 @@ services:
       default: {}
 ```
 
-If you want the service to not be connected a network, you must set [`network_mode: none`](#network_mode).
+Se você não quiser que o serviço esteja conectado a uma rede, deve definir
+[`network_mode: none`](#network_mode).
 
 #### `aliases`
 
-`aliases` declares alternative hostnames for the service on the network. Other containers on the same
-network can use either the service name or an alias to connect to one of the service's containers.
+`aliases` declara nomes de host alternativos para o serviço na rede.
+Outros contêineres na mesma rede podem usar o nome do serviço ou um alias para
+se conectar a um dos contêineres do serviço.
 
-Since `aliases` are network-scoped, the same service can have different aliases on different networks.
+Como os `aliases` têm escopo de rede, o mesmo serviço pode ter aliases
+diferentes em redes diferentes.
 
 > [!NOTE]
-> A network-wide alias can be shared by multiple containers, and even by multiple services.
-> If it is, then exactly which container the name resolves to is not guaranteed.
+>
+> Um alias de rede pode ser compartilhado por vários contêineres e até mesmo por
+> vários serviços.
+> Nesse caso, não há garantia de qual contêiner será resolvido pelo nome.
 
 ```yml
 services:
@@ -1684,9 +1707,10 @@ services:
           - alias2
 ```
 
-In the following example, service `frontend` is able to reach the `backend` service at
-the hostname `backend` or `database` on the `back-tier` network. The service `monitoring`
-is able to reach same `backend` service at `backend` or `mysql` on the `admin` network.
+No exemplo a seguir, o serviço `frontend` consegue acessar o serviço `backend`
+pelos nomes de host `backend` ou `database` na rede `back-tier`.
+O serviço `monitoring` consegue acessar esse mesmo serviço `backend` pelos nomes
+`backend` ou `mysql` na rede `admin`.
 
 ```yml
 services:
@@ -1721,7 +1745,10 @@ networks:
 
 {{< summary-bar feature_name="Compose interface-name" >}}
 
-`interface_name` lets you specify the name of the network interface used to connect a service to a given network. This ensures consistent and predictable interface naming across services and networks.
+`interface_name` permite especificar o nome da interface de rede usada para
+conectar um serviço a uma determinada rede.
+Isso garante uma nomenclatura de interface consistente e previsível entre
+serviços e redes.
 
 ```yaml
 services:
@@ -1733,7 +1760,7 @@ services:
         interface_name: eth0
 ```
 
-Running the example Compose application shows:
+Executar a aplicação de exemplo do Compose mostra:
 
 ```console
 backend-1  | 11: eth0@if64: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP
@@ -1741,10 +1768,12 @@ backend-1  | 11: eth0@if64: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qd
 
 #### `ipv4_address`, `ipv6_address`
 
-Specify a static IP address for a service container when joining the network.
+Especifica um endereço IP estático para um contêiner de serviço ao ingressar na
+rede.
 
-The corresponding network configuration in the [top-level networks section](networks.md) must have an
-`ipam` attribute with subnet configurations covering each static address.
+A configuração de rede correspondente na
+[seção de nível superior networks](networks.md) deve ter um atributo `ipam` com
+configurações de sub-rede que abranjam cada endereço estático.
 
 ```yml
 services:
@@ -1766,11 +1795,12 @@ networks:
 
 #### `link_local_ips`
 
-`link_local_ips` specifies a list of link-local IPs. Link-local IPs are special IPs which belong to a well
-known subnet and are purely managed by the operator, usually dependent on the architecture where they are
-deployed.
+`link_local_ips` especifica uma lista de endereços IP de link-local.
+Endereços IP de link-local são endereços especiais que pertencem a uma sub-rede
+conhecida e são gerenciados exclusivamente pela pessoa operadora, geralmente
+dependendo da arquitetura onde são implantados.
 
-Example:
+Exemplo:
 
 ```yaml
 services:
@@ -1791,12 +1821,15 @@ networks:
 
 {{< summary-bar feature_name="Compose mac address" >}}
 
-`mac_address` sets the Mac address used by the service container when connecting to this particular network.
+`mac_address` define o endereço MAC usado pelo contêiner do serviço ao se
+conectar a esta rede específica.
 
 #### `driver_opts`
 
-`driver_opts` specifies a list of options as key-value pairs to pass to the driver. These options are
-driver-dependent. Consult the driver's documentation for more information.
+`driver_opts` especifica uma lista de opções, no formato chave-valor, a serem
+passadas para o driver.
+Essas opções dependem do driver.
+Consulte a documentação do driver para obter mais informações.
 
 ```yml
 services:
@@ -1812,10 +1845,11 @@ services:
 
 {{< summary-bar feature_name="Compose gw priority" >}}
 
-The network with the highest `gw_priority` is selected as the default gateway for the service container.
-If unspecified, the default value is 0.
+A rede com a maior `gw_priority` é selecionada como o gateway padrão para o
+contêiner de serviço.
+Se não for especificada, o valor padrão é 0.
 
-In the following example, `app_net_2` will be selected as the default gateway.
+No exemplo a seguir, `app_net_2` será selecionada como o gateway padrão.
 
 ```yaml
 services:
@@ -1835,19 +1869,20 @@ networks:
 
 #### `priority`
 
-`priority` indicates in which order Compose connects the service’s containers to its
-networks. If unspecified, the default value is 0.
+`priority` indica a ordem em que o Compose conecta os contêineres do serviço às
+suas redes.
+Se não for especificado, o valor padrão é 0.
 
-If the container runtime accepts a `mac_address` attribute at service level, it is
-applied to the network with the highest `priority`. In other cases, use attribute
-`networks.mac_address`.
+Se o runtime do contêiner aceitar um atributo `mac_address` no nível do serviço,
+ele será aplicado à rede com a maior `priority`.
+Em outros casos, utilize o atributo `networks.mac_address`.
 
-`priority` does not affect which network is selected as the default gateway. Use the
-[`gw_priority`](#gw_priority) attribute instead.
+`priority` não afeta qual rede é selecionada como gateway padrão.
+Utilize o atributo [`gw_priority`](#gw_priority) para isso.
 
-`priority` does not control the order in which networks connections are added to
-the container, it cannot be used to determine the device name (`eth0` etc.) in the
-container.
+`priority` não controla a ordem em que as conexões de rede são adicionadas ao
+contêiner, nem pode ser usado para determinar o nome do dispositivo (`eth0`,
+etc.) dentro do contêiner.
 
 ```yaml
 services:
@@ -1869,37 +1904,44 @@ networks:
 
 ### `oom_kill_disable`
 
-If `oom_kill_disable` is set, Compose configures the platform so it won't kill the container in case
-of memory starvation.
+Se `oom_kill_disable` estiver definido, o Compose configura a plataforma para
+não encerrar o contêiner em caso de escassez de memória.
 
 ### `oom_score_adj`
 
-`oom_score_adj` tunes the preference for containers to be killed by platform in case of memory starvation. Value must
-be within -1000,1000 range.
+O `oom_score_adj` ajusta a preferência quanto a quais contêineres serão
+encerrados pela plataforma em caso de escassez de memória.
+O valor deve estar na faixa de -1000 a 1000.
 
 ### `pid`
 
-`pid` sets the PID mode for container created by Compose.
-Supported values are platform specific.
+`pid` define o modo PID para o contêiner criado pelo Compose.
+Os valores suportados dependem da plataforma.
 
 ### `pids_limit`
 
-`pids_limit` tunes a container’s PIDs limit. Set to -1 for unlimited PIDs.
+`pids_limit` ajusta o limite de PIDs de um contêiner.
+Defina como -1 para PIDs ilimitados.
 
 ```yml
 pids_limit: 10
 ```
 
-When set, `pids_limit` must be consistent with the `pids` attribute in the [Deploy Specification](deploy.md#pids).
+Quando definido, `pids_limit` deve ser consistente com o atributo `pids` na
+[Especificação de Deploy](deploy.md#pids).
 
 ### `platform`
 
-`platform` defines the target platform the containers for the service run on. It uses the `os[/arch[/variant]]` syntax.
+`platform` define a plataforma de destino na qual os contêineres do serviço são
+executados.
+Utiliza a sintaxe `os[/arch[/variant]]`.
 
-The values of `os`, `arch`, and `variant` must conform to the convention used by the [OCI Image Spec](https://github.com/opencontainers/image-spec/blob/v1.0.2/image-index.md).
+Os valores de `os`, `arch` e `variant` devem estar conforme a convenção
+usada pela
+[Especificação de Imagem OCI](https://github.com/opencontainers/image-spec/blob/v1.0.2/image-index.md).
 
-Compose uses this attribute to determine which version of the image is pulled
-and/or on which platform the service’s build is performed.
+O Compose usa esse atributo para determinar qual versão da imagem é baixada e/ou
+em qual plataforma a construção do serviço é realizada.
 
 ```yml
 platform: darwin
@@ -1913,36 +1955,51 @@ platform: linux/arm64/v8
 
 > [!NOTE]
 >
-> Port mapping must not be used with `network_mode: host`. Doing so causes a runtime error because `network_mode: host` already exposes container ports directly to the host network, so port mapping isn’t needed.
+> O mapeamento de portas não deve ser usado com `network_mode: host`.
+> Fazer isso causa um erro de tempo de execução, pois `network_mode: host` já
+> expõe as portas do contêiner diretamente à rede do host, tornando o mapeamento
+> de portas desnecessário.
 
-#### Short syntax
+#### Sintaxe curta
 
-The short syntax is a colon-separated string to set the host IP, host port, and container port
-in the form:
+A sintaxe curta é uma string separada por dois-pontos para definir o IP do host,
+a porta do host e a porta do contêiner, no formato:
 
-`[HOST:]CONTAINER[/PROTOCOL]` where:
+`[HOST:]CONTAINER[/PROTOCOL]` onde:
 
-- `HOST` is `[IP:](port | range)` (optional). If it is not set, it binds to all network interfaces (`0.0.0.0`).
-- `CONTAINER` is `port | range`.
-- `PROTOCOL` restricts ports to a specified protocol either `tcp` or `udp`(optional). Default is `tcp`.
+- `HOST` é `[IP:](porta | intervalo)` (opcional).
+  Se não for definido, a vinculação ocorre em todas as interfaces de rede
+  (`0.0.0.0`).
+- `CONTAINER` é `porta | intervalo`.
+- `PROTOCOL` restringe as portas a um protocolo específico, `tcp` ou `udp`
+  (opcional).
+  O padrão é `tcp`.
 
 > [!WARNING]
 >
-> If you do not specify a host IP (such as `127.0.0.1`), Docker binds to all interfaces (`0.0.0.0`), bypassing host firewall rules. This can expose the container directly to the internet if the host has a public IP address. For more information, see [Port publishing and mapping](/manuals/engine/network/port-publishing.md).
+> Se você não especificar um IP do host (como `127.0.0.1`), o Docker fará a
+> vinculação em todas as interfaces (`0.0.0.0`), contornando as regras de
+> firewall do host.
+> Isso pode expor o contêiner diretamente à internet se o host tiver um endereço
+> IP público.
+> Para mais informações, consulte
+> [Publicação e mapeamento de portas](/manuals/engine/network/port-publishing.md).
 
-Ports can be either a single value or a range. `HOST` and `CONTAINER` must use equivalent ranges.
+As portas podem ser um valor único ou um intervalo.
+`HOST` e `CONTAINER` devem usar intervalos equivalentes.
 
-You can either specify both ports (`HOST:CONTAINER`), or just the container port. In the latter case,
-the container runtime automatically allocates any unassigned port of the host.
+Você pode especificar ambas as portas (`HOST:CONTAINER`) ou apenas a porta do
+contêiner.
+Neste último caso, o ambiente de execução do contêiner aloca automaticamente
+qualquer porta não atribuída do host.
 
-`HOST:CONTAINER` should always be specified as a (quoted) string, to avoid conflicts
-with [YAML base-60 float](https://yaml.org/type/float.html).
+`HOST:CONTAINER` deve sempre ser especificado como uma string (entre aspas) para
+evitar conflitos com
+[valores de ponto flutuante em base 60 do YAML](https://yaml.org/type/float.html).
 
+Endereços IPv6 podem ser colocados entre colchetes.
 
-
-IPv6 addresses can be enclosed in square brackets.
-
-Examples:
+Exemplos:
 
 ```yml
 ports:
@@ -1961,21 +2018,39 @@ ports:
 
 > [!NOTE]
 >
-> If host IP mapping is not supported by a container engine, Compose rejects
-> the Compose file and ignores the specified host IP.
+> Se o mapeamento de IP do host não for suportado por um mecanismo de contêiner,
+> o Compose rejeita o arquivo Compose e ignora o IP do host especificado.
 
-#### Long syntax
+#### Sintaxe longa
 
-The long form syntax lets you configure additional fields that can't be
-expressed in the short form.
+A sintaxe longa permite configurar campos adicionais que não podem ser expressos
+na sintaxe curta.
 
-- `target`: The container port.
-- `published`: The publicly exposed port. It is defined as a string and can be set as a range using syntax `start-end`. It means the actual port is assigned a remaining available port, within the set range.
-- `host_ip`: The host IP mapping. If it is not set, it binds to all network interfaces (`0.0.0.0`).
-- `protocol`: The port protocol (`tcp` or `udp`). Defaults to `tcp`.
-- `app_protocol`: The application protocol (TCP/IP level 4 / OSI level 7) this port is used for. This is optional and can be used as a hint for Compose to offer richer behavior for protocols that it understands. Introduced in Docker Compose version [2.26.0](https://github.com/docker/compose/releases/tag/v2.26.0).
-- `mode`: Specifies how the port is published in a Swarm setup. If set to `host`, it publishes the port on every node in Swarm. If set to `ingress`, it allows load balancing across the nodes in Swarm. Defaults to `ingress`.
-- `name`: A human-readable name for the port, used to document its usage within the service.
+- `target`: a porta do contêiner.
+- `published`: a porta exposta publicamente.
+  É definida como uma string e pode ser configurada como um intervalo usando a
+  sintaxe `início-fim`.
+  Isso significa que a porta efetiva será uma porta disponível dentro do
+  intervalo definido.
+- `host_ip`: o mapeamento de IP do host.
+  Se não for definido, a vinculação ocorre em todas as interfaces de rede
+  (`0.0.0.0`).
+- `protocol`: o protocolo da porta (`tcp` ou `udp`).
+  O padrão é `tcp`.
+- `app_protocol`: o protocolo de aplicação (TCP/IP camada 4 / OSI camada 7)
+  usado por esta porta.
+  É opcional e pode servir como uma dica para o Compose oferecer funcionalidades
+  mais ricas para protocolos que ele reconhece.
+  Introduzido na versão
+  [2.26.0](https://github.com/docker/compose/releases/tag/v2.26.0) do Docker
+  Compose.
+- `mode`: especifica como a porta é publicada em uma configuração Swarm.
+  Se definido como `host`, publica a porta em todos os nós do Swarm.
+  Se definido como `ingress`, permite o balanceamento de carga entre os nós do
+  Swarm.
+  O padrão é `ingress`.
+- `name`: um nome legível para a porta, usado para documentar seu uso dentro do
+  serviço.
 
 ```yml
 ports:
@@ -2000,44 +2075,67 @@ ports:
 
 {{< summary-bar feature_name="Compose post start" >}}
 
-`post_start` defines a sequence of lifecycle hooks to run after a container has started. The exact timing of when the command is run is not guaranteed.
+`post_start` define uma sequência de hooks de ciclo de vida a serem executados
+após a inicialização de um contêiner.
+O momento exato da execução do comando não é garantido.
 
-- `command`: Specifies the command to run once the container starts. This attribute is required, and you can choose to use either the shell form or the exec form.
-- `user`: The user to run the command. If not set, the command is run with the same user as the main service command.
-- `privileged`: Lets the `post_start` command run with privileged access.
-- `working_dir`: The working directory in which to run the command. If not set, it is run in the same working directory as the main service command.
-- `environment`: Sets environment variables specifically for the `post_start` command. While the command inherits the environment variables defined for the service’s main command, this section lets you add new variables or override existing ones.
+- `command`: especifica o comando a ser executado assim que o contêiner iniciar.
+  Este atributo é obrigatório, e você pode optar por usar o formato shell ou o
+  formato exec.
+- `user`: o usuário que executará o comando.
+  Se não for definido, o comando será executado com o mesmo usuário do comando
+  principal do serviço.
+- `privileged`: permite que o comando `post_start` seja executado com
+  privilégios elevados.
+- `working_dir`: o diretório de trabalho no qual o comando será executado.
+  Se não for definido, a execução ocorrerá no mesmo diretório de trabalho do
+  comando principal do serviço.
+- `environment`: Define variáveis de ambiente especificamente para o comando
+  `post_start`.
+  Embora o comando herde as variáveis de ambiente definidas para o comando
+  principal do serviço, esta seção permite adicionar novas variáveis ou
+  substituir as existentes.
 
 ```yaml
 services:
   test:
     post_start:
-      - command: ./do_something_on_startup.sh
+      - command: ./executar_algo_na_inicializacao.sh
         user: root
         privileged: true
         environment:
           - FOO=BAR
 ```
 
-For more information, see [Use lifecycle hooks](/manuals/compose/how-tos/lifecycle.md).
+Para mais informações, consulte
+[Use hooks de ciclo de vida](/manuals/compose/how-tos/lifecycle.md).
 
 ### `pre_stop`
 
 {{< summary-bar feature_name="Compose pre stop" >}}
 
-`pre_stop` defines a sequence of lifecycle hooks to run before the container is stopped. These hooks won't run if the container stops by itself or is terminated suddenly.
+`pre_stop` define uma sequência de hooks de ciclo de vida para execução antes
+que o contêiner seja parado.
+Esses hooks não serão executados se o contêiner parar por conta própria ou for
+encerrado abruptamente.
 
-Configuration is equivalent to [post_start](#post_start).
+A configuração é equivalente à de `post_start` (#post_start).
 
 ### `privileged`
 
-`privileged` configures the service container to run with elevated privileges. Support and actual impacts are platform specific.
+`privileged` configura o contêiner do serviço para ser executado com privilégios
+elevados.
+O suporte e os impactos reais dependem da plataforma.
 
 ### `profiles`
 
-`profiles` defines a list of named profiles for the service to be enabled under. If unassigned, the service is always started but if assigned, it is only started if the profile is activated.
+`profiles` define uma lista de perfis nomeados sob os quais o serviço será
+habilitado.
+Se não for atribuído nenhum perfil, o serviço é sempre iniciado; se for
+atribuído, ele só será iniciado se o perfil estiver habilitado.
 
-If present, `profiles` follow the regex format of `[a-zA-Z0-9][a-zA-Z0-9_.-]+`.
+Quando presentes, os valores de `profiles` devem seguir o formato de expressão
+regular `[a-zA-Z0-9][a-zA-Z0-9_.-]+`.
 
 ```yaml
 services:
@@ -2057,7 +2155,10 @@ services:
 
 {{< summary-bar feature_name="Compose provider services" >}}
 
-`provider` can be used to define a service that Compose won't manage directly. Compose delegated the service lifecycle to a dedicated or third-party component.
+`provider` pode ser usado para definir um serviço que o Compose não gerenciará
+diretamente.
+O Compose delegou o ciclo de vida do serviço a um componente dedicado ou de
+terceiros.
 
 ```yaml
   database:
@@ -2072,41 +2173,65 @@ services:
        - database
 ```
 
-As Compose runs the application, the `awesomecloud` binary is used to manage the `database` service setup.
-Dependent service `app` receives additional environment variables prefixed by the service name so it can access the resource.
+Quando o Compose executa a aplicação, o binário `awesomecloud` é usado para
+gerenciar a configuração do serviço `database`.
+O serviço dependente `app` recebe variáveis de ambiente adicionais prefixadas
+com o nome do serviço, permitindo que ele acesse o recurso.
 
-For illustration, assuming `awesomecloud` execution produced variables `URL` and `API_KEY`, the `app` service
-runs with environment variables `DATABASE_URL` and `DATABASE_API_KEY`.
+A título de exemplo, supondo que a execução do `awesomecloud` tenha gerado as
+variáveis `URL` e `API_KEY`, o serviço `app` é executado com as variáveis de
+ambiente `DATABASE_URL` e `DATABASE_API_KEY`.
 
-As Compose stops the application, the `awesomecloud` binary is used to manage the `database` service tear down.
+Quando o Compose interrompe a aplicação, o binário `awesomecloud` é usado para
+gerenciar o encerramento do serviço `database`.
 
-The mechanism used by Compose to delegate the service lifecycle to an external binary is described in the [Compose extensibility documentation](https://github.com/docker/compose/tree/main/docs/extension.md).
+O mecanismo utilizado pelo Compose para delegar o ciclo de vida do serviço a um
+binário externo está descrito na
+[documentação de extensibilidade do Compose](https://github.com/docker/compose/tree/main/docs/extension.md).
 
-For more information on using the `provider` attribute, see [Use provider services](/manuals/compose/how-tos/provider-services.md).
+Para mais informações sobre o uso do atributo `provider`, consulte
+[Use serviços de provedor](/manuals/compose/how-tos/provider-services.md).
 
 #### `type`
 
-`type` attribute is required. It defines the external component used by Compose to manage setup and tear down lifecycle
-events.
+O atributo `type` é obrigatório.
+Ele define o componente externo utilizado pelo Compose para gerenciar os eventos
+de ciclo de vida de configuração e encerramento.
 
 #### `options`
 
-`options` are specific to the selected provider and not validated by the compose specification
+As `options` são específicas do provedor selecionado e não são validadas pela
+especificação do Compose.
 
 ### `pull_policy`
 
-`pull_policy` defines the decisions Compose makes when it starts to pull images. Possible values are:
+`pull_policy` define as decisões que o Compose toma ao iniciar a obtenção de
+imagens.
+Os valores possíveis são:
 
-- `always`: Compose always pulls the image from the registry.
-- `never`: Compose doesn't pull the image from a registry and relies on the platform cached image.
-   If there is no cached image, a failure is reported.
-- `missing`: Compose pulls the image only if it's not available in the platform cache.
-   This is the default option if you are not also using the [Compose Build Specification](build.md).
-  `if_not_present` is considered an alias for this value for backward compatibility. The `latest` tag is always pulled even when the `missing` pull policy is used.
-- `build`: Compose builds the image. Compose rebuilds the image if it's already present.
-- `daily`: Compose checks the registry for image updates if the last pull took place more than 24 hours ago.
-- `weekly`: Compose checks the registry for image updates if the last pull took place more than 7 days ago.
-- `every_<duration>`: Compose checks the registry for image updates if the last pull took place before `<duration>`. Duration can be expressed in weeks (`w`), days (`d`), hours (`h`), minutes (`m`), seconds (`s`) or a combination of these.
+- `always`: o Compose sempre baixa a imagem do registro.
+- `never`: o Compose não baixa a imagem de um registro e usa a imagem em cache
+  na plataforma.
+  Se não houver imagem em cache, uma falha é relatada.
+- `missing`: o Compose baixa a imagem apenas se ela não estiver disponível no
+  cache da plataforma.
+  Esta é a opção padrão caso você não esteja usando também a
+  [Especificação de Build do Compose](build.md).
+  `if_not_present` é considerado um alias para este valor, visando a
+  compatibilidade com versões anteriores.
+  A tag `latest` é sempre baixada, mesmo quando a política de pull `missing` é
+  utilizada.
+- `build`: o Compose constrói a imagem.
+  O Compose reconstrói a imagem caso ela já exista.
+- `daily`: o Compose verifica se há atualizações da imagem no registro caso o
+  último download tenha ocorrido há mais de 24 horas.
+- `weekly`: o Compose verifica se há atualizações da imagem no registro caso o
+  último download tenha ocorrido há mais de 7 dias.
+- `every_<duração>`: o Compose verifica se há atualizações da imagem no registro
+  caso o último download tenha ocorrido antes do período definido em
+  `<duração>`.
+  A duração pode ser expressa em semanas (`w`), dias (`d`), horas (`h`), minutos
+  (`m`), segundos (`s`) ou uma combinação deles.
 
 ```yaml
 services:
@@ -2117,18 +2242,23 @@ services:
 
 ### `read_only`
 
-`read_only` configures the service container to be created with a read-only filesystem.
+`read_only` configura o contêiner de serviço para ser criado com um sistema de
+arquivos somente leitura.
 
 ### `restart`
 
-`restart` defines the policy that the platform applies on container termination.
+`restart` define a política que a plataforma aplica quando o contêiner é
+encerrado.
 
-- `no`: The default restart policy. It does not restart the container under any circumstances.
-- `always`: The policy always restarts the container until its removal.
-- `on-failure[:max-retries]`: The policy restarts the container if the exit code indicates an error.
-Optionally, limit the number of restart retries the Docker daemon attempts.
-- `unless-stopped`: The policy restarts the container irrespective of the exit code but stops
-  restarting when the service is stopped or removed.
+- `no`: a política de reinicialização padrão.
+  O contêiner não é reiniciado em nenhuma circunstância.
+- `always`: a política reinicia o contêiner sempre, até que ele seja removido.
+- `on-failure[:max-retries]`: a política reinicia o contêiner se o código de
+  saída indicar um erro.
+  Opcionalmente, é possível limitar o número de tentativas de reinicialização
+  realizadas pelo daemon do Docker.
+- `unless-stopped`: a política reinicia o contêiner independentemente do código
+  de saída, mas para de reiniciá-lo quando o serviço é interrompido ou removido.
 
 ```yml
     restart: "no"
@@ -2138,15 +2268,18 @@ Optionally, limit the number of restart retries the Docker daemon attempts.
     restart: unless-stopped
 ```
 
-You can find more detailed information on restart policies in the
-[Restart Policies (--restart)](/reference/cli/docker/container/run/#restart)
-section of the Docker run reference page.
+Você pode encontrar informações mais detalhadas sobre políticas de
+reinicialização na seção
+[Políticas de reinicialização (--restart)](/reference/cli/docker/container/run/#restart)
+da página de referência do comando `docker run`.
 
 ### `runtime`
 
-`runtime` specifies which runtime to use for the service’s containers.
+`runtime` especifica qual runtime usar para os contêineres do serviço.
 
-For example, `runtime` can be the name of [an implementation of OCI Runtime Spec](https://github.com/opencontainers/runtime-spec/blob/master/implementations.md), such as "runc".
+Por exemplo, `runtime` pode ser o nome de
+[uma implementação da OCI Runtime Spec](https://github.com/opencontainers/runtime-spec/blob/master/implementations.md),
+como "runc".
 
 ```yml
 web:
@@ -2155,35 +2288,44 @@ web:
   runtime: runc
 ```
 
-The default is `runc`. To use a different runtime, see [Alternative runtimes](/manuals/engine/daemon/alternative-runtimes.md).
+O padrão é `runc`.
+Para usar um runtime diferente, consulte
+[Runtimes alternativos](/manuals/engine/daemon/alternative-runtimes.md).
 
 ### `scale`
 
-`scale` specifies the default number of containers to deploy for this service.
-When both are set, `scale` must be consistent with the `replicas` attribute in the [Deploy Specification](deploy.md#replicas).
+`scale` especifica o número padrão de contêineres a serem implantados para este
+serviço.
+Quando ambos são definidos, `scale` deve ser consistente com o atributo
+`replicas` na [Especificação de Deploy](deploy.md#replicas).
 
 ### `secrets`
 
 {{% include "compose/services-secrets.md" %}}
 
-Two different syntax variants are supported; the short syntax and the long syntax. Long and short syntax for secrets may be used in the same Compose file.
+Há suporte para duas variantes de sintaxe: a sintaxe curta e a sintaxe longa.
+Sintaxes longa e curta para secrets podem ser usadas no mesmo arquivo Compose.
 
-Compose reports an error if the secret doesn't exist on the platform or isn't defined in the
-[`secrets` top-level section](secrets.md) of the Compose file.
+O Compose relata um erro se o segredo não existir na plataforma ou não estiver
+definido na [seção de nível superior `secrets`](secrets.md) do arquivo Compose.
 
-Defining a secret in the top-level `secrets` must not imply granting any service access to it.
-Such grant must be explicit within service specification as [secrets](secrets.md) service element.
+Definir um segredo na seção de nível superior `secrets` não implica conceder
+acesso a ele a nenhum serviço.
+Essa concessão deve ser explícita na especificação do serviço, por meio do
+elemento de serviço [secrets](secrets.md).
 
-#### Short syntax
+#### Sintaxe curta
 
-The short syntax variant only specifies the secret name. This grants the
-container access to the secret and mounts it as read-only to `/run/secrets/<secret_name>`
-within the container. The source name and destination mountpoint are both set
-to the secret name.
+A variante de sintaxe curta especifica apenas o nome do segredo.
+Isso concede ao contêiner acesso ao segredo e o monta como somente leitura em
+`/run/secrets/<nome_do_segredo>` dentro do contêiner.
+Tanto o nome de origem quanto o ponto de montagem de destino são definidos como
+o nome do segredo.
 
-The following example uses the short syntax to grant the `frontend` service
-access to the `server-certificate` secret. The value of `server-certificate` is set
-to the contents of the file `./server.cert`.
+O exemplo a seguir usa a sintaxe curta para conceder ao serviço `frontend`
+acesso ao segredo `server-certificate`.
+O valor de `server-certificate` é definido como o conteúdo do arquivo
+`./server.cert`.
 
 ```yml
 services:
@@ -2196,48 +2338,58 @@ secrets:
     file: ./server.cert
 ```
 
-#### Long syntax
+#### Sintaxe longa
 
-The long syntax provides more granularity in how the secret is created within
-the service's containers.
+A sintaxe longa oferece maior granularidade na forma como o segredo é criado
+dentro dos contêineres do serviço.
 
-- `source`: The name of the secret as it exists on the platform.
-- `target`: The name of the file to be mounted in `/run/secrets/` in the
-  service's task container, or absolute path of the file if an alternate location is required. Defaults to `source` if not specified.
-- `uid` and `gid`: The numeric uid or gid that owns the file within
-  `/run/secrets/` in the service's task containers.
-- `mode`: The [permissions](https://wintelguy.com/permissions-calc.pl) for the file to be mounted in `/run/secrets/`
-  in the service's task containers, in octal notation.
-  The default value is world-readable permissions (mode `0444`).
-  The writable bit must be ignored if set. The executable bit may be set.
+- `source`: o nome do segredo conforme existe na plataforma.
+- `target`: o nome do arquivo a ser montado em `/run/secrets/` no contêiner da
+  tarefa do serviço, ou o caminho absoluto do arquivo caso seja necessária uma
+  localização alternativa.
+  O padrão é `source` se não for especificado.
+- `uid` e `gid`: o uid ou gid numérico do proprietário do arquivo dentro de
+  `/run/secrets/` nos contêineres da tarefa do serviço.
+- `mode`: as [permissões](https://wintelguy.com/permissions-calc.pl) para o
+  arquivo a ser montado em `/run/secrets/` nos contêineres da tarefa do serviço,
+  em notação octal.
+  O valor padrão são permissões de leitura para todos (modo `0444`).
+  O bit de escrita deve ser ignorado, caso esteja definido.
+  O bit de execução pode ser definido.
 
-Note that support for `uid`, `gid`, and `mode` attributes are only implemented in Docker Compose when the source of the secret is [`environment`](secrets.md). When the source is a [`file`](secrets.md), Compose uses a bind-mount under the hood which doesn't allow `uid` remapping, and these attributes are silently ignored.
+Observe que o suporte para os atributos `uid`, `gid` e `mode` no Docker Compose
+só é implementado quando a origem do segredo é [`environment`](secrets.md).
+Quando a origem é um [`file`](secrets.md), o Compose usa internamente um bind
+mount, que não permite o remapeamento de `uid`, e esses atributos são ignorados
+silenciosamente.
 
-The following example sets the name of the `my-token` secret file within the container,
-sets the mode to `0440` (group-readable), and sets the user and group to `103`.
-The value of `my-token` is read from the `MY_TOKEN` environment variable.
+O exemplo a seguir define o nome do arquivo de segredo `meu-token` dentro do
+contêiner, define o modo como `0440` (leitura permitida para o grupo) e define o
+usuário e o grupo como `103`.
+O valor de `meu-token` é lido a partir da variável de ambiente `MEU_TOKEN`.
 
 ```yml
 services:
   frontend:
     image: example/webapp
     secrets:
-      - source: my-token
+      - source: meu-token
         uid: "103"
         gid: "103"
         mode: 0o440
 secrets:
-  my-token:
-    environment: "MY_TOKEN"
+  meu-token:
+    environment: "MEU_TOKEN"
 ```
 
 ### `security_opt`
 
-`security_opt` overrides the default labeling scheme for each container.
+`security_opt` sobrescreve o esquema de rotulagem padrão para cada contêiner.
 
-Options accept either `option=value` or `option:value` syntax. For boolean options
-such as `no-new-privileges`, the value may be omitted entirely, in which case the
-option is treated as enabled. The following syntaxes are all equivalent:
+As opções aceitam a sintaxe `option=value` ou `option:value`.
+Para opções booleanas, como `no-new-privileges`, o valor pode ser omitido
+completamente, caso em que a opção é tratada como habilitada.
+As seguintes sintaxes são todas equivalentes:
 
 ```yml
 security_opt:
@@ -2252,38 +2404,47 @@ security_opt:
   - label=role:ROLE
 ```
 
-For further default labeling schemes you can override, see [Security configuration](/reference/cli/docker/container/run/#security-opt).
+Para outros esquemas de rotulagem padrão que você pode substituir, consulte
+[Configuração de segurança](/reference/cli/docker/container/run/#security-opt).
 
 ### `shm_size`
 
-`shm_size` configures the size of the shared memory (`/dev/shm` partition on Linux) allowed by the service container.
-It's specified as a [byte value](extension.md#specifying-byte-values).
+`shm_size` configura o tamanho da memória compartilhada (partição `/dev/shm` no
+Linux) permitida para o contêiner do serviço.
+É especificado como um [valor em bytes](extension.md#specifying-byte-values).
 
 ### `stdin_open`
 
-`stdin_open` configures a service's container to run with an allocated stdin. This is the same as running a container with the
-`-i` flag. For more information, see [Keep stdin open](/reference/cli/docker/container/run/#interactive).
+`stdin_open` configura o contêiner de um serviço para ser executado com um
+`stdin` alocado.
+Isso equivale a executar um contêiner com a flag `-i`.
+Para mais informações, consulte
+[Mantenha o stdin aberto](/reference/cli/docker/container/run/#interactive).
 
-Supported values are `true` or `false`.
+Os valores suportados são `true` ou `false`.
 
 ### `stop_grace_period`
 
-`stop_grace_period` specifies how long Compose must wait when attempting to stop a container if it doesn't
-handle SIGTERM (or whichever stop signal has been specified with
-[`stop_signal`](#stop_signal)), before sending SIGKILL. It's specified
-as a [duration](extension.md#specifying-durations).
+`stop_grace_period` especifica quanto tempo o Compose deve aguardar ao tentar
+parar um contêiner, caso este não processe o sinal `SIGTERM` (ou qualquer sinal
+de parada especificado com [`stop_signal`](#stop_signal)), antes de enviar o
+sinal `SIGKILL`.
+É especificado como uma [duração](extension.md#specifying-durations).
 
 ```yml
     stop_grace_period: 1s
     stop_grace_period: 1m30s
 ```
 
-Default value is 10 seconds for the container to exit before sending SIGKILL.
+O valor padrão é de 10 segundos para o encerramento do contêiner antes do envio
+do sinal `SIGKILL`.
 
 ### `stop_signal`
 
-`stop_signal` defines the signal that Compose uses to stop the service containers.
-If unset containers are stopped by Compose by sending `SIGTERM`.
+`stop_signal` define o sinal que o Compose usa para interromper os contêineres
+do serviço.
+Se não for definido, os contêineres são interrompidos pelo Compose através do
+envio de `SIGTERM`.
 
 ```yml
 stop_signal: SIGUSR1
@@ -2291,7 +2452,7 @@ stop_signal: SIGUSR1
 
 ### `storage_opt`
 
-`storage_opt` defines storage driver options for a service.
+`storage_opt` define opções do driver de armazenamento para um serviço.
 
 ```yml
 storage_opt:
@@ -2300,7 +2461,8 @@ storage_opt:
 
 ### `sysctls`
 
-`sysctls` defines kernel parameters to set in the container. `sysctls` can use either an array or a map.
+`sysctls` define parâmetros do kernel a serem configurados no contêiner.
+`sysctls` pode utilizar um array ou um mapa.
 
 ```yml
 sysctls:
@@ -2314,14 +2476,16 @@ sysctls:
   - net.ipv4.tcp_syncookies=0
 ```
 
-You can only use sysctls that are namespaced in the kernel. Docker does not
-support changing sysctls inside a container that also modify the host system.
-For an overview of supported sysctls, refer to [configure namespaced kernel
-parameters (sysctls) at runtime](/reference/cli/docker/container/run/#sysctl).
+Você só pode usar sysctls que possuam namespace no kernel.
+O Docker não oferece suporte à alteração de sysctls em um contêiner que também
+modifiquem o sistema host.
+Para uma visão geral dos sysctls suportados, consulte
+[configurar parâmetros de kernel com namespace (sysctls) em tempo de execução](/reference/cli/docker/container/run/#sysctl).
 
 ### `tmpfs`
 
-`tmpfs` mounts a temporary file system inside the container. It can be a single value or a list.
+`tmpfs` monta um sistema de arquivos temporário dentro do contêiner.
+Pode ser um valor único ou uma lista.
 
 ```yml
 tmpfs:
@@ -2329,14 +2493,14 @@ tmpfs:
  - <path>:<options>
 ```
 
-- `path`: The path inside the container where the tmpfs will be mounted.
-- `options`: Comma-separated list of options for the tmpfs mount.
+- `path`: o caminho dentro do contêiner onde o tmpfs será montado.
+- `options`: lista de opções separadas por vírgula para a montagem do tmpfs.
 
-Available options:
+Opções disponíveis:
 
-- `mode`: Sets the file system permissions.
-- `uid`: Sets the user ID that owns the mounted tmpfs.
-- `gid`: Sets the group ID that owns the mounted tmpfs.
+- `mode`: define as permissões do sistema de arquivos.
+- `uid`: define o ID do usuário proprietário do tmpfs montado.
+- `gid`: define o ID do grupo proprietário do tmpfs montado.
 
 ```yml
 services:
@@ -2348,15 +2512,18 @@ services:
 
 ### `tty`
 
-`tty` configures a service's container to run with a TTY. This is the same as running a container with the
-`-t` or `--tty` flag. For more information, see [Allocate a pseudo-TTY](/reference/cli/docker/container/run/#tty).
+`tty` configura o contêiner de um serviço para ser executado com um TTY.
+Isso equivale a executar um contêiner com a flag `-t` ou `--tty`.
+Para mais informações, consulte
+[Alocar um pseudo-TTY](/reference/cli/docker/container/run/#tty).
 
-Supported values are `true` or `false`.
+Os valores suportados são `true` ou `false`.
 
 ### `ulimits`
 
-`ulimits` overrides the default `ulimits` for a container. It's specified either as an integer for a single limit
-or as mapping for soft/hard limits.
+`ulimits` substitui os `ulimits` padrão de um contêiner.
+Ele é especificado como um número inteiro para um limite único ou como um
+mapeamento para limites soft/hard.
 
 ```yml
 ulimits:
@@ -2368,18 +2535,25 @@ ulimits:
 
 ### `use_api_socket`
 
-When `use_api_socket` is set, the container is able to interact with the underlying container engine through the API socket.
-Your credentials are mounted inside the container so the container acts as a pure delegate for your commands relating to the container engine.
-Typically, commands ran by container can `pull` and `push` to your registry.
+Quando `use_api_socket` está definido, o contêiner consegue interagir com o
+mecanismo de contêineres subjacente por meio do socket da API.
+Suas credenciais são montadas dentro do contêiner, permitindo que ele atue como
+um delegado direto para seus comandos relacionados à engine de contêineres.
+Normalmente, comandos executados pelo contêiner podem realizar operações de
+`pull` e `push` no seu registro.
 
 ### `user`
 
-`user` overrides the user used to run the container process. The default is set by the image, for example Dockerfile `USER`. If it's not set, then `root`.
+`user` substitui o usuário usado para executar o processo do contêiner.
+O padrão é definido pela imagem, por exemplo, pela instrução `USER` do
+Dockerfile.
+Se não for definido, o padrão é `root`.
 
 ### `userns_mode`
 
-`userns_mode` sets the user namespace for the service. Supported values are platform specific and may depend
-on platform configuration.
+`userns_mode` define o namespace de usuário para o serviço.
+Os valores suportados são específicos da plataforma e podem depender da
+configuração da plataforma.
 
 ```yml
 userns_mode: "host"
@@ -2389,10 +2563,12 @@ userns_mode: "host"
 
 {{< summary-bar feature_name="Compose uts" >}}
 
-`uts` configures the UTS namespace mode set for the service container. When unspecified
-it is the runtime's decision to assign a UTS namespace, if supported. Available values are:
+`uts` configura o modo de namespace UTS definido para o contêiner de serviço.
+Quando não especificado, a atribuição de um namespace UTS fica a critério do
+runtime, caso haja suporte.
+Os valores disponíveis são:
 
-- `'host'`: Results in the container using the same UTS namespace as the host.
+- `'host'`: faz com que o contêiner use o mesmo namespace UTS do host.
 
 ```yml
     uts: "host"
@@ -2402,8 +2578,8 @@ it is the runtime's decision to assign a UTS namespace, if supported. Available 
 
 {{% include "compose/services-volumes.md" %}}
 
-The following example shows a named volume (`db-data`) being used by the `backend` service,
-and a bind mount defined for a single service.
+O exemplo a seguir mostra um volume nomeado (`db-data`) sendo usado pelo serviço
+`backend`, e um bind mount definido para um único serviço.
 
 ```yml
 services:
@@ -2424,83 +2600,123 @@ volumes:
   db-data:
 ```
 
-For more information about the `volumes` top-level element, see [Volumes](volumes.md).
+Para mais informações sobre o elemento de nível superior `volumes`, consulte
+[Volumes](volumes.md).
 
-#### Short syntax
+#### Sintaxe curta
 
-The short syntax uses a single string with colon-separated values to specify a volume mount
-(`VOLUME:CONTAINER_PATH`), or an access mode (`VOLUME:CONTAINER_PATH:ACCESS_MODE`).
+A sintaxe curta usa uma única string com valores separados por dois-pontos para
+especificar uma montagem de volume (`VOLUME:CAMINHO_NO_CONTÊINER`) ou um modo de
+acesso (`VOLUME:CAMINHO_NO_CONTÊINER:MODO_DE_ACESSO`).
 
-- `VOLUME`: Can be either a host path on the platform hosting containers (bind mount) or a volume name.
-- `CONTAINER_PATH`: The path in the container where the volume is mounted.
-- `ACCESS_MODE`: A comma-separated `,` list of options:
-  - `rw`: Read and write access. This is the default if none is specified.
-  - `ro`: Read-only access.
-  - `z`: SELinux option indicating that the bind mount host content is shared among multiple containers.
-  - `Z`: SELinux option indicating that the bind mount host content is private and unshared for other containers.
-
-> [!NOTE]
->
-> The SELinux re-labeling bind mount option is ignored on platforms without SELinux.
-
-> [!NOTE]
-> Relative host paths are only supported by Compose that deploy to a
-> local container runtime. This is because the relative path is resolved from the Compose file’s parent
-> directory which is only applicable in the local case. When Compose deploys to a non-local
-> platform it rejects Compose files which use relative host paths with an error. To avoid ambiguities
-> with named volumes, relative paths should always begin with `.` or `..`.
+- `VOLUME`: pode ser um caminho no host, na plataforma que hospeda os
+  contêineres (bind mount), ou um nome de volume.
+- `CAMINHO_NO_CONTÊINER`: o caminho no contêiner onde o volume é montado.
+- `MODO_DE_ACESSO`: uma lista de opções separadas por vírgula (`,`):
+  - `rw`: acesso de leitura e escrita.
+    Este é o padrão caso nenhum seja especificado.
+  - `ro`: acesso somente leitura.
+  - `z`: opção do SELinux indicando que o conteúdo do bind mount no host é
+    compartilhado entre vários contêineres.
+  - `Z`: opção do SELinux indicando que o conteúdo do bind mount no host é
+    privado e não compartilhado com outros contêineres.
 
 > [!NOTE]
 >
-> For bind mounts, the short syntax creates a directory at the source path on the host if it doesn't exist. This is for backward compatibility with `docker-compose` legacy.
-> It can be prevented by using long syntax and setting `create_host_path` to `false`.
+> A opção de re-rotulagem do SELinux para bind mounts é ignorada em plataformas
+> sem SELinux.
 
-#### Long syntax
+> [!NOTE]
+>
+> Caminhos relativos no host são suportados apenas pelo Compose ao realizar a
+> implantação em um runtime de contêiner local.
+> Isso ocorre porque o caminho relativo é resolvido a partir do diretório pai
+> do arquivo Compose, o que só é aplicável no caso local.
+> Quando o Compose realiza a implantação em uma plataforma não local, ele
+> rejeita arquivos Compose que usam caminhos relativos no host, retornando um
+> erro.
+> Para evitar ambiguidades com volumes nomeados, caminhos relativos devem sempre
+> começar com `.` ou `..`.
 
-The long form syntax lets you configure additional fields that can't be
-expressed in the short form.
+> [!NOTE]
+>
+> Para bind mounts, a sintaxe curta cria um diretório no caminho de origem no
+> host, caso ele não exista.
+> Isso visa manter a compatibilidade com o `docker-compose` legado.
+> Esse comportamento pode ser evitado usando a sintaxe longa e definindo
+> `create_host_path` como `false`.
 
-- `type`: The mount type. Either `volume`, `bind`, `tmpfs`, `image`, `npipe`, or `cluster`
-- `source`: The source of the mount, a path on the host for a bind mount, a Docker image reference for an image mount, or the
-  name of a volume defined in the
-  [top-level `volumes` key](volumes.md). Not applicable for a tmpfs mount.
-- `target`: The path in the container where the volume is mounted.
-- `read_only`: Flag to set the volume as read-only.
-- `bind`: Used to configure additional bind options:
-  - `propagation`: The propagation mode used for the bind.
-  - `create_host_path`: Creates a directory at the source path on host if there is nothing present. Defaults to `true`.
-  - `selinux`: The SELinux re-labeling option `z` (shared) or `Z` (private)
-- `volume`: Configures additional volume options:
-  - `nocopy`: Flag to disable copying of data from a container when a volume is created.
-  - `subpath`: Path inside a volume to mount instead of the volume root.
-- `tmpfs`: Configures additional tmpfs options:
-  - `size`: The size for the tmpfs mount in bytes (either numeric or as bytes unit).
-  - `mode`: The file mode for the tmpfs mount as Unix permission bits as an octal number. Introduced in Docker Compose version [2.14.0](https://github.com/docker/compose/releases/tag/v2.14.0).
-- `image`: Configures additional image options:
-  - `subpath`: Path inside the source image to mount instead of the image root. Available in [Docker Compose version 2.35.0](https://github.com/docker/compose/releases/tag/v2.35.0)
-- `consistency`: The consistency requirements of the mount. Available values are platform specific.
+#### Sintaxe longa
+
+A sintaxe longa permite configurar campos adicionais que não podem ser expressos
+na forma curta.
+
+- `type`: o tipo de montagem.
+  Pode ser `volume`, `bind`, `tmpfs`, `image`, `npipe` ou `cluster`.
+- `source`: a origem da montagem, um caminho no host para um bind mount, uma
+  referência de imagem Docker para uma montagem de imagem ou o nome de um volume
+  definido na [chave de nível superior `volumes`](volumes.md).
+  Não se aplica a montagens tmpfs.
+- `target`: o caminho no container onde o volume é montado.
+- `read_only`: flag para definir o volume como somente leitura.
+- `bind`: usado para configurar opções adicionais de bind:
+  - `propagation`: o modo de propagação usado para o bind.
+  - `create_host_path`: cria um diretório no caminho de origem no host caso não
+    exista nada lá.
+    O padrão é `true`.
+  - `selinux`: a opção de re-rotulagem do SELinux: `z` (compartilhado) ou `Z`
+    (privado).
+- `volume`: configura opções adicionais de volume:
+  - `nocopy`: flag para desabilitar a cópia de dados de um container quando um
+    volume é criado.
+  - `subpath`: caminho em um volume a ser montado em vez da raiz do volume.
+- `tmpfs`: configura opções adicionais de tmpfs:
+  - `size`: o tamanho da montagem tmpfs em bytes (numérico ou com unidade de
+    medida de bytes).
+  - `mode`: o modo de arquivo para a montagem tmpfs, definido como bits de
+    permissão Unix em formato octal.
+    Introduzido na versão
+    [2.14.0](https://github.com/docker/compose/releases/tag/v2.14.0) do Docker
+    Compose.
+- `image`: configura opções adicionais de imagem:
+  - `subpath`: caminho dentro da imagem de origem a ser montado em vez da raiz
+    da imagem.
+    Disponível na
+    [versão 2.35.0 do Docker Compose](https://github.com/docker/compose/releases/tag/v2.35.0).
+- `consistency`: os requisitos de consistência da montagem.
+  Os valores disponíveis dependem da plataforma.
 
 > [!TIP]
 >
-> Working with large repositories or monorepos, or with virtual file systems that are no longer scaling with your codebase?
-> Compose now takes advantage of [Synchronized file shares](/manuals/desktop/features/synchronized-file-sharing.md) and automatically creates file shares for bind mounts.
-> Ensure you're signed in to Docker with a paid subscription and have enabled both **Access experimental features** and **Manage Synchronized file shares with Compose** in Docker Desktop's settings.
+> Trabalhando com grandes repositórios ou monorepos, ou com sistemas de arquivos
+> virtuais que não acompanham mais o crescimento da sua base de código?
+> O Compose agora tira proveito do recurso de
+> [compartilhamento de arquivos sincronizado](/manuals/desktop/features/synchronized-file-sharing.md)
+> e cria automaticamente compartilhamentos de arquivos para bind mounts.
+> Certifique-se de ter acessado o Docker com uma assinatura paga e de ter
+> habilitado as opções **Access experimental features** e **Manage Synchronized
+> file shares with Compose** nas configurações do Docker Desktop.
 
 ### `volumes_from`
 
-`volumes_from` mounts all of the volumes from another service or container. You can optionally specify
-read-only access `ro` or read-write `rw`. If no access level is specified, then read-write access is used.
+`volumes_from` monta todos os volumes de outro serviço ou contêiner.
+Você pode especificar, opcionalmente, acesso somente leitura (`ro`) ou leitura e
+escrita (`rw`).
+Se nenhum nível de acesso for especificado, o acesso de leitura e escrita será
+usado.
 
-You can also mount volumes from a container that is not managed by Compose by using the `container:` prefix.
+Você também pode montar volumes de um contêiner que não é gerenciado pelo
+Compose usando o prefixo `container:`.
 
 ```yaml
 volumes_from:
-  - service_name
-  - service_name:ro
-  - container:container_name
-  - container:container_name:rw
+  - nome_do_serviço
+  - nome_do_serviço:ro
+  - container:nome_do_contêiner
+  - container:nome_do_contêiner:rw
 ```
 
 ### `working_dir`
 
-`working_dir` overrides the container's working directory which is specified by the image, for example Dockerfile's `WORKDIR`.
+`working_dir` substitui o diretório de trabalho do contêiner definido pela
+imagem, por exemplo, o `WORKDIR` do Dockerfile.
