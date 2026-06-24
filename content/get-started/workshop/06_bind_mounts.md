@@ -10,76 +10,93 @@
 # The original work was translated from English into Brazilian Portuguese.
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
+source_url: https://github.com/docker/docs/blob/main/content/get-started/workshop/06_bind_mounts.md
+source_revision: cd5615c3da190b1f44e54c5105b6d937251eed72
+translation_status: ready
+
 title: Use bind mounts
 weight: 60
-linkTitle: "Part 5: Use bind mounts"
-keywords: 'get started, setup, orientation, quickstart, intro, concepts, containers, docker desktop'
-description: Using bind mounts in our application
+linkTitle: "Parte 5: Use bind mounts"
+keywords: >-
+  introdução, configuração, orientação, guia rápido, conceitos, containers,
+  docker desktop
+description: Usando bind mounts em nossa aplicação.
 aliases:
- - /guides/walkthroughs/access-local-folder/
- - /get-started/06_bind_mounts/
- - /guides/workshop/06_bind_mounts/
+  - /guides/walkthroughs/access-local-folder/
+  - /get-started/06_bind_mounts/
+  - /guides/workshop/06_bind_mounts/
 ---
-In [part 4](./05_persisting_data.md), you used a volume mount to persist the
-data in your database. A volume mount is a great choice when you need somewhere
-persistent to store your application data.
 
-A bind mount is another type of mount, which lets you share a directory from the
-host's filesystem into the container. When working on an application, you can
-use a bind mount to mount source code into the container. The container sees the
-changes you make to the code immediately, as soon as you save a file. This means
-that you can run processes in the container that watch for filesystem changes
-and respond to them.
+Na [parte 4](./05_persisting_data.md), você utilizou uma montagem de volume para
+persistir os dados do seu banco de dados.
+Uma montagem de volume é uma excelente escolha quando você precisa de um local
+persistente para armazenar os dados da sua aplicação.
 
-In this chapter, you'll see how you can use bind mounts and a tool called
-[nodemon](https://npmjs.com/package/nodemon) to watch for file changes, and then restart the application
-automatically. There are equivalent tools in most other languages and
-frameworks.
+Um bind mount (montagem bind) é outro tipo de montagem que permite compartilhar
+um diretório do sistema de arquivos do host com o container.
+Ao desenvolver uma aplicação, você pode usar um bind mount para montar o
+código-fonte dentro do container.
+O container percebe as alterações feitas no código imediatamente, assim que você
+salva um arquivo.
+Isso significa que você pode executar processos no container que monitoram
+alterações no sistema de arquivos e reagem a elas.
 
-## Quick volume type comparisons
+Neste capítulo, você verá como utilizar bind mounts e uma ferramenta chamada
+[nodemon](https://npmjs.com/package/nodemon) para monitorar alterações em
+arquivos e, em seguida, reiniciar a aplicação automaticamente.
+Existem ferramentas equivalentes na maioria das outras linguagens e frameworks.
 
-The following are examples of a named volume and a bind mount using `--mount`:
+## Comparação rápida entre tipos de volume
 
-- Named volume: `type=volume,src=my-volume,target=/usr/local/data`
+Abaixo estão exemplos de um volume nomeado e de um bind mount utilizando
+`--mount`:
+
+- Volume nomeado: `type=volume,src=my-volume,target=/usr/local/data`
 - Bind mount: `type=bind,src=/path/to/data,target=/usr/local/data`
 
-The following table outlines the main differences between volume mounts and bind
-mounts.
+A tabela a seguir apresenta as principais diferenças entre montagens de volume e
+bind mounts.
 
-|                                              | Named volumes                                      | Bind mounts                                          |
-| -------------------------------------------- | -------------------------------------------------- | ---------------------------------------------------- |
-| Host location                                | Docker chooses                                     | You decide                                           |
-| Populates new volume with container contents | Yes                                                | No                                                   |
-| Supports Volume Drivers                      | Yes                                                | No                                                   |
+|                                                | Volumes nomeados | Bind mounts |
+|------------------------------------------------|------------------| ----------- |
+| Localização no host                            | O Docker escolhe | Você decide |
+| Preenche novo volume com conteúdo do container | Sim              | Não         |
+| Suporta drivers de volume                      | Sim              | Não         |
 
-## Trying out bind mounts
+## Experimentando bind mounts
 
-Before looking at how you can use bind mounts for developing your application,
-you can run a quick experiment to get a practical understanding of how bind mounts
-work.
+Antes de ver como você pode usar bind mounts para desenvolver sua aplicação,
+você pode realizar um experimento rápido para entender na prática como as
+bind mounts funcionam.
 
-1. Verify that your `getting-started-app` directory is in a directory defined in
-Docker Desktop's file sharing setting. This setting defines which parts of your
-filesystem you can share with containers. For details about accessing the setting, see [File sharing](/manuals/desktop/settings-and-maintenance/settings.md#file-sharing).
+1. Verifique se o diretório `getting-started-app` está localizado em um
+   diretório definido nas configurações de compartilhamento de arquivos do
+   Docker Desktop.
+   Essa configuração define quais partes do seu sistema de arquivos podem ser
+   compartilhadas com os containers.
+   Para detalhes sobre como acessar essa configuração, consulte
+   [Compartilhamento de arquivos](/manuals/desktop/settings-and-maintenance/settings.md#file-sharing).
 
-    > [!NOTE]
-    > The **File sharing** tab is only available in Hyper-V mode, because the files are automatically shared in WSL 2 mode and Windows container mode.
+   > [!NOTE]
+   >
+   > A aba **File sharing** está disponível apenas no modo Hyper-V, pois os
+   > arquivos são compartilhados automaticamente nos modos WSL 2 e containers do
+   > Windows.
 
-2. Open a terminal and change directory to the `getting-started-app`
-   directory.
+2. Abra um terminal e navegue até o diretório `getting-started-app`.
 
-3. Run the following command to start `bash` in an `ubuntu` container with a
-   bind mount.
+3. Execute o comando a seguir para iniciar o `bash` em um container `ubuntu` com
+   um bind mount.
 
    {{< tabs >}}
    {{< tab name="Mac / Linux" >}}
 
    ```console
-   $ docker run -it --mount type=bind,src="$(pwd)",target=/src ubuntu bash
+   $ docker run -it --mount type=bind,src=.,target=/src ubuntu bash
    ```
 
    {{< /tab >}}
-   {{< tab name="Command Prompt" >}}
+   {{< tab name="Prompt de Comando" >}}
 
    ```console
    $ docker run -it --mount "type=bind,src=%cd%,target=/src" ubuntu bash
@@ -89,25 +106,26 @@ filesystem you can share with containers. For details about accessing the settin
    {{< tab name="Git Bash" >}}
 
    ```console
-   $ docker run -it --mount type=bind,src="/$(pwd)",target=/src ubuntu bash
+   $ docker run -it --mount type=bind,src="./",target=/src ubuntu bash
    ```
 
    {{< /tab >}}
    {{< tab name="PowerShell" >}}
 
    ```console
-   $ docker run -it --mount "type=bind,src=$($pwd),target=/src" ubuntu bash
+   $ docker run -it --mount "type=bind,src=.,target=/src" ubuntu bash
    ```
 
    {{< /tab >}}
    {{< /tabs >}}
 
-   The `--mount type=bind` option tells Docker to create a bind mount, where `src` is the
-   current working directory on your host machine (`getting-started-app`), and
-   `target` is where that directory should appear inside the container (`/src`).
+   A opção `--mount type=bind` instrui o Docker a criar um bind mount, no qual
+   `src` é o diretório de trabalho atual na sua máquina host
+   (`getting-started-app`) e `target` é o local onde esse diretório deve
+   aparecer dentro do container (`/src`).
 
-4. After running the command, Docker starts an interactive `bash` session in the
-   root directory of the container's filesystem.
+4. Após executar o comando, o Docker inicia uma sessão `bash` interativa no
+   diretório raiz do sistema de arquivos do contêiner.
 
    ```console
    root@ac1237fad8db:/# pwd
@@ -117,28 +135,28 @@ filesystem you can share with containers. For details about accessing the settin
    boot  etc  lib   mnt    proc  run   src   sys  usr
    ```
 
-5. Change directory to the `src` directory.
+5. Mude para o diretório `src`.
 
-   This is the directory that you mounted when starting the container. Listing
-   the contents of this directory displays the same files as in the
-   `getting-started-app` directory on your host machine.
+   Este é o diretório que você montou ao iniciar o container.
+   Listar o conteúdo deste diretório exibe os mesmos arquivos presentes no
+   diretório `getting-started-app` da sua máquina host.
 
    ```console
    root@ac1237fad8db:/# cd src
    root@ac1237fad8db:/src# ls
-   Dockerfile  node_modules  package.json  spec  src  yarn.lock
+   Dockerfile  node_modules  package.json  package-lock.json  spec  src
    ```
 
-6. Create a new file named `myfile.txt`.
+6. Crie um novo arquivo chamado `myfile.txt`.
 
    ```console
    root@ac1237fad8db:/src# touch myfile.txt
    root@ac1237fad8db:/src# ls
-   Dockerfile  myfile.txt  node_modules  package.json  spec  src  yarn.lock
+   Dockerfile  myfile.txt  node_modules  package.json  package-lock.json  spec  src
    ```
 
-7. Open the `getting-started-app` directory on the host and observe that the
-   `myfile.txt` file is in the directory.
+7. Abra o diretório `getting-started-app` no host e observe que o arquivo
+   `myfile.txt` está no diretório.
 
    ```text
    ├── getting-started-app/
@@ -146,75 +164,87 @@ filesystem you can share with containers. For details about accessing the settin
    │ ├── myfile.txt
    │ ├── node_modules/
    │ ├── package.json
+   │ ├── package-lock.json
    │ ├── spec/
-   │ ├── src/
-   │ └── yarn.lock
+   │ └── src/
    ```
 
-8. From the host, delete the `myfile.txt` file.
-9. In the container, list the contents of the `app` directory once more. Observe that the file is now gone.
+8. No host, exclua o arquivo `myfile.txt`.
+
+9. No contêiner, liste o conteúdo do diretório `app` mais uma vez.
+   Observe que o arquivo não está mais presente.
 
    ```console
    root@ac1237fad8db:/src# ls
-   Dockerfile  node_modules  package.json  spec  src  yarn.lock
+   Dockerfile  node_modules  package.json  package-lock.json spec  src
    ```
 
-10. Stop the interactive container session with `Ctrl` + `D`.
+10. Encerre a sessão interativa do contêiner com `Ctrl` + `D`.
 
-That's all for a brief introduction to bind mounts. This procedure
-demonstrated how files are shared between the host and the container, and how
-changes are immediately reflected on both sides. Now you can use
-bind mounts to develop software.
+Isso é tudo para uma breve introdução aos bind mounts.
+Este procedimento demonstrou como os arquivos são compartilhados entre o host e
+o contêiner, e como as alterações são refletidas imediatamente em ambos os
+lados.
+Agora você pode usar bind mounts para desenvolver software.
 
-## Development containers
+## Containers de desenvolvimento
 
-Using bind mounts is common for local development setups. The advantage is that the development machine doesn’t need to have all of the build tools and environments installed. With a single docker run command, Docker pulls dependencies and tools.
+O uso de bind mounts é comum em configurações de desenvolvimento local.
+A vantagem é que a máquina de desenvolvimento não precisa ter todas as
+ferramentas de build e ambientes instalados.
+Com um único comando `docker run`, o Docker baixa as dependências e ferramentas
+necessárias.
 
-### Run your app in a development container
+### Execute sua aplicação em um container de desenvolvimento
 
-The following steps describe how to run a development container with a bind
-mount that does the following:
+Os passos a seguir descrevem como executar um container de desenvolvimento com
+um bind mount que realiza as seguintes ações:
 
-- Mount your source code into the container
-- Install all dependencies
-- Start `nodemon` to watch for filesystem changes
+- Monta o código-fonte dentro do container.
+- Instala todas as dependências.
+- Inicia o `nodemon` para monitorar alterações no sistema de arquivos.
 
-You can use the CLI or Docker Desktop to run your container with a bind mount.
+Você pode usar a CLI ou o Docker Desktop para executar seu container com um bind
+mount.
 
 {{< tabs >}}
-{{< tab name="Mac / Linux CLI" >}}
+{{< tab name="CLI para Mac / Linux" >}}
 
-1. Make sure you don't have any `getting-started` containers currently running.
+1. Certifique-se de que não há nenhum contêiner `getting-started` em execução no
+   momento.
 
-2. Run the following command from the `getting-started-app` directory.
+2. Execute o seguinte comando a partir do diretório `getting-started-app`.
 
    ```console
    $ docker run -dp 127.0.0.1:3000:3000 \
-       -w /app --mount type=bind,src="$(pwd)",target=/app \
-       node:18-alpine \
-       sh -c "yarn install && yarn run dev"
+       -w /app --mount type=bind,src=.,target=/app \
+       node:24-alpine \
+       sh -c "npm install && npm run dev"
    ```
 
-   The following is a breakdown of the command:
-   - `-dp 127.0.0.1:3000:3000` - same as before. Run in detached (background) mode and
-     create a port mapping
-   - `-w /app` - sets the "working directory" or the current directory that the
-     command will run from
-   - `--mount type=bind,src="$(pwd)",target=/app` - bind mount the current
-     directory from the host into the `/app` directory in the container
-   - `node:18-alpine` - the image to use. Note that this is the base image for
-     your app from the Dockerfile
-   - `sh -c "yarn install && yarn run dev"` - the command. You're starting a
-     shell using `sh` (alpine doesn't have `bash`) and running `yarn install` to
-     install packages and then running `yarn run dev` to start the development
-     server. If you look in the `package.json`, you'll see that the `dev` script
-     starts `nodemon`.
+   Abaixo está o detalhamento do comando:
+   - `-dp 127.0.0.1:3000:3000` - o mesmo que anteriormente.
+     Executa em modo detached (em segundo plano) e cria um mapeamento de
+     porta.
+   - `-w /app` - define o "diretório de trabalho" ou o diretório atual a partir
+     do qual o comando será executado.
+   - `--mount type=bind,src=.,target=/app` - cria um bind mount do diretório
+     atual do host para o diretório `/app` dentro do container.
+   - `node:24-alpine` - a imagem a ser utilizada.
+     Observe que esta é a imagem base para sua aplicação, definida no
+     Dockerfile.
+   - `sh -c "npm install && npm run dev"` - o comando.
+     Você inicia um shell usando `sh` (o Alpine não possui `bash`) e executa
+     `npm install` para instalar os pacotes e, em seguida, executa `npm run dev`
+     para iniciar o servidor de desenvolvimento.
+     Se você verificar o arquivo `package.json`, verá que o script `dev` inicia
+     o `nodemon`.
 
-3. You can watch the logs using `docker logs <container-id>`. You'll know you're
-   ready to go when you see this:
+3. Você pode acompanhar os logs usando `docker logs <id-do-contêiner>`.
+   Você saberá que está tudo pronto quando vir isto:
 
    ```console
-   $ docker logs -f <container-id>
+   $ docker logs -f <id-do-contêiner>
    nodemon -L src/index.js
    [nodemon] 2.0.20
    [nodemon] to restart at any time, enter `rs`
@@ -225,42 +255,46 @@ You can use the CLI or Docker Desktop to run your container with a bind mount.
    Listening on port 3000
    ```
 
-   When you're done watching the logs, exit out by hitting `Ctrl`+`C`.
+   Quando terminar de acompanhar os logs, saia pressionando `Ctrl`+`C`.
 
 {{< /tab >}}
-{{< tab name="PowerShell CLI" >}}
+{{< tab name="CLI do PowerShell" >}}
 
-1. Make sure you don't have any `getting-started` containers currently running.
+1. Certifique-se de que não há nenhum contêiner `getting-started` em execução no
+   momento.
 
-2. Run the following command from the `getting-started-app` directory.
+2. Execute o seguinte comando a partir do diretório `getting-started-app`.
 
    ```powershell
    $ docker run -dp 127.0.0.1:3000:3000 `
-       -w /app --mount "type=bind,src=$pwd,target=/app" `
-       node:18-alpine `
-       sh -c "yarn install && yarn run dev"
+       -w /app --mount "type=bind,src=.,target=/app" `
+       node:24-alpine `
+       sh -c "npm install && npm run dev"
    ```
 
-   The following is a breakdown of the command:
-   - `-dp 127.0.0.1:3000:3000` - same as before. Run in detached (background) mode and
-     create a port mapping
-   - `-w /app` - sets the "working directory" or the current directory that the
-     command will run from
-   - `--mount "type=bind,src=$pwd,target=/app"` - bind mount the current
-     directory from the host into the `/app` directory in the container
-   - `node:18-alpine` - the image to use. Note that this is the base image for
-     your app from the Dockerfile
-   - `sh -c "yarn install && yarn run dev"` - the command. You're starting a
-     shell using `sh` (alpine doesn't have `bash`) and running `yarn install` to
-     install packages and then running `yarn run dev` to start the development
-     server. If you look in the `package.json`, you'll see that the `dev` script
-     starts `nodemon`.
+   Abaixo está o detalhamento do comando:
+   - `-dp 127.0.0.1:3000:3000` - o mesmo que anteriormente.
+     Executa em modo detached (em segundo plano) e cria um mapeamento de
+     porta.
+   - `-w /app` - define o "diretório de trabalho" ou o diretório atual a partir
+     do qual o comando será executado.
+   - `--mount "type=bind,src=.,target=/app"` - cria um bind mount do diretório
+     atual do host para o diretório `/app` dentro do container.
+   - `node:24-alpine` - a imagem a ser utilizada.
+     Observe que esta é a imagem base para sua aplicação, definida no
+     Dockerfile.
+   - `sh -c "npm install && npm run dev"` - o comando.
+     Você inicia um shell usando `sh` (o Alpine não possui `bash`) e executa
+     `npm install` para instalar os pacotes e, em seguida, executa `npm run dev`
+     para iniciar o servidor de desenvolvimento.
+     Se você verificar o arquivo `package.json`, verá que o script `dev` inicia
+     o `nodemon`.
 
-3. You can watch the logs using `docker logs <container-id>`. You'll know you're
-   ready to go when you see this:
+3. Você pode acompanhar os logs usando `docker logs <id-do-contêiner>`.
+   Você saberá que está tudo pronto quando vir isto:
 
    ```console
-   $ docker logs -f <container-id>
+   $ docker logs -f <id-do-contêiner>
    nodemon -L src/index.js
    [nodemon] 2.0.20
    [nodemon] to restart at any time, enter `rs`
@@ -271,42 +305,46 @@ You can use the CLI or Docker Desktop to run your container with a bind mount.
    Listening on port 3000
    ```
 
-   When you're done watching the logs, exit out by hitting `Ctrl`+`C`.
+   Quando terminar de acompanhar os logs, saia pressionando `Ctrl`+`C`.
 
 {{< /tab >}}
-{{< tab name="Command Prompt CLI" >}}
+{{< tab name="CLI do Prompt de Comando" >}}
 
-1. Make sure you don't have any `getting-started` containers currently running.
+1. Certifique-se de que não haja nenhum contêiner `getting-started` em execução
+   no momento.
 
-2. Run the following command from the `getting-started-app` directory.
+2. Execute o seguinte comando a partir do diretório `getting-started-app`.
 
    ```console
    $ docker run -dp 127.0.0.1:3000:3000 ^
        -w /app --mount "type=bind,src=%cd%,target=/app" ^
-       node:18-alpine ^
-       sh -c "yarn install && yarn run dev"
+       node:24-alpine ^
+       sh -c "npm install && npm run dev"
    ```
 
-   The following is a breakdown of the command:
-   - `-dp 127.0.0.1:3000:3000` - same as before. Run in detached (background) mode and
-     create a port mapping
-   - `-w /app` - sets the "working directory" or the current directory that the
-     command will run from
-   - `--mount "type=bind,src=%cd%,target=/app"` - bind mount the current
-     directory from the host into the `/app` directory in the container
-   - `node:18-alpine` - the image to use. Note that this is the base image for
-     your app from the Dockerfile
-   - `sh -c "yarn install && yarn run dev"` - the command. You're starting a
-     shell using `sh` (alpine doesn't have `bash`) and running `yarn install` to
-     install packages and then running `yarn run dev` to start the development
-     server. If you look in the `package.json`, you'll see that the `dev` script
-     starts `nodemon`.
+   Abaixo está o detalhamento do comando:
+   - `-dp 127.0.0.1:3000:3000` - o mesmo que anteriormente.
+     Executa em modo detached (em segundo plano) e cria um mapeamento de
+     porta.
+   - `-w /app` - define o "diretório de trabalho" ou o diretório atual a partir
+     do qual o comando será executado.
+   - `--mount "type=bind,src=%cd%,target=/app"` - cria um bind mount do diretório
+     atual do host para o diretório `/app` dentro do container.
+   - `node:24-alpine` - a imagem a ser utilizada.
+     Observe que esta é a imagem base para sua aplicação, definida no
+     Dockerfile.
+   - `sh -c "npm install && npm run dev"` - o comando.
+     Você inicia um shell usando `sh` (o Alpine não possui `bash`) e executa
+     `npm install` para instalar os pacotes e, em seguida, executa `npm run dev`
+     para iniciar o servidor de desenvolvimento.
+     Se você verificar o arquivo `package.json`, verá que o script `dev` inicia
+     o `nodemon`.
 
-3. You can watch the logs using `docker logs <container-id>`. You'll know you're
-   ready to go when you see this:
+3. Você pode acompanhar os logs usando `docker logs <id-do-contêiner>`.
+   Você saberá que está tudo pronto quando vir isto:
 
    ```console
-   $ docker logs -f <container-id>
+   $ docker logs -f <id-do-contêiner>
    nodemon -L src/index.js
    [nodemon] 2.0.20
    [nodemon] to restart at any time, enter `rs`
@@ -317,42 +355,46 @@ You can use the CLI or Docker Desktop to run your container with a bind mount.
    Listening on port 3000
    ```
 
-   When you're done watching the logs, exit out by hitting `Ctrl`+`C`.
+   Quando terminar de acompanhar os logs, saia pressionando `Ctrl`+`C`.
 
 {{< /tab >}}
-{{< tab name="Git Bash CLI" >}}
+{{< tab name="CLI do Git Bash" >}}
 
-1. Make sure you don't have any `getting-started` containers currently running.
+1. Certifique-se de que não há nenhum contêiner `getting-started` em execução no
+   momento.
 
-2. Run the following command from the `getting-started-app` directory.
+2. Execute o seguinte comando a partir do diretório `getting-started-app`.
 
    ```console
    $ docker run -dp 127.0.0.1:3000:3000 \
-       -w //app --mount type=bind,src="/$(pwd)",target=/app \
-       node:18-alpine \
-       sh -c "yarn install && yarn run dev"
+       -w //app --mount type=bind,src="./",target=/app \
+       node:24-alpine \
+       sh -c "npm install && npm run dev"
    ```
 
-   The following is a breakdown of the command:
-   - `-dp 127.0.0.1:3000:3000` - same as before. Run in detached (background) mode and
-     create a port mapping
-   - `-w //app` - sets the "working directory" or the current directory that the
-     command will run from
-   - `--mount type=bind,src="/$(pwd)",target=/app` - bind mount the current
-     directory from the host into the `/app` directory in the container
-   - `node:18-alpine` - the image to use. Note that this is the base image for
-     your app from the Dockerfile
-   - `sh -c "yarn install && yarn run dev"` - the command. You're starting a
-     shell using `sh` (alpine doesn't have `bash`) and running `yarn install` to
-     install packages and then running `yarn run dev` to start the development
-     server. If you look in the `package.json`, you'll see that the `dev` script
-     starts `nodemon`.
+   Abaixo está o detalhamento do comando:
+   - `-dp 127.0.0.1:3000:3000` - o mesmo que anteriormente.
+     Executa em modo detached (em segundo plano) e cria um mapeamento de
+     porta.
+   - `-w //app` - define o "diretório de trabalho" ou o diretório atual a partir
+     do qual o comando será executado.
+   - `--mount type=bind,src="./",target=/app` - cria um bind mount do diretório
+     atual do host para o diretório `/app` dentro do container.
+   - `node:24-alpine` - a imagem a ser utilizada.
+     Observe que esta é a imagem base para sua aplicação, definida no
+     Dockerfile.
+   - `sh -c "npm install && npm run dev"` - o comando.
+     Você inicia um shell usando `sh` (o Alpine não possui `bash`) e executa
+     `npm install` para instalar os pacotes e, em seguida, executa `npm run dev`
+     para iniciar o servidor de desenvolvimento.
+     Se você verificar o arquivo `package.json`, verá que o script `dev` inicia
+     o `nodemon`.
 
-3. You can watch the logs using `docker logs <container-id>`. You'll know you're
-   ready to go when you see this:
+3. Você pode acompanhar os logs usando `docker logs <id-do-contêiner>`.
+   Você saberá que está tudo pronto quando vir isto:
 
    ```console
-   $ docker logs -f <container-id>
+   $ docker logs -f <id-do-contêiner>
    nodemon -L src/index.js
    [nodemon] 2.0.20
    [nodemon] to restart at any time, enter `rs`
@@ -363,35 +405,38 @@ You can use the CLI or Docker Desktop to run your container with a bind mount.
    Listening on port 3000
    ```
 
-   When you're done watching the logs, exit out by hitting `Ctrl`+`C`.
+   Quando terminar de acompanhar os logs, saia pressionando `Ctrl`+`C`.
 
 {{< /tab >}}
 {{< tab name="Docker Desktop" >}}
 
-Make sure you don't have any `getting-started` containers currently running.
+Certifique-se de que não haja nenhum contêiner `getting-started` em execução no
+momento.
 
-Run the image with a bind mount.
+Execute a imagem com um bind mount.
 
-1. Select the search box at the top of Docker Desktop.
-2. In the search window, select the **Images** tab.
-3. In the search box, specify the container name, `getting-started`.
+1. Selecione a caixa de pesquisa na parte superior do Docker Desktop.
+2. Na janela de pesquisa, selecione a aba **Images**.
+3. Na caixa de pesquisa, especifique o nome do contêiner: `getting-started`.
 
    > [!TIP]
    >
-   >  Use the search filter to filter images and only show **Local images**.
+   > Use o filtro de pesquisa para filtrar as imagens e exibir apenas **Local
+   > images**.
 
-4. Select your image and then select **Run**.
-5. Select **Optional settings**.
-6. In **Host path**, specify the path to the `getting-started-app` directory on your host machine.
-7. In **Container path**, specify `/app`.
-8. Select **Run**.
+4. Selecione sua imagem e, em seguida, selecione **Run**.
+5. Selecione **Optional settings**.
+6. Em **Host path**, especifique o caminho para o diretório
+   `getting-started-app` em sua máquina host.
+7. Em **Container path**, especifique `/app`.
+8. Selecione **Run**.
 
-You can watch the container logs using Docker Desktop.
+Você pode acompanhar os logs do contêiner usando o Docker Desktop.
 
-1. Select **Containers** in Docker Desktop.
-2. Select your container name.
+1. Selecione **Containers** no Docker Desktop.
+2. Selecione o nome do seu contêiner.
 
-You'll know you're ready to go when you see this:
+Você saberá que está tudo pronto quando vir isto:
 
 ```console
 nodemon -L src/index.js
@@ -407,55 +452,62 @@ Listening on port 3000
 {{< /tab >}}
 {{< /tabs >}}
 
-### Develop your app with the development container
+### Desenvolva sua aplicação com o contêiner de desenvolvimento
 
-Update your app on your host machine and see the changes reflected in the container.
+Atualize sua aplicação na máquina host e veja as alterações refletidas no
+contêiner.
 
-1. In the `src/static/js/app.js` file, on line
-   109, change the "Add Item" button to simply say "Add":
+1. No arquivo `src/static/js/app.js`, na linha 109, altere o botão "Add Item"
+   para exibir apenas "Add":
 
    ```diff
    - {submitting ? 'Adding...' : 'Add Item'}
    + {submitting ? 'Adding...' : 'Add'}
    ```
 
-   Save the file.
+   Salve o arquivo.
 
-2. Refresh the page in your web browser, and you should see the change reflected
-   almost immediately because of the bind mount. Nodemon detects the change and
-   restarts the server. It might take a few seconds for the Node server to
-   restart. If you get an error, try refreshing after a few seconds.
+2. Atualize a página no seu navegador; você deverá ver a alteração refletida
+   quase imediatamente devido ao bind mount.
+   O Nodemon detecta a alteração e reinicia o servidor.
+   Pode levar alguns segundos para o servidor Node reiniciar.
+   Se ocorrer um erro, tente atualizar a página após alguns segundos.
 
-   ![Screenshot of updated label for Add button](images/updated-add-button.webp)
+   ![Captura de tela do rótulo atualizado do botão Add](images/updated-add-button.webp)
 
-3. Feel free to make any other changes you'd like to make. Each time you make a
-   change and save a file, the change is reflected in the container because of
-   the bind mount. When Nodemon detects a change, it restarts the app inside the
-   container automatically. When you're done, stop the container and build your
-   new image using:
+3. Sinta-se à vontade para fazer outras alterações que desejar.
+   Sempre que você faz uma alteração e salva um arquivo, ela é refletida no
+   contêiner devido ao bind mount.
+   Quando o Nodemon detecta uma alteração, ele reinicia a aplicação dentro do
+   contêiner automaticamente.
+   Quando terminar, pare o contêiner e construa sua nova imagem usando:
 
    ```console
    $ docker build -t getting-started .
    ```
 
-## Summary
+## Resumo
 
-At this point, you can persist your database and see changes in your app as you develop without rebuilding the image.
+Neste ponto, você consegue persistir os dados do banco de dados e visualizar as
+alterações na aplicação enquanto desenvolve, sem precisar reconstruir a imagem.
 
-In addition to volume mounts and bind mounts, Docker also supports other mount
-types and storage drivers for handling more complex and specialized use cases.
+Além de montagens de volume e bind mounts, o Docker também oferece suporte a
+outros tipos de montagem e drivers de armazenamento para lidar com casos de uso
+mais complexos e especializados.
 
-Related information:
+Informações relacionadas:
 
- - [docker CLI reference](/reference/cli/docker/)
- - [Manage data in Docker](https://docs.docker.com/storage/)
+- [Referência da CLI do Docker](/reference/cli/docker/)
+- [Gerenciamento de dados no Docker](https://docs.docker.com/storage/)
 
-## Next steps
+## Próximos passos
 
-In order to prepare your app for production, you need to migrate your database
-from working in SQLite to something that can scale a little better. For
-simplicity, you'll keep using a relational database and switch your application
-to use MySQL. But, how should you run MySQL? How do you allow the containers to
-talk to each other? You'll learn about that in the next section.
+Para preparar sua aplicação para produção, você precisa migrar o banco de dados
+do SQLite para uma solução que ofereça melhor escalabilidade.
+Para simplificar, você continuará usando um banco de dados relacional e
+configurará sua aplicação para utilizar o MySQL.
+Mas como executar o MySQL?
+Como permitir que os contêineres se comuniquem entre si?
+Você aprenderá sobre isso na próxima seção.
 
-{{< button text="Multi container apps" url="07_multi_container.md" >}}
+{{< button text="Aplicações multicontêineres" url="07_multi_container.md" >}}
