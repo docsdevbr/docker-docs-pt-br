@@ -42,7 +42,7 @@ Se não for usada, a seção `build` é ignorada e o arquivo Compose ainda é
 considerado válido.
 O suporte à criação é um aspecto opcional da Especificação do Compose e é
 descrito em detalhes na documentação da
-[Especificação da Build do Compose](build.md).
+[Especificação de Build do Compose](build.md).
 
 Cada serviço define restrições e requisitos de tempo de execução para executar
 seus contêineres.
@@ -51,15 +51,17 @@ estratégia de implantação para melhor atender às necessidades dos contêiner
 com os recursos disponíveis.
 O suporte à implantação é um aspecto opcional da Especificação do Compose e é
 descrito em detalhes na documentação da
-[Especificação do Deploy do Compose](deploy.md).
+[Especificação de Deploy do Compose](deploy.md).
 Caso não seja implementada, a seção `deploy` é ignorada e o arquivo Compose
 ainda é considerado válido.
 
-## Examples
+## Exemplos
 
-### Simple example
+### Exemplo simples
 
-The following example demonstrates how to define two simple services, set their images, map ports, and configure basic environment variables using Docker Compose.
+O exemplo a seguir demonstra como definir dois serviços simples, definir suas
+imagens, mapear portas e configurar variáveis de ambiente básicas usando o
+Docker Compose.
 
 ```yaml
 services:
@@ -75,11 +77,15 @@ services:
       POSTGRES_DB: exampledb
 ```
 
-### Advanced example
+### Exemplo avançado
 
-In the following example, the `proxy` service uses the Nginx image, mounts a local Nginx configuration file into the container, exposes port `80` and depends on the `backend` service.
+No exemplo a seguir, o serviço `proxy` usa a imagem do Nginx, monta um arquivo
+de configuração local do Nginx no contêiner, expõe a porta `80` e depende do
+serviço `backend`.
 
-The `backend` service builds an image from the Dockerfile located in the `backend` directory that is set to build at stage `builder`.
+O serviço `backend` constrói uma imagem a partir do Dockerfile localizado no
+diretório `backend`, configurado para realizar a construção no estágio
+`builder`.
 
 ```yaml
 services:
@@ -101,15 +107,17 @@ services:
       target: builder
 ```
 
-For more example Compose files, explore the [Awesome Compose samples](https://github.com/docker/awesome-compose).
+Para mais exemplos de arquivos Compose, explore os
+[exemplos do Awesome Compose](https://github.com/docker/awesome-compose).
 
-## Attributes
+## Atributos
 
 <!-- vale off(Docker.HeadingSentenceCase.yml) -->
 
 ### `annotations`
 
-`annotations` defines annotations for the container. `annotations` can use either an array or a map.
+`annotations` define anotações para o contêiner.
+`annotations` pode usar um array ou um mapa.
 
 ```yml
 annotations:
@@ -125,18 +133,21 @@ annotations:
 
 {{< summary-bar feature_name="Compose attach" >}}
 
-When `attach` is defined and set to `false` Compose does not collect service logs,
-until you explicitly request it to.
+Quando `attach` está definido como `false`, o Compose não coleta os logs do
+serviço, a menos que você solicite isso explicitamente.
 
-The default service configuration is `attach: true`.
+A configuração padrão do serviço é `attach: true`.
 
 ### `build`
 
-`build` specifies the build configuration for creating a container image from source, as defined in the [Compose Build Specification](build.md).
+`build` especifica a configuração de build para criar uma imagem de contêiner a
+partir do código-fonte, conforme definido na
+[Especificação de Build do Compose](build.md).
 
 ### `blkio_config`
 
-`blkio_config` defines a set of configuration options to set block I/O limits for a service.
+`blkio_config` define um conjunto de opções de configuração para estabelecer
+limites de E/S de bloco para um serviço.
 
 ```yml
 services:
@@ -163,58 +174,67 @@ services:
 
 #### `device_read_bps`, `device_write_bps`
 
-Set a limit in bytes per second for read / write operations on a given device.
-Each item in the list must have two keys:
+Define um limite em bytes por segundo para operações de leitura/escrita em um
+dispositivo específico.
+Cada item da lista deve conter duas chaves:
 
-- `path`: Defines the symbolic path to the affected device.
-- `rate`: Either as an integer value representing the number of bytes or as a string expressing a byte value.
+- `path`: Define o caminho simbólico para o dispositivo afetado.
+- `rate`: Pode ser um valor inteiro representando o número de bytes ou uma
+  string expressando um valor em bytes.
 
 #### `device_read_iops`, `device_write_iops`
 
-Set a limit in operations per second for read / write operations on a given device.
-Each item in the list must have two keys:
+Define um limite em operações por segundo para operações de leitura/escrita em
+um dispositivo específico.
+Cada item da lista deve conter duas chaves:
 
-- `path`: Defines the symbolic path to the affected device.
-- `rate`: As an integer value representing the permitted number of operations per second.
+- `path`: Define o caminho simbólico para o dispositivo afetado.
+- `rate`: Um valor inteiro representando o número permitido de operações por
+  segundo.
 
 #### `weight`
 
-Modify the proportion of bandwidth allocated to a service relative to other services.
-Takes an integer value between 10 and 1000, with 500 being the default.
+Modifica a proporção de largura de banda alocada a um serviço em relação a
+outros serviços.
+Assume um valor inteiro entre 10 e 1000, sendo 500 o valor padrão.
 
 #### `weight_device`
 
-Fine-tune bandwidth allocation by device. Each item in the list must have two keys:
+Ajusta a alocação de largura de banda por dispositivo.
+Cada item da lista deve ter duas chaves:
 
-- `path`: Defines the symbolic path to the affected device.
-- `weight`: An integer value between 10 and 1000.
+- `path`: Define o caminho simbólico para o dispositivo afetado.
+- `weight`: Um valor inteiro entre 10 e 1000.
 
 ### `cpu_count`
 
-`cpu_count` defines the number of usable CPUs for service container.
+`cpu_count` define o número de CPUs utilizáveis para o contêiner de serviço.
 
 ### `cpu_percent`
 
-`cpu_percent` defines the usable percentage of the available CPUs.
+`cpu_percent` define a porcentagem utilizável das CPUs disponíveis.
 
 ### `cpu_shares`
 
-`cpu_shares` defines, as integer value, a service container's relative CPU weight versus other containers.
+`cpu_shares` define, como um valor inteiro, o peso relativo de CPU de um
+contêiner de serviço em relação a outros contêineres.
 
 ### `cpu_period`
 
-`cpu_period` configures CPU CFS (Completely Fair Scheduler) period when a platform is based
-on Linux kernel.
+`cpu_period` configura o período do CFS (Completely Fair Scheduler) da CPU
+quando uma plataforma é baseada no kernel Linux.
 
 ### `cpu_quota`
 
-`cpu_quota` configures CPU CFS (Completely Fair Scheduler) quota when a platform is based
-on Linux kernel.
+`cpu_quota` configura a cota de CPU do CFS (Completely Fair Scheduler) quando a
+plataforma é baseada no kernel Linux.
 
 ### `cpu_rt_runtime`
 
-`cpu_rt_runtime` configures CPU allocation parameters for platforms with support for real-time scheduler. It can be either
-an integer value using microseconds as unit or a [duration](extension.md#specifying-durations).
+`cpu_rt_runtime` configura os parâmetros de alocação de CPU para plataformas com
+suporte a escalonador de tempo real.
+Pode ser um valor inteiro em microssegundos ou uma
+[duração](extension.md#specifying-durations).
 
 ```yml
  cpu_rt_runtime: '400ms'
@@ -223,8 +243,10 @@ an integer value using microseconds as unit or a [duration](extension.md#specify
 
 ### `cpu_rt_period`
 
-`cpu_rt_period` configures CPU allocation parameters for platforms with support for real-time scheduler. It can be either
-an integer value using microseconds as unit or a [duration](extension.md#specifying-durations).
+`cpu_rt_period` configura os parâmetros de alocação de CPU para plataformas com
+suporte a escalonador de tempo real.
+Pode ser um valor inteiro usando microssegundos como unidade ou uma
+[duração](extension.md#specifying-durations).
 
 ```yml
  cpu_rt_period: '1400us'
@@ -233,19 +255,24 @@ an integer value using microseconds as unit or a [duration](extension.md#specify
 
 ### `cpus`
 
-`cpus` define the number of (potentially virtual) CPUs to allocate to service containers. This is a fractional number.
-`0.000` means no limit.
+`cpus` define o número de CPUs (potencialmente virtuais) a serem alocadas para
+os contêineres de serviço.
+Este é um número fracionário.
+`0.000` significa sem limite.
 
-When set, `cpus` must be consistent with the `cpus` attribute in the [Deploy Specification](deploy.md#cpus).
+Quando definido, `cpus` deve ser consistente com o atributo `cpus` na
+[Especificação de Deploy](deploy.md#cpus).
 
 ### `cpuset`
 
-`cpuset` defines the explicit CPUs in which to permit execution. Can be a range `0-3` or a list `0,1`
+`cpuset` define as CPUs específicas nas quais a execução é permitida.
+Pode ser um intervalo, como `0-3`, ou uma lista, como `0,1`.
 
 ### `cap_add`
 
-`cap_add` specifies additional container [capabilities](https://man7.org/linux/man-pages/man7/capabilities.7.html)
-as strings.
+`cap_add` especifica
+[capabilities](https://man7.org/linux/man-pages/man7/capabilities.7.html)
+adicionais do contêiner como strings.
 
 ```yaml
 cap_add:
@@ -254,8 +281,9 @@ cap_add:
 
 ### `cap_drop`
 
-`cap_drop` specifies container [capabilities](https://man7.org/linux/man-pages/man7/capabilities.7.html) to drop
-as strings.
+`cap_drop` especifica as
+[capabilities](https://man7.org/linux/man-pages/man7/capabilities.7.html) do
+contêiner a serem descartadas, na forma de strings.
 
 ```yaml
 cap_drop:
@@ -267,15 +295,18 @@ cap_drop:
 
 {{< summary-bar feature_name="Compose cgroup" >}}
 
-`cgroup` specifies the cgroup namespace to join. When unset, it is the container runtime's decision to
-select which cgroup namespace to use, if supported.
+`cgroup` especifica o namespace de cgroup ao qual se associar.
+Quando não definido, cabe ao runtime do contêiner decidir qual namespace de
+cgroup usar, caso haja suporte.
 
-- `host`: Runs the container in the Container runtime cgroup namespace.
-- `private`: Runs the container in its own private cgroup namespace.
+- `host`: Executa o contêiner no namespace de cgroup do runtime do contêiner.
+- `private`: Executa o contêiner em seu próprio namespace de cgroup privado.
 
 ### `cgroup_parent`
 
-`cgroup_parent` specifies an optional parent [cgroup](https://man7.org/linux/man-pages/man7/cgroups.7.html) for the container.
+`cgroup_parent` especifica um
+[cgroup](https://man7.org/linux/man-pages/man7/cgroups.7.html) pai opcional para
+o contêiner.
 
 ```yaml
 cgroup_parent: m-executor-abcd
@@ -283,50 +314,70 @@ cgroup_parent: m-executor-abcd
 
 ### `command`
 
-`command` overrides the default command declared by the container image, for example by Dockerfile's `CMD`.
+`command` substitui o comando padrão declarado pela imagem do contêiner, por
+exemplo, aquele definido pelo `CMD` do Dockerfile.
 
 ```yaml
 command: bundle exec thin -p 3000
 ```
 
-If the value is `null`, the default command from the image is used.
+Se o valor for `null`, o comando padrão da imagem é utilizado.
 
-If the value is `[]` (empty list) or `''` (empty string), the default command declared by the image is ignored, or in other words overridden to be empty.
+Se o valor for `[]` (lista vazia) ou `''` (string vazia), o comando padrão
+declarado pela imagem é ignorado ou, em outras palavras, substituído por um
+comando vazio.
 
 > [!NOTE]
 >
-> Unlike the `CMD` instruction in a Dockerfile, the `command` field doesn't automatically run within the context of the [`SHELL`](/reference/dockerfile.md#shell-form) instruction defined in the image. If your `command` relies on shell-specific features, such as environment variable expansion, you need to explicitly run it within a shell. For example:
+> Ao contrário da instrução `CMD` em um Dockerfile, o campo `command` não é
+> executado automaticamente no contexto da instrução
+> [`SHELL`](/reference/dockerfile.md#shell-form) definida na imagem.
+> Se o seu `command` depender de recursos específicos do shell, como a expansão
+> de variáveis de ambiente, você precisará executá-lo explicitamente dentro de
+> um shell.
+> Por exemplo:
 >
 > ```yaml
 > command: /bin/sh -c 'echo "hello $$HOSTNAME"'
 > ```
 
-The value can also be a list, similar to the [exec-form syntax](/reference/dockerfile.md#exec-form)
-used by the [Dockerfile](/reference/dockerfile.md#exec-form).
+O valor também pode ser uma lista, semelhante à
+[sintaxe exec-form](/reference/dockerfile.md#exec-form)
+utilizada pelo [Dockerfile](/reference/dockerfile.md#exec-form).
 
 ### `configs`
 
-`configs` let services adapt their behaviour without the need to rebuild a Docker image.
-Services can only access configs when explicitly granted by the `configs` attribute. Two different syntax variants are supported.
+As `configs` permitem que os serviços adaptem seu comportamento sem a
+necessidade de reconstruir uma imagem Docker.
+Os serviços só podem acessar as `configs` quando isso é explicitamente concedido
+por meio do atributo `configs`.
+Há suporte para duas variantes de sintaxe.
 
-Compose reports an error if `config` doesn't exist on the platform or isn't defined in the
-[`configs` top-level element](configs.md) in the Compose file.
+O Compose gera um erro se a `config` não existir na plataforma ou não estiver
+definida no [elemento de nível superior `configs`](configs.md) do arquivo
+Compose.
 
-There are two syntaxes defined for configs: a short syntax and a long syntax.
+Existem duas sintaxes definidas para `configs`: uma sintaxe curta e uma sintaxe
+longa.
 
-You can grant a service access to multiple configs, and you can mix long and short syntax.
+Você pode conceder a um serviço acesso a múltiplas `configs` e combinar as
+sintaxes longa e curta.
 
-#### Short syntax
+#### Sintaxe curta
 
-The short syntax variant only specifies the config name. This grants the
-container access to the config and mounts it as files into a service’s container’s filesystem. The location of the mount point within the container defaults to `/<config_name>` in Linux containers, and `C:\<config-name>` in Windows containers.
+A variante de sintaxe curta especifica apenas o nome da configuração.
+Isso concede ao container acesso à configuração e a monta como arquivos no
+sistema de arquivos do container do serviço.
+O local do ponto de montagem dentro do container é, por padrão,
+`/<nome_da_config>` em contêineres Linux e `C:\<nome-da-config>` em contêineres
+Windows.
 
-The following example uses the short syntax to grant the `redis` service
-access to the `my_config` and `my_other_config` configs. The value of
-`my_config` is set to the contents of the file `./my_config.txt`, and
-`my_other_config` is defined as an external resource, which means that it has
-already been defined in the platform. If the external config does not exist,
-the deployment fails.
+O exemplo a seguir usa a sintaxe curta para conceder ao serviço `redis`acesso às
+configurações `my_config` e `my_other_config`.
+O valor de `my_config` é definido como o conteúdo do arquivo `./my_config.txt`,
+e `my_other_config` é definida como um recurso externo, o que significa que ela
+já foi definida na plataforma.
+Se a configuração externa não existir, a implantação falha.
 
 ```yml
 services:
@@ -342,23 +393,27 @@ configs:
     external: true
 ```
 
-#### Long syntax
+#### Sintaxe longa
 
-The long syntax provides more granularity in how the config is created within the service's task containers.
+A sintaxe longa oferece maior granularidade na forma como a configuração é
+criada dentro dos contêineres de tarefa do serviço.
 
-- `source`: The name of the config as it exists in the platform.
-- `target`: The path and name of the file to be mounted in the service's
-  task containers. Defaults to `/<source>` if not specified.
-- `uid` and `gid`: The numeric uid or gid that owns the mounted config file
-  within the service's task containers.
-- `mode`: The [permissions](https://wintelguy.com/permissions-calc.pl) for the file that is mounted within the service's
-  task containers, in octal notation. Default value is world-readable (`0444`).
-  Writable bit must be ignored. The executable bit can be set.
+- `source`: O nome da configuração conforme ela existe na plataforma.
+- `target`: O caminho e o nome do arquivo a ser montado nos contêineres de
+  tarefa do serviço.
+  O padrão é `/<source>` se não for especificado.
+- `uid` e `gid`: O UID ou GID numérico do proprietário do arquivo de
+  configuração montado dentro dos contêineres de tarefa do serviço.
+- `mode`: As [permissões](https://wintelguy.com/permissions-calc.pl) do arquivo
+  montado dentro dos contêineres de tarefa do serviço, em notação octal.
+  O valor padrão é de leitura para todos (`0444`).
+  O bit de escrita deve ser ignorado.
+  O bit de execução pode ser definido.
 
-The following example sets the name of `my_config` to `redis_config` within the
-container, sets the mode to `0440` (group-readable) and sets the user and group
-to `103`. The `redis` service does not have access to the `my_other_config`
-config.
+O exemplo a seguir define o nome de `my_config` como `redis_config` dentro do
+contêiner, define o modo como `0440` (leitura pelo grupo) e define o usuário e o
+grupo como `103`.
+O serviço `redis` não tem acesso à configuração `my_other_config`.
 
 ```yml
 services:
@@ -379,51 +434,58 @@ configs:
 
 ### `container_name`
 
-`container_name` is a string that specifies a custom container name, rather than a name generated by default.
+`container_name` é uma string que especifica um nome de contêiner personalizado,
+em vez de um nome gerado por padrão.
 
 ```yml
-container_name: my-web-container
+container_name: meu-conteiner-web
 ```
 
-Compose does not scale a service beyond one container if the Compose file specifies a
-`container_name`. Attempting to do so results in an error.
+O Compose não escala um serviço além de um único contêiner se o arquivo Compose
+especificar um `container_name`.
+Tentar fazer isso resulta em um erro.
 
-`container_name` follows the regex format of `[a-zA-Z0-9][a-zA-Z0-9_.-]+`
+`container_name` segue o formato de expressão regular
+`[a-zA-Z0-9][a-zA-Z0-9_.-]+`.
 
 ### `credential_spec`
 
-`credential_spec` configures the credential spec for a managed service account.
+`credential_spec` configura a especificação de credenciais para uma conta de
+serviço gerenciada.
 
-If you have services that use Windows containers, you can use `file:` and
-`registry:` protocols for `credential_spec`. Compose also supports additional
-protocols for custom use-cases.
+Se você tiver serviços que usam contêineres do Windows, poderá usar os
+protocolos `file:` e `registry:` para `credential_spec`.
+O Compose também oferece suporte a protocolos adicionais para casos de uso
+personalizados.
 
-The `credential_spec` must be in the format `file://<filename>` or `registry://<value-name>`.
+O `credential_spec` deve estar no formato `file://<nome-do-arquivo>` ou `registry://<nome-do-valor>`.
 
 ```yml
 credential_spec:
   file: my-credential-spec.json
 ```
 
-When using `registry:`, the credential spec is read from the Windows registry on
-the daemon's host. A registry value with the given name must be located in:
+Ao usar `registry:`, a especificação de credenciais é lida a partir do Registro
+do Windows no host do daemon.
+Um valor de registro com o nome especificado deve estar localizado em:
 
 ```bash
 HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtualization\Containers\CredentialSpecs
 ```
 
-The following example loads the credential spec from a value named `my-credential-spec`
-in the registry:
+O exemplo a seguir carrega a especificação de credenciais a partir de um valor
+chamado `my-credential-spec` no registro:
 
 ```yml
 credential_spec:
   registry: my-credential-spec
 ```
 
-#### Example gMSA configuration
+#### Exemplo de configuração de gMSA
 
-When configuring a gMSA credential spec for a service, you only need
-to specify a credential spec with `config`, as shown in the following example:
+Ao configurar uma especificação de credencial gMSA para um serviço, você só
+precisa especificar uma especificação de credencial com `config`, conforme
+mostrado no exemplo a seguir:
 
 ```yml
 services:
