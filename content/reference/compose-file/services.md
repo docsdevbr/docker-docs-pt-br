@@ -178,8 +178,8 @@ Define um limite em bytes por segundo para operações de leitura/escrita em um
 dispositivo específico.
 Cada item da lista deve conter duas chaves:
 
-- `path`: Define o caminho simbólico para o dispositivo afetado.
-- `rate`: Pode ser um valor inteiro representando o número de bytes ou uma
+- `path`: define o caminho simbólico para o dispositivo afetado.
+- `rate`: pode ser um valor inteiro representando o número de bytes ou uma
   string expressando um valor em bytes.
 
 #### `device_read_iops`, `device_write_iops`
@@ -188,8 +188,8 @@ Define um limite em operações por segundo para operações de leitura/escrita 
 um dispositivo específico.
 Cada item da lista deve conter duas chaves:
 
-- `path`: Define o caminho simbólico para o dispositivo afetado.
-- `rate`: Um valor inteiro representando o número permitido de operações por
+- `path`: define o caminho simbólico para o dispositivo afetado.
+- `rate`: um valor inteiro representando o número permitido de operações por
   segundo.
 
 #### `weight`
@@ -203,8 +203,8 @@ Assume um valor inteiro entre 10 e 1000, sendo 500 o valor padrão.
 Ajusta a alocação de largura de banda por dispositivo.
 Cada item da lista deve ter duas chaves:
 
-- `path`: Define o caminho simbólico para o dispositivo afetado.
-- `weight`: Um valor inteiro entre 10 e 1000.
+- `path`: define o caminho simbólico para o dispositivo afetado.
+- `weight`: um valor inteiro entre 10 e 1000.
 
 ### `cpu_count`
 
@@ -299,8 +299,8 @@ cap_drop:
 Quando não definido, cabe ao runtime do contêiner decidir qual namespace de
 cgroup usar, caso haja suporte.
 
-- `host`: Executa o contêiner no namespace de cgroup do runtime do contêiner.
-- `private`: Executa o contêiner em seu próprio namespace de cgroup privado.
+- `host`: executa o contêiner no namespace de cgroup do runtime do contêiner.
+- `private`: executa o contêiner em seu próprio namespace de cgroup privado.
 
 ### `cgroup_parent`
 
@@ -321,7 +321,7 @@ exemplo, aquele definido pelo `CMD` do Dockerfile.
 command: bundle exec thin -p 3000
 ```
 
-Se o valor for `null`, o comando padrão da imagem é utilizado.
+Se o valor for `null`, o comando padrão da imagem é usado.
 
 Se o valor for `[]` (lista vazia) ou `''` (string vazia), o comando padrão
 declarado pela imagem é ignorado ou, em outras palavras, substituído por um
@@ -366,9 +366,9 @@ sintaxes longa e curta.
 #### Sintaxe curta
 
 A variante de sintaxe curta especifica apenas o nome da configuração.
-Isso concede ao container acesso à configuração e a monta como arquivos no
-sistema de arquivos do container do serviço.
-O local do ponto de montagem dentro do container é, por padrão,
+Isso concede ao contêiner acesso à configuração e a monta como arquivos no
+sistema de arquivos do contêiner do serviço.
+O local do ponto de montagem dentro do contêiner é, por padrão,
 `/<nome_da_config>` em contêineres Linux e `C:\<nome-da-config>` em contêineres
 Windows.
 
@@ -398,13 +398,13 @@ configs:
 A sintaxe longa oferece maior granularidade na forma como a configuração é
 criada dentro dos contêineres de tarefa do serviço.
 
-- `source`: O nome da configuração conforme ela existe na plataforma.
-- `target`: O caminho e o nome do arquivo a ser montado nos contêineres de
+- `source`: o nome da configuração conforme ela existe na plataforma.
+- `target`: o caminho e o nome do arquivo a ser montado nos contêineres de
   tarefa do serviço.
   O padrão é `/<source>` se não for especificado.
-- `uid` e `gid`: O UID ou GID numérico do proprietário do arquivo de
+- `uid` e `gid`: o UID ou GID numérico do proprietário do arquivo de
   configuração montado dentro dos contêineres de tarefa do serviço.
-- `mode`: As [permissões](https://wintelguy.com/permissions-calc.pl) do arquivo
+- `mode`: as [permissões](https://wintelguy.com/permissions-calc.pl) do arquivo
   montado dentro dos contêineres de tarefa do serviço, em notação octal.
   O valor padrão é de leitura para todos (`0444`).
   O bit de escrita deve ser ignorado.
@@ -503,18 +503,19 @@ configs:
 
 {{% include "compose/services-depends-on.md" %}}
 
-#### Short syntax
+#### Sintaxe curta
 
-The short syntax variant only specifies service names of the dependencies.
-Service dependencies cause the following behaviors:
+A variante de sintaxe curta especifica apenas os nomes dos serviços das
+dependências.
+As dependências de serviço resultam nos seguintes comportamentos:
 
-- Compose creates services in dependency order. In the following
-  example, `db` and `redis` are created before `web`.
+- O Compose cria os serviços na ordem de dependência.
+  No exemplo a seguir, `db` e `redis` são criados antes de `web`.
 
-- Compose removes services in dependency order. In the following
-  example, `web` is removed before `db` and `redis`.
+- O Compose remove os serviços na ordem de dependência.
+  No exemplo a seguir, `web` é removido antes de `db` e `redis`.
 
-Simple example:
+Exemplo simples:
 
 ```yml
 services:
@@ -529,41 +530,53 @@ services:
     image: postgres:18
 ```
 
-Compose guarantees dependency services have been started before
-starting a dependent service.
-With short syntax, Compose does not wait for dependency services to be "healthy" before
-starting a dependent service.
+O Compose garante que os serviços de dependência tenham sido iniciados antes de
+iniciar um serviço dependente.
+Com a sintaxe curta, o Compose não aguarda que os serviços de dependência
+estejam "saudáveis" antes de iniciar um serviço dependente.
 
-#### Long syntax
+#### Sintaxe longa
 
-The long form syntax enables the configuration of additional fields that can't be
-expressed in the short form.
+A sintaxe de formato longo permite a configuração de campos adicionais que não
+podem ser expressos no formato curto.
 
-- `restart`: When set to `true` Compose restarts this service after it updates the dependency service.
-  This applies to an explicit restart controlled by a Compose operation, and excludes automated restart by the container runtime
-  after the container dies. Introduced in Docker Compose version [2.17.0](https://github.com/docker/compose/releases/tag/v2.17.0).
+- `restart`: quando definido como `true`, o Compose reinicia este serviço após
+  atualizar o serviço de dependência.
+  Isso se aplica a uma reinicialização explícita controlada por uma operação do
+  Compose e exclui a reinicialização automatizada pelo runtime do contêiner após
+  a parada do contêiner.
+  Introduzido na versão
+  [2.17.0](https://github.com/docker/compose/releases/tag/v2.17.0) do Docker
+  Compose.
 
-- `condition`: Sets the condition under which dependency is considered satisfied
-  - `service_started`: An equivalent of the short syntax described previously
-  - `service_healthy`: Specifies that a dependency is expected to be "healthy"
-    (as indicated by [`healthcheck`](#healthcheck)) before starting a dependent
-    service.
-  - `service_completed_successfully`: Specifies that a dependency is expected to run
-    to successful completion before starting a dependent service.
-- `required`: When set to `false` Compose only warns you when the dependency service isn't started or available. If it's not defined
-    the default value of `required` is `true`. Introduced in Docker Compose version [2.20.0](https://github.com/docker/compose/releases/tag/v2.20.0).
+- `condition`: define a condição sob a qual a dependência é considerada
+  satisfeita.
+  - `service_started`: equivalente à sintaxe curta descrita anteriormente.
+  - `service_healthy`: especifica que se espera que uma dependência esteja
+    "saudável" (conforme indicado por [`healthcheck`](#healthcheck)) antes de
+    iniciar um serviço dependente.
+  - `service_completed_successfully`: especifica que se espera que uma
+    dependência seja executada até a conclusão bem-sucedida antes de iniciar um
+    serviço dependente.
+- `required`: quando definido como `false`, o Compose apenas emite um aviso caso
+  o serviço de dependência não tenha sido iniciado ou não esteja disponível.
+  Se não for definido, o valor padrão de `required` é `true`.
+  Introduzido na versão
+  [2.20.0](https://github.com/docker/compose/releases/tag/v2.20.0) do Docker
+  Compose.
 
-Service dependencies cause the following behaviors:
+As dependências de serviço geram os seguintes comportamentos:
 
-- Compose creates services in dependency order. In the following
-  example, `db` and `redis` are created before `web`.
+- O Compose cria serviços na ordem de dependência.
+  No exemplo a seguir, `db` e `redis` são criados antes de `web`.
 
-- Compose waits for healthchecks to pass on dependencies
-  marked with `service_healthy`. In the following example, `db` is expected to
-  be "healthy" before `web` is created.
+- O Compose aguarda a conclusão bem-sucedida das verificações de saúde das
+  dependências marcadas com `service_healthy`.
+  No exemplo a seguir, espera-se que `db` esteja "saudável" antes de `web` ser
+  criado.
 
-- Compose removes services in dependency order. In the following
-  example, `web` is removed before `db` and `redis`.
+- O Compose remove serviços na ordem de dependência.
+  No exemplo a seguir, `web` é removido antes de `db` e `redis`.
 
 ```yml
 services:
@@ -581,26 +594,30 @@ services:
     image: postgres:18
 ```
 
-Compose guarantees dependency services are started before
-starting a dependent service.
-Compose guarantees dependency services marked with
-`service_healthy` are "healthy" before starting a dependent service.
+O Compose garante que os serviços de dependência sejam iniciados antes de
+iniciar um serviço dependente.
+O Compose garante que os serviços de dependência marcados com `service_healthy`
+estejam "saudáveis" antes de iniciar um serviço dependente.
 
 ### `deploy`
 
-`deploy` specifies the configuration for the deployment and lifecycle of services, as defined [in the Compose Deploy Specification](deploy.md).
+`deploy` especifica a configuração para a implantação e o ciclo de vida dos
+serviços, conforme definido [na Especificação de Deploy do Compose](deploy.md).
 
 ### `develop`
 
 {{< summary-bar feature_name="Compose develop" >}}
 
-`develop` specifies the development configuration for maintaining a container in sync with source, as defined in the [Development Section](develop.md).
+`develop` especifica a configuração de desenvolvimento para manter um contêiner
+sincronizado com o código-fonte, conforme definido na
+[Seção de desenvolvimento](develop.md).
 
 ### `device_cgroup_rules`
 
-`device_cgroup_rules` defines a list of device cgroup rules for this container.
-The format is the same format the Linux kernel specifies in the [Control Groups
-Device Whitelist Controller](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v1/devices.html).
+`device_cgroup_rules` define uma lista de regras de cgroup de dispositivos para
+este contêiner.
+O formato é o mesmo especificado pelo kernel do Linux no
+[Control Groups Device Whitelist Controller](https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v1/devices.html).
 
 ```yml
 device_cgroup_rules:
@@ -610,8 +627,8 @@ device_cgroup_rules:
 
 ### `devices`
 
-`devices` defines a list of device mappings for created containers in the form of
-`HOST_PATH:CONTAINER_PATH[:CGROUP_PERMISSIONS]`.
+`devices` define uma lista de mapeamentos de dispositivos para contêineres
+criados, no formato `HOST_PATH:CONTAINER_PATH[:CGROUP_PERMISSIONS]`.
 
 ```yml
 devices:
@@ -619,7 +636,9 @@ devices:
   - "/dev/sda:/dev/xvda:rwm"
 ```
 
-`devices` can also rely on the [CDI](https://github.com/cncf-tags/container-device-interface) syntax to let the container runtime select a device:
+`devices` também pode usar a sintaxe da
+[CDI](https://github.com/cncf-tags/container-device-interface) para permitir que
+o runtime de contêiner selecione um dispositivo:
 
 ```yml
 devices:
@@ -628,7 +647,9 @@ devices:
 
 ### `dns`
 
-`dns` defines custom DNS servers to set on the container network interface configuration. It can be a single value or a list.
+`dns` define servidores DNS personalizados a serem configurados na interface de
+rede do contêiner.
+Pode ser um valor único ou uma lista.
 
 ```yml
 dns: 8.8.8.8
@@ -642,7 +663,8 @@ dns:
 
 ### `dns_opt`
 
-`dns_opt` list custom DNS options to be passed to the container’s DNS resolver (`/etc/resolv.conf` file on Linux).
+`dns_opt` lista opções de DNS personalizadas a serem passadas para o resolvedor
+de DNS do contêiner (arquivo `/etc/resolv.conf` no Linux).
 
 ```yml
 dns_opt:
@@ -652,7 +674,9 @@ dns_opt:
 
 ### `dns_search`
 
-`dns_search` defines custom DNS search domains to set on container network interface configuration. It can be a single value or a list.
+`dns_search` define domínios de busca DNS personalizados para configurar na
+interface de rede do contêiner.
+Pode ser um valor único ou uma lista.
 
 ```yml
 dns_search: example.com
@@ -666,14 +690,17 @@ dns_search:
 
 ### `domainname`
 
-`domainname` declares a custom domain name to use for the service container. It must be a valid RFC 1123 hostname.
+`domainname` declara um nome de domínio personalizado a ser usado para o
+contêiner de serviço.
+Ele deve ser um nome de host válido segundo a RFC 1123.
 
 ### `driver_opts`
 
 {{< summary-bar feature_name="Compose driver opts" >}}
 
-`driver_opts` specifies a list of options as key-value pairs to pass to the driver. These options are
-driver-dependent.
+`driver_opts` especifica uma lista de opções, na forma de pares chave-valor, a
+serem passadas para o driver.
+Essas opções dependem do driver.
 
 ```yml
 services:
@@ -684,24 +711,27 @@ services:
           com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
 ```
 
-Consult the [network drivers documentation](/manuals/engine/network/_index.md) for more information.
+Consulte a [documentação dos drivers de rede](/manuals/engine/network/_index.md)
+para obter mais informações.
 
 ### `entrypoint`
 
-`entrypoint` declares the default entrypoint for the service container.
-This overrides the `ENTRYPOINT` instruction from the service's Dockerfile.
+O `entrypoint` declara o ponto de entrada padrão para o contêiner do serviço.
+Isso substitui a instrução `ENTRYPOINT` do Dockerfile do serviço.
 
-If `entrypoint` is non-null, Compose ignores any default command from the image, for example the `CMD`
-instruction in the Dockerfile.
+Se o `entrypoint` não for nulo, o Compose ignora qualquer comando padrão da
+imagem, como, por exemplo, a instrução `CMD` no Dockerfile.
 
-See also [`command`](#command) to set or override the default command to be executed by the entrypoint process.
+Veja também [`command`](#command) para definir ou substituir o comando padrão a
+ser executado pelo processo de ponto de entrada.
 
-In its short form, the value can be defined as a string:
+Em sua forma abreviada, o valor pode ser definido como uma string:
+
 ```yml
 entrypoint: /code/entrypoint.sh
 ```
 
-Alternatively, the value can also be a list, in a manner similar to the
+Alternativamente, o valor também pode ser uma lista, de maneira semelhante ao
 [Dockerfile](https://docs.docker.com/reference/dockerfile/#cmd):
 
 ```yml
@@ -714,9 +744,11 @@ entrypoint:
   - vendor/bin/phpunit
 ```
 
-If the value is `null`, the default entrypoint from the image is used.
+Se o valor for `null`, o ponto de entrada padrão da imagem será usado.
 
-If the value is `[]` (empty list) or `''` (empty string), the default entrypoint declared by the image is ignored, or in other words, overridden to be empty.
+Se o valor for `[]` (lista vazia) ou `''` (string vazia), o ponto de entrada
+padrão declarado pela imagem será ignorado, ou seja, substituído por um valor
+vazio.
 
 ### `env_file`
 
@@ -726,14 +758,19 @@ If the value is `[]` (empty list) or `''` (empty string), the default entrypoint
 env_file: .env
 ```
 
-Relative paths are resolved from the Compose file's parent folder. As absolute paths prevent the Compose
-file from being portable, Compose warns you when such a path is used to set `env_file`.
+Caminhos relativos são resolvidos a partir da pasta que contém o arquivo
+Compose.
+Como caminhos absolutos impedem a portabilidade do arquivo Compose, o Compose
+emite um aviso quando tal caminho é usado para definir `env_file`.
 
-Environment variables declared in the [`environment`](#environment) section override these values. This holds true even if those values are
-empty or undefined.
+Variáveis de ambiente declaradas na seção [`environment`](#environment)
+substituem esses valores.
+Isso se aplica mesmo que tais valores estejam vazios ou indefinidos.
 
-`env_file` can also be a list. The files in the list are processed from the top down. For the same variable
-specified in two environment files, the value from the last file in the list stands.
+O `env_file` também pode ser uma lista.
+Os arquivos da lista são processados de cima para baixo.
+Caso uma mesma variável seja especificada em dois arquivos de ambiente,
+prevalece o valor definido no último arquivo da lista.
 
 ```yml
 env_file:
@@ -741,14 +778,16 @@ env_file:
   - ./b.env
 ```
 
-List elements can also be declared as a mapping, which then lets you set additional
-attributes.
+Elementos de lista também podem ser declarados como um mapeamento, o que permite
+definir atributos adicionais.
 
 #### `required`
 
 {{< summary-bar feature_name="Compose required" >}}
 
-The `required` attribute defaults to `true`. When `required` is set to `false` and the `.env` file is missing, Compose silently ignores the entry.
+O atributo `required` tem `true` como valor padrão.
+Quando `required` é definido como `false` e o arquivo `.env` está ausente, o
+Compose ignora a entrada silenciosamente.
 
 ```yml
 env_file:
@@ -762,10 +801,14 @@ env_file:
 
 {{< summary-bar feature_name="Compose format" >}}
 
-The `format` attribute lets you use an alternative file format for the `env_file`. When not set, `env_file` is parsed according to the Compose rules outlined in [`Env_file` format](#env_file-format).
+O atributo `format` permite usar um formato de arquivo alternativo para o
+`env_file`.
+Quando não definido, o `env_file` é analisado conforme as regras do Compose
+descritas em [Formato do `env_file`](#env_file-format).
 
-`raw` format lets you use an `env_file` with key=value items, but without any attempt from Compose to parse the value for interpolation.
-This let you pass values as-is, including quotes and `$` signs.
+O formato `raw` permite usar um `env_file` com itens chave=valor, mas sem que o
+Compose tente analisar o valor para interpolação.
+Isso permite passar valores como estão, incluindo aspas e cifrão (`$`).
 
 ```yml
 env_file:
@@ -773,43 +816,49 @@ env_file:
     format: raw
 ```
 
-#### `Env_file` format
+#### Formato do `env_file`
 
-Each line in an `.env` file must be in `VAR[=[VAL]]` format. The following syntax rules apply:
+Cada linha em um arquivo `.env` deve estar no formato `VAR[=[VAL]]`.
+As seguintes regras de sintaxe são aplicadas:
 
-- Lines beginning with `#` are processed as comments and ignored.
-- Blank lines are ignored.
-- Unquoted and double-quoted (`"`) values have [Interpolation](interpolation.md) applied.
-- Each line represents a key-value pair. Values can optionally be quoted.
-- Delimiter separating key and value can be either `=` or `:`.
-- Spaces before and after value are ignored.
+- Linhas que começam com `#` são processadas como comentários e ignoradas.
+- Linhas em branco são ignoradas.
+- Valores sem aspas ou entre aspas duplas (`"`) passam por
+  [Interpolação](interpolation.md).
+- Cada linha representa um par chave-valor.
+  Os valores podem, opcionalmente, estar entre aspas.
+- O delimitador que separa a chave do valor pode ser `=` ou `:`.
+- Espaços antes e depois do valor são ignorados.
   - `VAR=VAL` -> `VAL`
   - `VAR="VAL"` -> `VAL`
   - `VAR='VAL'` -> `VAL`
   - `VAR: VAL` -> `VAL`
   - `VAR = VAL  ` -> `VAL` <!-- markdownlint-disable-line no-space-in-code -->
-- Inline comments for unquoted values must be preceded with a space.
-  - `VAR=VAL # comment` -> `VAL`
-  - `VAR=VAL# not a comment` -> `VAL# not a comment`
-- Inline comments for quoted values must follow the closing quote.
-  - `VAR="VAL # not a comment"` -> `VAL # not a comment`
-  - `VAR="VAL" # comment` -> `VAL`
-- Single-quoted (`'`) values are used literally.
+- Comentários na mesma linha para valores sem aspas devem ser precedidos por um
+  espaço.
+  - `VAR=VAL # comentário` -> `VAL`
+  - `VAR=VAL# não é um comentário` -> `VAL# não é um comentário`
+- Comentários na mesma linha para valores entre aspas devem vir após as aspas de
+  fechamento.
+  - `VAR="VAL # não é um comentário"` -> `VAL # não é um comentário`
+  - `VAR="VAL" # comentário` -> `VAL`
+- Valores entre aspas simples (`'`) são tratados literalmente.
   - `VAR='$OTHER'` -> `$OTHER`
   - `VAR='${OTHER}'` -> `${OTHER}`
-- Quotes can be escaped with `\`.
+- Aspas podem ser escapadas com `\`.
   - `VAR='Let\'s go!'` -> `Let's go!`
   - `VAR="{\"hello\": \"json\"}"` -> `{"hello": "json"}`
-- Common shell escape sequences including `\n`, `\r`, `\t`, and `\\` are supported in double-quoted values.
-  - `VAR="some\tvalue"` -> `some  value`
-  - `VAR='some\tvalue'` -> `some\tvalue`
-  - `VAR=some\tvalue` -> `some\tvalue`
+- Sequências de escape comuns de shell, incluindo `\n`, `\r`, `\t` e `\\`, são
+  suportadas em valores entre aspas duplas.
+  - `VAR="algum\tvalor"` -> `algum  valor`
+  - `VAR='algum\tvalor'` -> `algum\tvalor`
+  - `VAR=algum\tvalor` -> `algum\tvalor`
 
-`VAL` may be omitted, in such cases the variable value is an empty string.
-`=VAL` may be omitted, in such cases the variable is unset.
+`VAL` pode ser omitido; nesses casos, o valor da variável é uma string vazia.
+`=VAL` pode ser omitido; nesses casos, a variável não é definida (unset).
 
 ```bash
-# Set Rails/Rack environment
+# Define o ambiente Rails/Rack
 RACK_ENV=development
 VAR="quoted"
 ```
@@ -818,11 +867,13 @@ VAR="quoted"
 
 {{% include "compose/services-environment.md" %}}
 
-Environment variables can be declared by a single key (no value to equals sign). In this case Compose
-relies on you to resolve the value. If the value is not resolved, the variable
-is unset and is removed from the service container environment.
+As variáveis de ambiente podem ser declaradas por uma única chave (sem valor
+para o sinal de igual).
+Nesse caso, o Compose depende de você para resolver o valor.
+Se o valor não for resolvido, a variável é removida e excluída do ambiente do
+contêiner de serviço.
 
-Map syntax:
+Sintaxe do mapa:
 
 ```yml
 environment:
@@ -831,7 +882,7 @@ environment:
   USER_INPUT:
 ```
 
-Array syntax:
+Sintaxe de array:
 
 ```yml
 environment:
@@ -840,16 +891,20 @@ environment:
   - USER_INPUT
 ```
 
-When both `env_file` and `environment` are set for a service, values set by `environment` have precedence.
+Quando tanto `env_file` quanto `environment` são definidos para um serviço, os
+valores definidos em `environment` têm precedência.
 
 ### `expose`
 
-`expose` defines the (incoming) port or a range of ports that Compose exposes from the container. These ports must be
-accessible to linked services and should not be published to the host machine. Only the internal container
-ports can be specified.
+O `expose` define a porta (de entrada) ou o intervalo de portas que o Compose
+expõe a partir do contêiner.
+Essas portas devem ser acessíveis a serviços vinculados e não devem ser
+publicadas na máquina host.
+Apenas as portas internas do contêiner podem ser especificadas.
 
-Syntax is `<portnum>/[<proto>]` or `<startport-endport>/[<proto>]` for a port range.
-When not explicitly set, `tcp` protocol is used.
+A sintaxe é `<número_da_porta>/[<proto>]` ou
+`<porta_inicial-porta_final>/[<proto>]` para um intervalo de portas.
+Quando não definido explicitamente, o protocolo `tcp` é usado.
 
 ```yml
 expose:
@@ -860,14 +915,24 @@ expose:
 
 > [!NOTE]
 >
-> If the Dockerfile for the image already exposes ports, it is visible to other containers on the network even if `expose` is not set in your Compose file.
+> Se o Dockerfile da imagem já expuser portas, elas ficarão visíveis para outros
+> contêineres na rede, mesmo que `expose` não esteja definido no seu arquivo
+> Compose.
 
 ### `extends`
 
-`extends` lets you share common configurations among different files, or even different projects entirely. With `extends` you can define a common set of service options in one place and refer to it from anywhere. You can refer to another Compose file and select a service you want to also use in your own application, with the ability to override some attributes for your own needs.
+O `extends` permite compartilhar configurações comuns entre arquivos diferentes
+ou até mesmo entre projetos totalmente distintos.
+Com o `extends`, você pode definir um conjunto comum de opções de serviço em um
+único local e referenciá-lo de qualquer lugar.
+É possível referenciar outro arquivo Compose e selecionar um serviço que você
+deseja usar também em sua própria aplicação, com a possibilidade de substituir
+alguns atributos para atender às suas necessidades específicas.
 
-You can use `extends` on any service together with other configuration keys. The `extends` value must be a mapping
-defined with a required `service` and an optional `file` key.
+Você pode usar o `extends` em qualquer serviço, juntamente com outras chaves de
+configuração.
+O valor de `extends` deve ser um mapeamento definido com uma chave obrigatória
+`service` e uma chave opcional `file`.
 
 ```yaml
 extends:
@@ -875,58 +940,78 @@ extends:
   service: webapp
 ```
 
-- `service`: Defines the name of the service being referenced as a base, for example `web` or `database`.
-- `file`: The location of a Compose configuration file defining that service.
+- `service`: define o nome do serviço que está sendo referenciado como base; por
+  exemplo, `web` ou `database`.
+- `file`: o local de um arquivo de configuração do Compose que define esse
+  serviço.
 
-`extends` is not supported when deploying with `docker stack deploy`.
+`extends` não é suportado ao realizar o deploy com `docker stack deploy`.
 
-#### Restrictions
+#### Restrições
 
-When a service is referenced using `extends`, it can declare dependencies on other resources. These dependencies may be explicitly defined through attributes like `volumes`, `networks`, `configs`, `secrets`, `links`, `volumes_from`, or `depends_on`. Alternatively, dependencies can reference another service using the `service:{name}` syntax in namespace declarations such as `ipc`, `pid`, or `network_mode`.
+Quando um serviço é referenciado usando `extends`, ele pode declarar
+dependências de outros recursos.
+Essas dependências podem ser definidas explicitamente por meio de atributos como
+`volumes`, `networks`, `configs`, `secrets`, `links`, `volumes_from` ou
+`depends_on`.
+Alternativamente, as dependências podem referenciar outro serviço usando a
+sintaxe `service:{name}` em declarações de namespace, como `ipc`, `pid` ou
+`network_mode`.
 
-Compose does not automatically import these referenced resources into the extended model. It is your responsibility to ensure all required resources are explicitly declared in the model that relies on extends.
+O Compose não importa automaticamente esses recursos referenciados para o modelo
+estendido.
+É sua responsabilidade garantir que todos os recursos necessários sejam
+declarados explicitamente no modelo que usa o `extends`.
 
-Circular references with `extends` are not supported, Compose returns an error when one is detected.
+Referências circulares com `extends` não são suportadas; o Compose retorna um
+erro quando uma delas é detectada.
 
-#### Finding referenced service
+#### Localizando o serviço referenciado
 
-`file` value can be:
+O valor de `file` pode ser:
 
-- Not present.
-  This indicates that another service within the same Compose file is being referenced.
-- File path, which can be either:
-  - Relative path. This path is considered as relative to the location of the main Compose
-    file.
-  - Absolute path.
+- Ausente.
+  Isso indica que está sendo referenciado outro serviço dentro do mesmo arquivo
+  Compose.
+- Um caminho de arquivo, que pode ser:
+  - Caminho relativo.
+    Esse caminho é considerado relativo à localização do arquivo Compose
+    principal.
+  - Caminho absoluto.
 
-A service denoted by `service` must be present in the identified referenced Compose file.
-Compose returns an error if:
+O serviço indicado por `service` deve estar presente no arquivo Compose
+referenciado e identificado.
+O Compose retorna um erro se:
 
-- The service denoted by `service` is not found.
-- The Compose file denoted by `file` is not found.
+- O serviço indicado por `service` não for encontrado.
+- O arquivo Compose indicado por `file` não for encontrado.
 
-#### Merging service definitions
+#### Mesclando definições de serviço
 
-Two service definitions, the main one in the current Compose file and the referenced one
-specified by `extends`, are merged in the following way:
+Duas definições de serviço, a principal, no arquivo Compose atual, e a
+referenciada, especificada por `extends`, são mescladas da seguinte forma:
 
-- Mappings: Keys in mappings of the main service definition override keys in mappings
-  of the referenced service definition. Keys that aren't overridden are included as is.
-- Sequences: Items are combined together into a new sequence. The order of elements is
-  preserved with the referenced items coming first and main items after.
-- Scalars: Keys in the main service definition take precedence over keys in the
-  referenced one.
+- Mapeamentos: chaves nos mapeamentos da definição de serviço principal
+  substituem chaves nos mapeamentos da definição de serviço referenciada.
+  Chaves que não são substituídas são incluídas como estão.
+- Sequências: os itens são combinados em uma nova sequência.
+  A ordem dos elementos é preservada, com os itens referenciados vindo primeiro
+  e os itens principais depois.
+- Escalares: chaves na definição de serviço principal têm precedência sobre
+  chaves na definição referenciada.
 
-##### Mappings
+##### Mapeamentos
 
-The following keys should be treated as mappings: `annotations`, `build.args`, `build.labels`,
-`build.extra_hosts`, `deploy.labels`, `deploy.update_config`, `deploy.rollback_config`,
-`deploy.restart_policy`, `deploy.resources.limits`, `environment`, `healthcheck`,
-`labels`, `logging.options`, `sysctls`, `storage_opt`, `extra_hosts`, `ulimits`.
+As seguintes chaves devem ser tratadas como mapeamentos: `annotations`,
+`build.args`, `build.labels`, `build.extra_hosts`, `deploy.labels`,
+`deploy.update_config`, `deploy.rollback_config`, `deploy.restart_policy`,
+`deploy.resources.limits`, `environment`, `healthcheck`, `labels`,
+`logging.options`, `sysctls`, `storage_opt`, `extra_hosts`, `ulimits`.
 
-One exception that applies to `healthcheck` is that the main mapping cannot specify
-`disable: true` unless the referenced mapping also specifies `disable: true`. Compose returns an error in this case.
-For example, the following input:
+Uma exceção que se aplica a `healthcheck` é que o mapeamento principal não pode
+especificar `disable: true` a menos que o mapeamento referenciado também
+especifique `disable: true`.
+O Compose retorna um erro nesse caso.
 
 ```yaml
 services:
@@ -942,8 +1027,8 @@ services:
       PORT: 8080
 ```
 
-Produces the following configuration for the `cli` service. The same output is
-produced if array syntax is used.
+Gera a seguinte configuração para o serviço `cli`.
+O mesmo resultado é obtido se a sintaxe de array for usada.
 
 ```yaml
 environment:
@@ -952,12 +1037,12 @@ environment:
 image: busybox
 ```
 
-Items under `blkio_config.device_read_bps`, `blkio_config.device_read_iops`,
-`blkio_config.device_write_bps`, `blkio_config.device_write_iops`, `devices` and
-`volumes` are also treated as mappings where key is the target path inside the
-container.
+Os itens em `blkio_config.device_read_bps`, `blkio_config.device_read_iops`,
+`blkio_config.device_write_bps`, `blkio_config.device_write_iops`, `devices` e
+`volumes` também são tratados como mapeamentos onde a chave é o caminho de
+destino dentro do contêiner.
 
-For example, the following input:
+Por exemplo, a seguinte entrada:
 
 ```yaml
 services:
@@ -972,8 +1057,9 @@ services:
       - cli-volume:/var/lib/backup/data:ro
 ```
 
-Produces the following configuration for the `cli` service. Note that the mounted path
-now points to the new volume name and `ro` flag was applied.
+Gera a seguinte configuração para o serviço `cli`.
+Observe que o caminho montado agora aponta para o novo nome de volume e a flag
+`ro` foi aplicada.
 
 ```yaml
 image: busybox
@@ -981,11 +1067,12 @@ volumes:
 - cli-volume:/var/lib/backup/data:ro
 ```
 
-If the referenced service definition contains `extends` mapping, the items under it
-are simply copied into the new merged definition. The merging process is then kicked
-off again until no `extends` keys are remaining.
+Se a definição de serviço referenciada contiver um mapeamento `extends`, os
+itens sob ele serão simplesmente copiados para a nova definição mesclada.
+O processo de mesclagem é então iniciado novamente até que não haja mais chaves
+`extends`.
 
-For example, the following input:
+Por exemplo, a seguinte entrada:
 
 ```yaml
 services:
@@ -1001,25 +1088,25 @@ services:
       service: common
 ```
 
-Produces the following configuration for the `cli` service. Here, `cli` services
-gets `user` key from `common` service, which in turn gets this key from `base`
-service.
+Gera a seguinte configuração para o serviço `cli`.
+Aqui, o serviço `cli` obtém a chave `user` do serviço `common`, que, por sua
+vez, obtém essa chave do serviço `base`.
 
 ```yaml
 image: busybox
 user: root
 ```
 
-##### Sequences
+##### Sequências
 
-The following keys should be treated as sequences: `cap_add`, `cap_drop`, `configs`,
-`deploy.placement.constraints`, `deploy.placement.preferences`,
+As seguintes chaves devem ser tratadas como sequências: `cap_add`, `cap_drop`,
+`configs`, `deploy.placement.constraints`, `deploy.placement.preferences`,
 `deploy.reservations.generic_resources`, `device_cgroup_rules`, `expose`,
 `external_links`, `ports`, `secrets`, `security_opt`.
-Any duplicates resulting from the merge are removed so that the sequence only
-contains unique elements.
+Quaisquer duplicatas resultantes da mesclagem são removidas para que a sequência
+contenha apenas elementos únicos.
 
-For example, the following input:
+Por exemplo, a seguinte entrada:
 
 ```yaml
 services:
@@ -1034,7 +1121,7 @@ services:
       - label=user:USER
 ```
 
-Produces the following configuration for the `cli` service.
+Gera a seguinte configuração para o serviço `cli`.
 
 ```yaml
 image: busybox
@@ -1043,19 +1130,23 @@ security_opt:
 - label=user:USER
 ```
 
-In case list syntax is used, the following keys should also be treated as sequences:
-`dns`, `dns_search`, `env_file`, `tmpfs`. Unlike sequence fields mentioned previously,
-duplicates resulting from the merge are not removed.
+Caso a sintaxe de lista seja utilizada, as seguintes chaves também devem ser
+tratadas como sequências: `dns`, `dns_search`, `env_file`, `tmpfs`.
+Ao contrário dos campos de sequência mencionados anteriormente, duplicatas
+resultantes da mesclagem não são removidas.
 
-##### Scalars
+##### Escalares
 
-Any other allowed keys in the service definition should be treated as scalars.
+Quaisquer outras chaves permitidas na definição do serviço devem ser tratadas
+como escalares.
 
 ### `external_links`
 
-`external_links` link service containers to services managed outside of your Compose application.
-`external_links` define the name of an existing service to retrieve using the platform lookup mechanism.
-An alias of the form `SERVICE:ALIAS` can be specified.
+`external_links` vincula contêineres de serviço a serviços gerenciados fora da
+sua aplicação Compose.
+`external_links` define o nome de um serviço existente a ser recuperado
+utilizando o mecanismo de busca da plataforma.
+Um apelido no formato `SERVICE:ALIAS` pode ser especificado.
 
 ```yml
 external_links:
@@ -1066,11 +1157,14 @@ external_links:
 
 ### `extra_hosts`
 
-`extra_hosts` adds hostname mappings to the container network interface configuration (`/etc/hosts` for Linux).
+O `extra_hosts` adiciona mapeamentos de nomes de host à configuração da
+interface de rede do contêiner (`/etc/hosts` no Linux).
 
-#### Short syntax
+#### Sintaxe curta
 
-Short syntax uses plain strings in a list. Values must set hostname and IP address for additional hosts in the form of `HOSTNAME=IP`.
+A sintaxe curta utiliza strings simples em uma lista.
+Os valores devem definir o nome do host e o endereço IP para hosts adicionais no
+formato `HOSTNAME=IP`.
 
 ```yml
 extra_hosts:
@@ -1079,14 +1173,18 @@ extra_hosts:
   - "myhostv6=::1"
 ```
 
-IPv6 addresses can be enclosed in square brackets, for example:
+Endereços IPv6 podem ser colocados entre colchetes, por exemplo:
 
 ```yml
 extra_hosts:
   - "myhostv6=[::1]"
 ```
 
-The separator `=` is preferred, but `:` can also be used. Introduced in Docker Compose version [2.24.1](https://github.com/docker/compose/releases/tag/v2.24.1). For example:
+O separador `=` é o preferido, mas `:` também pode ser usado.
+Introduzido na versão
+[2.24.1](https://github.com/docker/compose/releases/tag/v2.24.1) do Docker
+Compose.
+Por exemplo:
 
 ```yml
 extra_hosts:
@@ -1094,9 +1192,10 @@ extra_hosts:
   - "myhostv6:::1"
 ```
 
-#### Long syntax
+#### Sintaxe longa
 
-Alternatively, `extra_hosts` can be set as a mapping between hostname(s) and IP(s)
+Alternativamente, `extra_hosts` pode ser definido como um mapeamento entre
+hostname(s) e IP(s).
 
 ```yml
 extra_hosts:
@@ -1105,8 +1204,9 @@ extra_hosts:
   myhostv6: "::1"
 ```
 
-Compose creates a matching entry with the IP address and hostname in the container's network
-configuration, which means for Linux `/etc/hosts` get extra lines:
+O Compose cria uma entrada correspondente com o endereço IP e o nome do host na
+configuração de rede do contêiner; isso significa que, no Linux, o arquivo
+`/etc/hosts` recebe linhas adicionais:
 
 ```console
 162.242.195.82  somehost
@@ -1118,8 +1218,10 @@ configuration, which means for Linux `/etc/hosts` get extra lines:
 
 {{< summary-bar feature_name="Compose gpus" >}}
 
-`gpus` specifies GPU devices to be allocated for container usage. This is equivalent to a [device request](deploy.md#devices) with
-an implicit `gpu` capability.
+`gpus` especifica os dispositivos de GPU a serem alocados para uso pelo
+contêiner.
+Isso equivale a uma [solicitação de dispositivo](deploy.md#devices) com uma
+capacidade `gpu` implícita.
 
 ```yaml
 services:
@@ -1129,7 +1231,8 @@ services:
         count: 2
 ```
 
-`gpus` also can be set as string `all` to allocate all available GPU devices to the container.
+`gpus` também pode ser definido como a string `all` para alocar todos os
+dispositivos de GPU disponíveis ao contêiner.
 
 ```yaml
 services:
@@ -1139,11 +1242,14 @@ services:
 
 ### `group_add`
 
-`group_add` specifies additional groups, by name or number, which the user inside the container must be a member of.
+`group_add` especifica grupos adicionais, por nome ou número, dos quais o
+usuário dentro do contêiner deve fazer parte.
 
-An example of where this is useful is when multiple containers (running as different users) need to all read or write
-the same file on a shared volume. That file can be owned by a group shared by all the containers, and specified in
-`group_add`.
+Um exemplo de onde isso é útil é quando vários contêineres (executados com
+usuários diferentes) precisam ler ou gravar o mesmo arquivo em um volume
+compartilhado.
+Esse arquivo pode pertencer a um grupo compartilhado por todos os contêineres
+e especificado em `group_add`.
 
 ```yml
 services:
@@ -1153,14 +1259,15 @@ services:
       - mail
 ```
 
-Running `id` inside the created container must show that the user belongs to the `mail` group, which would not have
-been the case if `group_add` were not declared.
+Executar `id` dentro do contêiner criado deve mostrar que o usuário pertence ao
+grupo `mail`, o que não aconteceria se `group_add` não tivesse sido declarado.
 
 ### `healthcheck`
 
 {{% include "compose/services-healthcheck.md" %}}
 
-For more information on `HEALTHCHECK`, see the [Dockerfile reference](/reference/dockerfile.md#healthcheck).
+Para mais informações sobre `HEALTHCHECK`, consulte a
+[referência do Dockerfile](/reference/dockerfile.md#healthcheck).
 
 ```yml
 healthcheck:
@@ -1172,19 +1279,27 @@ healthcheck:
   start_interval: 5s
 ```
 
-`interval`, `timeout`, `start_period`, and `start_interval` are [specified as durations](extension.md#specifying-durations). Introduced in Docker Compose version [2.20.2](https://github.com/docker/compose/releases/tag/v2.20.2)
+`interval`, `timeout`, `start_period` e `start_interval` são
+[especificados como durações](extension.md#specifying-durations).
+Introduzidos na versão
+[2.20.2](https://github.com/docker/compose/releases/tag/v2.20.2) do Docker
+Compose.
 
-`test` defines the command Compose runs to check container health. It can be
-either a string or a list. If it's a list, the first item must be either `NONE`, `CMD` or `CMD-SHELL`.
-If it's a string, it's equivalent to specifying `CMD-SHELL` followed by that string.
+`test` define o comando que o Compose executa para verificar a saúde do
+contêiner.
+Ele pode ser uma string ou uma lista.
+Se for uma lista, o primeiro item deve ser `NONE`, `CMD` ou `CMD-SHELL`.
+Se for uma string, é equivalente a especificar `CMD-SHELL` seguido por essa
+string.
 
 ```yml
-# Hit the local web app
+# Acessa a aplicação web local
 test: ["CMD", "curl", "-f", "http://localhost"]
 ```
 
-Using `CMD-SHELL` runs the command configured as a string using the container's default shell
-(`/bin/sh` for Linux). Both of the following forms are equivalent:
+Usar `CMD-SHELL` executa o comando configurado como uma string utilizando o
+shell padrão do contêiner (`/bin/sh` no Linux).
+As duas formas a seguir são equivalentes:
 
 ```yml
 test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
@@ -1194,8 +1309,10 @@ test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
 test: curl -f https://localhost || exit 1
 ```
 
-`NONE` disables the healthcheck, and is mostly useful to disable the Healthcheck Dockerfile instruction set by the service's Docker image. Alternatively,
-the healthcheck set by the image can be disabled by setting `disable: true`:
+`NONE` desativa a verificação de saúde e é útil principalmente para desativar a
+instrução `HEALTHCHECK` do Dockerfile definida pela imagem Docker do serviço.
+Alternativamente, a verificação de saúde definida pela imagem pode ser
+desativada definindo `disable: true`:
 
 ```yml
 healthcheck:
@@ -1204,13 +1321,16 @@ healthcheck:
 
 ### `hostname`
 
-`hostname` declares a custom host name to use for the service container. It must be a valid RFC 1123 hostname.
+`hostname` declara um nome de host personalizado a ser usado para o contêiner de
+serviço.
+Ele deve ser um nome de host válido segundo a RFC 1123.
 
 ### `image`
 
-`image` specifies the image to start the container from. `image` must follow the Open Container Specification
-[addressable image format](https://github.com/opencontainers/org/blob/master/docs/docs/introduction/digests.md),
-as `[<registry>/][<project>/]<image>[:<tag>|@<digest>]`.
+`image` especifica a imagem a partir da qual o contêiner será iniciado.
+`image` deve seguir o formato de imagem endereçável da
+[Open Container Specification](https://github.com/opencontainers/org/blob/master/docs/docs/introduction/digests.md),
+como `[<registry>/][<project>/]<image>[:<tag>|@<digest>]`.
 
 ```yml
     image: redis
@@ -1221,16 +1341,23 @@ as `[<registry>/][<project>/]<image>[:<tag>|@<digest>]`.
     image: my_private.registry:5000/redis
 ```
 
-If the image does not exist on the platform, Compose attempts to pull it based on the `pull_policy`.
-If you are also using the [Compose Build Specification](build.md), there are alternative options for controlling the precedence of
-pull over building the image from source, however pulling the image is the default behavior.
+Se a imagem não existir na plataforma, o Compose tenta baixá-la com base na
+`pull_policy`.
+Se você também estiver utilizando a
+[Especificação de Build do Compose](build.md), existem opções alternativas para
+controlar a precedência entre baixar a imagem e construí-la a partir do
+código-fonte; no entanto, baixar a imagem é o comportamento padrão.
 
-`image` may be omitted from a Compose file as long as a `build` section is declared. If you are not using the Compose Build Specification, Compose won't work if `image` is missing from the Compose file.
+`image` pode ser omitido de um arquivo Compose, desde que uma seção `build` seja
+declarada.
+Se você não estiver utilizando a Especificação de Build do Compose, o Compose
+não funcionará caso o campo `image` esteja ausente do arquivo Compose.
 
 ### `init`
 
-`init` runs an init process (PID 1) inside the container that forwards signals and reaps processes.
-Set this option to `true` to enable this feature for the service.
+`init` executa um processo de inicialização (PID 1) dentro do contêiner,
+responsável por encaminhar sinais e coletar processos encerrados.
+Defina esta opção como `true` para habilitar esse recurso para o serviço.
 
 ```yml
 services:
@@ -1239,62 +1366,75 @@ services:
     init: true
 ```
 
-The init binary that is used is platform specific.
+O binário `init` usado é específico para a plataforma.
 
 ### `ipc`
 
-`ipc` configures the IPC isolation mode set by the service container.
+`ipc` configura o modo de isolamento de IPC definido pelo contêiner de serviço.
 
-- `shareable`: Gives the container its own private IPC namespace, with a
-  possibility to share it with other containers.
-- `service:{name}`: Makes the container join another container's
-  (`shareable`) IPC namespace.
+- `shareable`: atribui ao contêiner seu próprio namespace de IPC privado, com a
+  possibilidade de compartilhá-lo com outros contêineres.
+- `service:{nome}`: Faz com que o contêiner ingresse no namespace de IPC (do
+  tipo `shareable`) de outro contêiner.
 
 ```yml
     ipc: "shareable"
-    ipc: "service:[service name]"
+    ipc: "service:[nome do serviço]"
 ```
 
 ### `isolation`
 
-`isolation` specifies a container’s isolation technology. Supported values are platform specific.
+`isolation` especifica a tecnologia de isolamento de um contêiner.
+Os valores suportados dependem da plataforma.
 
 ### `labels`
 
-`labels` add metadata to containers. You can use either an array or a map.
+`labels` adicionam metadados aos contêineres.
+Você pode usar um array ou um mapa.
 
-It's recommended that you use reverse-DNS notation to prevent your labels from conflicting with
-those used by other software.
+Recomenda-se usar a notação de DNS reverso para evitar conflitos entre seus
+rótulos e aqueles utilizados por outros softwares.
 
 ```yml
 labels:
-  com.example.description: "Accounting webapp"
-  com.example.department: "Finance"
-  com.example.label-with-empty-value: ""
+  com.example.description: "Aplicação web de contabilidade"
+  com.example.department: "Finanças"
+  com.example.rotulo-com-valor-vazio: ""
 ```
 
 ```yml
 labels:
-  - "com.example.description=Accounting webapp"
-  - "com.example.department=Finance"
-  - "com.example.label-with-empty-value"
+  - "com.example.description=Aplicação web de contabilidade"
+  - "com.example.department=Finanças"
+  - "com.example.rotulo-com-valor-vazio"
 ```
 
-Compose creates containers with canonical labels:
+O Compose cria contêineres com rótulos canônicos:
 
-- `com.docker.compose.project` set on all resources created by Compose to the user project name
-- `com.docker.compose.service` set on service containers with service name as defined in the Compose file
+- `com.docker.compose.project`: definido em todos os recursos criados pelo
+  Compose com o nome do projeto da pessoa usuária.
+- `com.docker.compose.service`: definido nos contêineres de serviço com o nome do
+  serviço, conforme definido no arquivo do Compose.
 
-The `com.docker.compose` label prefix is reserved. Specifying labels with this prefix in the Compose file
-results in a runtime error.
+O prefixo de rótulo `com.docker.compose` é reservado.
+Especificar rótulos com esse prefixo no arquivo do Compose resulta em um erro de
+tempo de execução.
 
 ### `label_file`
 
 {{< summary-bar feature_name="Compose label file" >}}
 
-The `label_file` attribute lets you load labels for a service from an external file or a list of files. This provides a convenient way to manage multiple labels without cluttering the Compose file.
+O atributo `label_file` permite carregar rótulos para um serviço a partir de um
+arquivo externo ou de uma lista de arquivos.
+Isso oferece uma maneira prática de gerenciar múltiplos rótulos sem
+sobrecarregar o arquivo do Compose.
 
-The file uses a key-value format, similar to `env_file`. You can specify multiple files as a list. When using multiple files, they are processed in the order they appear in the list. If the same label is defined in multiple files, the value from the last file in the list overrides earlier ones.
+O arquivo utiliza um formato de chave-valor, semelhante ao `env_file`.
+É possível especificar vários arquivos como uma lista.
+Ao usar múltiplos arquivos, eles são processados na ordem em que aparecem na
+lista.
+Se o mesmo rótulo for definido em vários arquivos, o valor do último arquivo da
+lista substituirá os anteriores.
 
 ```yaml
 services:
@@ -1307,12 +1447,14 @@ services:
       - ./additional.labels
 ```
 
-If a label is defined in both the `label_file` and the `labels` attribute, the value in [labels](#labels) takes precedence.
+Se um rótulo for definido tanto no `label_file` quanto no atributo `labels`, o
+valor em [labels](#labels) terá precedência.
 
 ### `links`
 
-`links` defines a network link to containers in another service. Either specify both the service name and
-a link alias (`SERVICE:ALIAS`), or just the service name.
+O `links` define uma conexão de rede com contêineres em outro serviço.
+Especifique o nome do serviço e um alias para o link (`SERVICE:ALIAS`) ou apenas
+o nome do serviço.
 
 ```yml
 web:
@@ -1322,19 +1464,25 @@ web:
     - redis
 ```
 
-Containers for the linked service are reachable at a hostname identical to the alias, or the service name
-if no alias is specified.
+Os contêineres do serviço vinculado podem ser acessados por meio de um hostname
+idêntico ao alias — ou ao nome do serviço, caso nenhum alias seja especificado.
 
-Links are not required to enable services to communicate. When no specific network configuration is set,
-any service is able to reach any other service at that service’s name on the `default` network.
-If services specify the networks they are attached to, `links` does not override the network configuration. Services that are not connected to a shared network are not be able to communicate with each other. Compose doesn't warn you about a configuration mismatch.
+Não é necessário utilizar links para permitir a comunicação entre serviços.
+Quando nenhuma configuração de rede específica é definida, qualquer serviço
+consegue acessar outro serviço utilizando o nome deste na rede `default`.
+Se os serviços especificarem as redes às quais estão conectados, os `links` não
+substituem essa configuração de rede.
+Serviços que não estão conectados a uma rede compartilhada não conseguem se
+comunicar entre si.
+O Compose não emite avisos sobre inconsistências na configuração.
 
-Links also express implicit dependency between services in the same way as
-[`depends_on`](#depends_on), so they determine the order of service startup.
+Os links também estabelecem uma dependência implícita entre serviços, da mesma
+forma que o [`depends_on`](#depends_on), determinando assim a ordem de
+inicialização dos serviços.
 
 ### `logging`
 
-`logging` defines the logging configuration for the service.
+`logging` define a configuração de registro de logs para o serviço.
 
 ```yml
 logging:
@@ -1343,52 +1491,80 @@ logging:
     syslog-address: "tcp://192.168.0.42:123"
 ```
 
-The `driver` name specifies a logging driver for the service's containers. The default and available values
-are platform specific. Driver specific options can be set with `options` as key-value pairs.
+O nome `driver` especifica um driver de log para os contêineres do serviço.
+Os valores padrão e disponíveis dependem da plataforma.
+Opções específicas do driver podem ser definidas em `options` como pares
+chave-valor.
 
 ### `mac_address`
 
-> Available with Docker Compose version 2.24.0 and later.
+> Disponível a partir da versão 2.24.0 do Docker Compose.
 
-`mac_address` sets a Mac address for the service container.
+`mac_address` define um endereço MAC para o contêiner do serviço.
 
 > [!NOTE]
-> Container runtimes might reject this value, for example Docker Engine >= v25.0. In that case, you should use [networks.mac_address](#mac_address) instead.
+>
+> Runtimes de contêiner podem rejeitar esse valor; por exemplo, o Docker Engine
+> >= v25.0.
+> Nesse caso, você deve usar [networks.mac_address](#mac_address) em vez disso.
 
 ### `mem_limit`
 
-`mem_limit` configures a limit on the amount of memory a container can allocate, set as a string expressing a [byte value](extension.md#specifying-byte-values).
+`mem_limit` configura um limite para a quantidade de memória que um contêiner
+pode alocar, definido como uma string que expressa um
+[valor em bytes](extension.md#specifying-byte-values).
 
-When set, `mem_limit` must be consistent with the `limits.memory` attribute in the [Deploy Specification](deploy.md#memory).
+Quando definido, `mem_limit` deve ser consistente com o atributo `limits.memory`
+na [Especificação de Deploy](deploy.md#memory).
 
 ### `mem_reservation`
 
-`mem_reservation` configures a reservation on the amount of memory a container can allocate, set as a string expressing a [byte value](extension.md#specifying-byte-values).
+`mem_reservation` configura uma reserva na quantidade de memória que um
+container pode alocar, definida como uma string que expressa um
+[valor em bytes](extension.md#specifying-byte-values).
 
-When set, `mem_reservation` must be consistent with the `reservations.memory` attribute in the [Deploy Specification](deploy.md#memory).
+Quando definido, `mem_reservation` deve ser consistente com o atributo
+`reservations.memory` na [Especificação de Deploy](deploy.md#memory).
 
 ### `mem_swappiness`
 
-`mem_swappiness` defines as a percentage, a value between 0 and 100, for the host kernel to swap out
-anonymous memory pages used by a container.
+`mem_swappiness` define, como uma porcentagem (um valor entre 0 e 100), a
+propensão do kernel do host para mover para o swap páginas de memória anônima
+usadas por um contêiner.
 
-- `0`: Turns off anonymous page swapping.
-- `100`: Sets all anonymous pages as swappable.
+- `0`: desativa o swap de páginas anônimas.
+- `100`: define todas as páginas anônimas como passíveis de swap.
 
-The default value is platform specific.
+O valor padrão depende da plataforma.
 
 ### `memswap_limit`
 
-`memswap_limit` defines the amount of memory the container is allowed to swap to disk. This is a modifier
-attribute that only has meaning if [`memory`](deploy.md#memory) is also set. Using swap lets the container write excess
-memory requirements to disk when the container has exhausted all the memory that is available to it.
-There is a performance penalty for applications that swap memory to disk often.
+`memswap_limit` define a quantidade de memória que o contêiner tem permissão
+para mover para o disco.
+Este é um atributo modificador que só faz sentido se
+[`memory`](deploy.md#memory) também estiver definido.
+O uso de swap permite que o contêiner grave o excedente de memória no disco
+quando esgota toda a memória disponível para ele.
+Há uma penalidade de desempenho para aplicações que frequentemente movem memória
+para o disco.
 
-- If `memswap_limit` is set to a positive integer, then both `memory` and `memswap_limit` must be set. `memswap_limit` represents the total amount of memory and swap that can be used, and `memory` controls the amount used by non-swap memory. So if `memory`="300m" and `memswap_limit`="1g", the container can use 300m of memory and 700m (1g - 300m) swap.
-- If `memswap_limit` is set to 0, the setting is ignored, and the value is treated as unset.
-- If `memswap_limit` is set to the same value as `memory`, and `memory` is set to a positive integer, the container does not have access to swap.
-- If `memswap_limit` is unset, and `memory` is set, the container can use as much swap as the `memory` setting, if the host container has swap memory configured. For instance, if `memory`="300m" and `memswap_limit` is not set, the container can use 600m in total of memory and swap.
-- If `memswap_limit` is explicitly set to -1, the container is allowed to use unlimited swap, up to the amount available on the host system.
+- Se `memswap_limit` for definido como um número inteiro positivo, então tanto
+  `memory` quanto `memswap_limit` devem ser definidos.
+  `memswap_limit` representa a quantidade total de memória e swap que pode ser
+  usada, e `memory` controla a quantidade de memória que não é swap.
+  Portanto, se `memory`="300m" e `memswap_limit`="1g", o contêiner pode usar
+  300m de memória e 700m (1g - 300m) de swap.
+- Se `memswap_limit` for definido como 0, a configuração é ignorada e o valor é
+  tratado como não definido.
+- Se `memswap_limit` for definido com o mesmo valor de `memory`, e `memory` for
+  um número inteiro positivo, o contêiner não terá acesso a swap.
+- Se `memswap_limit` não estiver definido e `memory` estiver definido, o
+  contêiner poderá usar uma quantidade de swap igual ao valor de `memory`, caso
+  o host tenha memória swap configurada.
+  Por exemplo, se `memory`="300m" e `memswap_limit` não estiver definido, o
+  contêiner poderá usar um total de 600m entre memória e swap.
+- Se `memswap_limit` for explicitamente definido como -1, o contêiner terá
+  permissão para usar swap ilimitado, até o limite disponível no sistema host.
 
 ### `models`
 
