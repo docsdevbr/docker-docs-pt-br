@@ -234,7 +234,7 @@ São elas:
 
 - `MYSQL_HOST` - o nome do host do servidor MySQL em execução.
 - `MYSQL_USER` - o nome de usuário a ser usado na conexão.
-- `MYSQL_PASSWORD` - a senha a ser utilizada na conexão.
+- `MYSQL_PASSWORD` - a senha a ser usada na conexão.
 - `MYSQL_DB` - o banco de dados a ser usado após a conexão.
 
 > [!NOTE]
@@ -247,8 +247,8 @@ São elas:
 > explicando os motivos.
 >
 > Um mecanismo mais seguro é usar o suporte a segredos oferecido pelo seu
-> framework de orquestração de containers.
-> Geralmente, esses segredos são montados como arquivos dentro do container em
+> framework de orquestração de contêineres.
+> Geralmente, esses segredos são montados como arquivos dentro do contêiner em
 > execução.
 > Você verá que muitas aplicações (incluindo a imagem do MySQL e a aplicação de
 > lista de tarefas) também oferecem suporte a variáveis de ambiente com o sufixo
@@ -334,7 +334,7 @@ Agora você pode iniciar seu contêiner pronto para desenvolvimento.
    {{< /tab >}}
    {{< /tabs >}}
 
-2. Se você verificar os logs do container (`docker logs -f <container-id>`),
+2. Se você verificar os logs do contêiner (`docker logs -f <id-do-contêiner>`),
    deverá ver uma mensagem semelhante à seguinte, indicando que ele está usando
    o banco de dados MySQL.
 
@@ -358,7 +358,7 @@ Agora você pode iniciar seu contêiner pronto para desenvolvimento.
    Lembre-se de que a senha é `secret`.
 
    ```console
-   $ docker exec -it <mysql-container-id> mysql -p todos
+   $ docker exec -it <id-do-contêiner-do-mysql> mysql -p todos
    ```
 
    E no shell do MySQL, execute o seguinte:
