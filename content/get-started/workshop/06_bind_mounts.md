@@ -27,7 +27,7 @@ aliases:
   - /guides/workshop/06_bind_mounts/
 ---
 
-Na [parte 4](./05_persisting_data.md), você utilizou uma montagem de volume para
+Na [parte 4](./05_persisting_data.md), você usou uma montagem de volume para
 persistir os dados do seu banco de dados.
 Uma montagem de volume é uma excelente escolha quando você precisa de um local
 persistente para armazenar os dados da sua aplicação.
@@ -41,15 +41,14 @@ salva um arquivo.
 Isso significa que você pode executar processos no container que monitoram
 alterações no sistema de arquivos e reagem a elas.
 
-Neste capítulo, você verá como utilizar bind mounts e uma ferramenta chamada
+Neste capítulo, você verá como usar bind mounts e uma ferramenta chamada
 [nodemon](https://npmjs.com/package/nodemon) para monitorar alterações em
 arquivos e, em seguida, reiniciar a aplicação automaticamente.
 Existem ferramentas equivalentes na maioria das outras linguagens e frameworks.
 
 ## Comparação rápida entre tipos de volume
 
-Abaixo estão exemplos de um volume nomeado e de um bind mount utilizando
-`--mount`:
+Abaixo estão exemplos de um volume nomeado e de um bind mount usando `--mount`:
 
 - Volume nomeado: `type=volume,src=my-volume,target=/usr/local/data`
 - Bind mount: `type=bind,src=/path/to/data,target=/usr/local/data`
@@ -230,7 +229,7 @@ mount.
      do qual o comando será executado.
    - `--mount type=bind,src=.,target=/app` - cria um bind mount do diretório
      atual do host para o diretório `/app` dentro do container.
-   - `node:24-alpine` - a imagem a ser utilizada.
+   - `node:24-alpine` - a imagem a ser usada.
      Observe que esta é a imagem base para sua aplicação, definida no
      Dockerfile.
    - `sh -c "npm install && npm run dev"` - o comando.
@@ -280,7 +279,7 @@ mount.
      do qual o comando será executado.
    - `--mount "type=bind,src=.,target=/app"` - cria um bind mount do diretório
      atual do host para o diretório `/app` dentro do container.
-   - `node:24-alpine` - a imagem a ser utilizada.
+   - `node:24-alpine` - a imagem a ser usada.
      Observe que esta é a imagem base para sua aplicação, definida no
      Dockerfile.
    - `sh -c "npm install && npm run dev"` - o comando.
@@ -330,7 +329,7 @@ mount.
      do qual o comando será executado.
    - `--mount "type=bind,src=%cd%,target=/app"` - cria um bind mount do diretório
      atual do host para o diretório `/app` dentro do container.
-   - `node:24-alpine` - a imagem a ser utilizada.
+   - `node:24-alpine` - a imagem a ser usada.
      Observe que esta é a imagem base para sua aplicação, definida no
      Dockerfile.
    - `sh -c "npm install && npm run dev"` - o comando.
@@ -380,7 +379,7 @@ mount.
      do qual o comando será executado.
    - `--mount type=bind,src="./",target=/app` - cria um bind mount do diretório
      atual do host para o diretório `/app` dentro do container.
-   - `node:24-alpine` - a imagem a ser utilizada.
+   - `node:24-alpine` - a imagem a ser usada.
      Observe que esta é a imagem base para sua aplicação, definida no
      Dockerfile.
    - `sh -c "npm install && npm run dev"` - o comando.
@@ -505,7 +504,7 @@ Informações relacionadas:
 Para preparar sua aplicação para produção, você precisa migrar o banco de dados
 do SQLite para uma solução que ofereça melhor escalabilidade.
 Para simplificar, você continuará usando um banco de dados relacional e
-configurará sua aplicação para utilizar o MySQL.
+configurará sua aplicação para usar o MySQL.
 Mas como executar o MySQL?
 Como permitir que os contêineres se comuniquem entre si?
 Você aprenderá sobre isso na próxima seção.

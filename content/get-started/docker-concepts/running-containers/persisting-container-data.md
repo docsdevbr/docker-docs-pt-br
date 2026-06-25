@@ -29,8 +29,8 @@ aliases:
 
 ## Explicação
 
-Quando um contêiner é iniciado, ele utiliza os arquivos e a configuração
-fornecidos pela imagem.
+Quando um contêiner é iniciado, ele usa os arquivos e a configuração fornecidos
+pela imagem.
 Cada contêiner pode criar, modificar e excluir arquivos sem afetar outros
 contêineres.
 Quando o contêiner é excluído, essas alterações nos arquivos também são
@@ -86,8 +86,7 @@ Os comandos a seguir serão úteis para gerenciar volumes:
 - `docker volume ls` - lista todos os volumes.
 - `docker volume rm <nome-ou-id-do-volume>` - remove um volume (funciona apenas
   quando o volume não está associado a nenhum contêiner).
-- `docker volume prune` - remove todos os volumes não utilizados (não
-  associados).
+- `docker volume prune` - remove todos os volumes não usados (não associados).
 
 ## Experimente
 
@@ -217,8 +216,7 @@ Existem alguns métodos para remover volumes, incluindo os seguintes:
   $ docker volume rm postgres_data
   ```
 
-- Use o comando `docker volume prune` para remover todos os volumes não
-  utilizados:
+- Use o comando `docker volume prune` para remover todos os volumes não usados:
 
   ```console
   $ docker volume prune

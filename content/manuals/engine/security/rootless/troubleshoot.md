@@ -297,7 +297,7 @@ Esta seção fornece dicas de solução de problemas para redes em modo rootless
 A rede em modo rootless é suportada por meio de drivers de rede e porta no
 RootlessKit.
 O desempenho e as características da rede dependem da combinação de drivers de
-rede e porta que você utiliza.
+rede e porta que você usa.
 Se você estiver enfrentando comportamentos inesperados ou problemas de
 desempenho relacionados à rede, consulte a tabela a seguir, que mostra as
 configurações suportadas pelo RootlessKit e como elas se comparam:
@@ -314,7 +314,7 @@ configurações suportadas pelo RootlessKit e como elas se comparam:
 | `bypass4netns`     | `bypass4netns`     | Rápida ✅                      | Rápida ✅                       | ✅                          | ✅       | **Nota:** Não integrado ao RootlessKit, pois requer um perfil seccomp personalizado. |
 
 (*) Aplicável a partir do RootlessKit v3.0.
-Também requer que o `userland-proxy` esteja desativado.
+Também requer que o `userland-proxy` esteja desabilitado.
 
 Para obter informações sobre como solucionar problemas específicos de rede,
 consulte:

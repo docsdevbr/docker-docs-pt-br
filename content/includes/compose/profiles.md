@@ -22,4 +22,4 @@ iniciam/param por padrão, enquanto os atribuídos só iniciam/param quando seu
 perfil está ativo.
 Essa configuração significa que serviços específicos, como aqueles para
 depuração ou desenvolvimento, podem ser incluídos em um único arquivo
-`compose.yml` e ativados somente quando necessário.
+`compose.yml` e habilitados somente quando necessário.

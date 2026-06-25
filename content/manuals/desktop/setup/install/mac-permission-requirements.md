@@ -152,7 +152,7 @@ conta de usuário por máquina, ou seja, aquela especificada na opção `--user`
 Em situações específicas onde o auxiliar privilegiado é necessário, como por
 exemplo, para vincular portas privilegiadas ou armazenar em cache a política de
 Registry Access Management, ele é iniciado pelo `launchd` e executado em segundo
-plano, a menos que seja desativado em tempo de execução, conforme descrito
+plano, a menos que seja desabilitado em tempo de execução, conforme descrito
 anteriormente.
 O backend do Docker Desktop se comunica com o auxiliar privilegiado através do
 socket de domínio UNIX `/var/run/com.docker.vmnetd.sock`.

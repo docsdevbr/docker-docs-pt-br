@@ -16,7 +16,7 @@ translation_status: ready
 
 title: Conteinerize uma aplicação
 weight: 20
-linkTitle: "Parte 1: Conteinerize uma aplicação"
+linkTitle: "Parte 1: conteinerize uma aplicação"
 keywords: >-
   exemplo de dockerfile, conteinerize uma aplicação, executar dockerfile,
   executando dockerfile, como executar dockerfile, exemplo de dockerfile, como

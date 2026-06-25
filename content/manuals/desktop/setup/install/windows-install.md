@@ -56,7 +56,7 @@ O Docker Desktop oferece dois modos de instalação.
 A instalação por usuário (Beta) é recomendada para a maioria das pessoas
 usuárias.
 Ela não requer privilégios de administrador para instalar ou atualizar, e o
-backend WSL 2 que utiliza atende às necessidades da grande maioria das pessoas
+backend WSL 2 usado atende às necessidades da grande maioria das pessoas
 usuárias do Docker Desktop.
 
 | | Por usuário (recomendado) | Todos os usuários |

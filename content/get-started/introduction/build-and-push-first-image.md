@@ -59,8 +59,8 @@ Esses pacotes podem ser distribuídos e compartilhados com outras pessoas.
 Para compartilhar suas imagens Docker, você precisa de um local para
 armazená-las.
 É aqui que entram os registros.
-Embora existam muitos registros, o Docker Hub é o registro padrão e mais
-utilizado para imagens.
+Embora existam muitos registros, o Docker Hub é o registro padrão e mais usado
+para imagens.
 O Docker Hub oferece um lugar para você armazenar suas próprias imagens e
 encontrar imagens de outras pessoas para executar ou usar como base para suas
 próprias imagens.

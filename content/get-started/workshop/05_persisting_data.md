@@ -16,7 +16,7 @@ translation_status: ready
 
 title: Persista o banco de dados
 weight: 50
-linkTitle: "Parte 4: Persista o banco de dados"
+linkTitle: "Parte 4: persista o banco de dados"
 keywords: >-
   primeiros passos, configuração, orientação, início rápido, introdução,
   conceitos, contêineres, docker desktop

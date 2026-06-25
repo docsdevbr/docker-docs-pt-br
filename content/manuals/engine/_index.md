@@ -43,7 +43,7 @@ grid:
     icon: document-text
     link: /config/containers/logging/
   - title: Limpeza
-    description: Remova os recursos não utilizados.
+    description: Remova os recursos não usados.
     icon: scissors
     link: /config/pruning
   - title: Configure o daemon

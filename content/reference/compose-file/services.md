@@ -1144,8 +1144,8 @@ como escalares.
 
 `external_links` vincula contêineres de serviço a serviços gerenciados fora da
 sua aplicação Compose.
-`external_links` define o nome de um serviço existente a ser recuperado
-utilizando o mecanismo de busca da plataforma.
+`external_links` define o nome de um serviço existente a ser recuperado usando o
+mecanismo de busca da plataforma.
 Um apelido no formato `SERVICE:ALIAS` pode ser especificado.
 
 ```yml
@@ -1297,8 +1297,8 @@ string.
 test: ["CMD", "curl", "-f", "http://localhost"]
 ```
 
-Usar `CMD-SHELL` executa o comando configurado como uma string utilizando o
-shell padrão do contêiner (`/bin/sh` no Linux).
+Usar `CMD-SHELL` executa o comando configurado como uma string usando o shell
+padrão do contêiner (`/bin/sh` no Linux).
 As duas formas a seguir são equivalentes:
 
 ```yml
@@ -1343,15 +1343,15 @@ como `[<registry>/][<project>/]<image>[:<tag>|@<digest>]`.
 
 Se a imagem não existir na plataforma, o Compose tenta baixá-la com base na
 `pull_policy`.
-Se você também estiver utilizando a
-[Especificação de Build do Compose](build.md), existem opções alternativas para
-controlar a precedência entre baixar a imagem e construí-la a partir do
-código-fonte; no entanto, baixar a imagem é o comportamento padrão.
+Se você também estiver usando a [Especificação de Build do Compose](build.md),
+existem opções alternativas para controlar a precedência entre baixar a imagem e
+construí-la a partir do código-fonte; no entanto, baixar a imagem é o
+comportamento padrão.
 
 `image` pode ser omitido de um arquivo Compose, desde que uma seção `build` seja
 declarada.
-Se você não estiver utilizando a Especificação de Build do Compose, o Compose
-não funcionará caso o campo `image` esteja ausente do arquivo Compose.
+Se você não estiver usando a Especificação de Build do Compose, o Compose não
+funcionará caso o campo `image` esteja ausente do arquivo Compose.
 
 ### `init`
 
@@ -1467,9 +1467,9 @@ web:
 Os contêineres do serviço vinculado podem ser acessados por meio de um hostname
 idêntico ao alias — ou ao nome do serviço, caso nenhum alias seja especificado.
 
-Não é necessário utilizar links para permitir a comunicação entre serviços.
+Não é necessário usar links para permitir a comunicação entre serviços.
 Quando nenhuma configuração de rede específica é definida, qualquer serviço
-consegue acessar outro serviço utilizando o nome deste na rede `default`.
+consegue acessar outro serviço usando o nome deste na rede `default`.
 Se os serviços especificarem as redes às quais estão conectados, os `links` não
 substituem essa configuração de rede.
 Serviços que não estão conectados a uma rede compartilhada não conseguem se
@@ -1570,8 +1570,7 @@ para o disco.
 
 {{< summary-bar feature_name="Compose models" >}}
 
-`models` define quais modelos de IA o serviço deve utilizar em tempo de
-execução.
+`models` define quais modelos de IA o serviço deve usar em tempo de execução.
 Cada modelo referenciado deve ser definido no
 [elemento de nível superior `models`](models.md).
 
@@ -1875,10 +1874,10 @@ Se não for especificado, o valor padrão é 0.
 
 Se o runtime do contêiner aceitar um atributo `mac_address` no nível do serviço,
 ele será aplicado à rede com a maior `priority`.
-Em outros casos, utilize o atributo `networks.mac_address`.
+Em outros casos, use o atributo `networks.mac_address`.
 
 `priority` não afeta qual rede é selecionada como gateway padrão.
-Utilize o atributo [`gw_priority`](#gw_priority) para isso.
+Use o atributo [`gw_priority`](#gw_priority) para isso.
 
 `priority` não controla a ordem em que as conexões de rede são adicionadas ao
 contêiner, nem pode ser usado para determinar o nome do dispositivo (`eth0`,
@@ -1934,7 +1933,7 @@ Quando definido, `pids_limit` deve ser consistente com o atributo `pids` na
 
 `platform` define a plataforma de destino na qual os contêineres do serviço são
 executados.
-Utiliza a sintaxe `os[/arch[/variant]]`.
+Usa a sintaxe `os[/arch[/variant]]`.
 
 Os valores de `os`, `arch` e `variant` devem estar conforme a convenção
 usada pela
@@ -2185,7 +2184,7 @@ ambiente `DATABASE_URL` e `DATABASE_API_KEY`.
 Quando o Compose interrompe a aplicação, o binário `awesomecloud` é usado para
 gerenciar o encerramento do serviço `database`.
 
-O mecanismo utilizado pelo Compose para delegar o ciclo de vida do serviço a um
+O mecanismo usado pelo Compose para delegar o ciclo de vida do serviço a um
 binário externo está descrito na
 [documentação de extensibilidade do Compose](https://github.com/docker/compose/tree/main/docs/extension.md).
 
@@ -2195,8 +2194,8 @@ Para mais informações sobre o uso do atributo `provider`, consulte
 #### `type`
 
 O atributo `type` é obrigatório.
-Ele define o componente externo utilizado pelo Compose para gerenciar os eventos
-de ciclo de vida de configuração e encerramento.
+Ele define o componente externo usado pelo Compose para gerenciar os eventos de
+ciclo de vida de configuração e encerramento.
 
 #### `options`
 
@@ -2220,7 +2219,7 @@ Os valores possíveis são:
   `if_not_present` é considerado um alias para este valor, visando a
   compatibilidade com versões anteriores.
   A tag `latest` é sempre baixada, mesmo quando a política de pull `missing` é
-  utilizada.
+  usada.
 - `build`: o Compose constrói a imagem.
   O Compose reconstrói a imagem caso ela já exista.
 - `daily`: o Compose verifica se há atualizações da imagem no registro caso o
@@ -2462,7 +2461,7 @@ storage_opt:
 ### `sysctls`
 
 `sysctls` define parâmetros do kernel a serem configurados no contêiner.
-`sysctls` pode utilizar um array ou um mapa.
+`sysctls` pode usar um array ou um mapa.
 
 ```yml
 sysctls:

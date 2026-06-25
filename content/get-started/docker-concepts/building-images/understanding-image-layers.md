@@ -23,7 +23,7 @@ summary: >-
   Este guia ajudará você a entender as camadas de imagem - os blocos de
   construção fundamentais das imagens de contêiner.
   Você obterá uma compreensão abrangente de como as camadas são criadas,
-  empilhadas e utilizadas para garantir contêineres eficientes e otimizados.
+  empilhadas e usadas para garantir contêineres eficientes e otimizados.
 weight: 1
 aliases:
   - /guides/docker-concepts/building-images/understanding-image-layers/

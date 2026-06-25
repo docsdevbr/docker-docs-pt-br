@@ -141,8 +141,8 @@ Docker.
    Esta é a porta na sua máquina local que será usada para acessar a aplicação
    em execução dentro do contêiner.
    O segundo `80` refere-se à porta do contêiner.
-   Esta é a porta que a aplicação dentro do contêiner utiliza para aguardar
-   conexões de entrada.
+   Esta é a porta que a aplicação dentro do contêiner usa para aguardar conexões
+   de entrada.
    Portanto, o comando vincula a porta `8080` do host à porta `80` do sistema do
    contêiner.
 

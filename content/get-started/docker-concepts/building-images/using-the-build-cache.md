@@ -51,7 +51,7 @@ Para cada instrução, o Docker verifica se pode reutilizá-la de uma construç�
 anterior.
 Se encontrar uma instrução semelhante já executada, o Docker não precisa
 refazê-la.
-Em vez disso, utiliza o resultado em cache.
+Em vez disso, usa o resultado em cache.
 Dessa forma, o processo de construção torna-se mais rápido e eficiente,
 economizando tempo e recursos valiosos.
 

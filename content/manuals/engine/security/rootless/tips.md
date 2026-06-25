@@ -209,7 +209,7 @@ EOF
 Mesmo quando o cgroup não está disponível, você ainda pode usar os tradicionais
 `ulimit` e [`cpulimit`](https://github.com/opsengine/cpulimit), embora eles
 funcionem em nível de processo em vez de nível de contêiner, e possam ser
-desativados arbitrariamente pelo processo do contêiner.
+desabilitados arbitrariamente pelo processo do contêiner.
 
 Por exemplo:
 

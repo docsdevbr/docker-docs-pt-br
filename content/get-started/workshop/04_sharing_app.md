@@ -16,7 +16,7 @@ translation_status: ready
 
 title: Compartilhe a aplicação
 weight: 40
-linkTitle: "Parte 3: Compartilhe a aplicação"
+linkTitle: "Parte 3: compartilhe a aplicação"
 keywords: >-
   primeiros passos, configuração, orientação, início rápido, introdução,
   conceitos, contêineres, docker desktop, docker hub, compartilhamento

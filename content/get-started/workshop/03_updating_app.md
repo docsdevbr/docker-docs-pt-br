@@ -16,7 +16,7 @@ translation_status: ready
 
 title: Atualize a aplicação
 weight: 30
-linkTitle: "Parte 2: Atualize a aplicação"
+linkTitle: "Parte 2: atualize a aplicação"
 keywords: >-
   primeiros passos, configuração, orientação, início rápido, introdução,
   conceitos, contêineres, docker desktop

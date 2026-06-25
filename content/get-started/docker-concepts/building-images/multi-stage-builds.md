@@ -357,7 +357,7 @@ Agora que você tem o projeto, já pode criar o `Dockerfile`.
      Esta etapa recebeu o nome de `builder`.
 
    - A segunda etapa é uma nova etapa chamada `final`.
-     Ela utiliza uma imagem mais enxuta `eclipse-temurin:21.0.2_13-jre-jammy`,
+     Ela usa uma imagem mais enxuta `eclipse-temurin:21.0.2_13-jre-jammy`,
      contendo apenas o Java Runtime Environment (JRE) necessário para executar a
      aplicação.
      Esta imagem fornece um Java Runtime Environment (JRE) suficiente para

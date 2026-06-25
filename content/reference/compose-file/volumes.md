@@ -214,7 +214,7 @@ volumes:
     name: ${DATABASE_VOLUME}
 ```
 
-Executar `docker compose up` utiliza o volume chamado `my_volume_001`.
+Executar `docker compose up` usa o volume chamado `my_volume_001`.
 
 Ele também pode ser usado em conjunto com a propriedade `external`.
 Isso significa que o nome usado para localizar o volume real na plataforma é
