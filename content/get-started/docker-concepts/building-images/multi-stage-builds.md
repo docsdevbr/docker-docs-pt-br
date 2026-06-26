@@ -429,6 +429,6 @@ Agora que você tem o projeto, já pode criar o `Dockerfile`.
 ## Recursos adicionais
 
 * [Construções multiestágio](/build/building/multi-stage/)
-* [Melhores práticas para o Dockerfile](/develop/develop-images/dockerfile_best-practices/)
+* [Boas práticas para o Dockerfile](/develop/develop-images/dockerfile_best-practices/)
 * [Imagens base](/build/building/base-images/)
 * [Spring Boot Docker](https://spring.io/guides/topicals/spring-boot-docker)

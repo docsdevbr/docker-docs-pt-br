@@ -27,7 +27,7 @@ summary: >-
   público.
 weight: 3
 aliases:
- - /guides/docker-concepts/building-images/build-tag-and-publish-an-image/
+  - /guides/docker-concepts/building-images/build-tag-and-publish-an-image/
 ---
 
 {{< youtube-embed chiiGLlYRlY >}}

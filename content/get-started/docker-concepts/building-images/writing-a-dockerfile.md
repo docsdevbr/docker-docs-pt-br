@@ -203,7 +203,7 @@ Agora que você tem o projeto, pode criar o `Dockerfile`.
 Para saber mais sobre como escrever um Dockerfile, visite os seguintes recursos:
 
 - [Referência do Dockerfile](/reference/dockerfile/)
-- [Melhores práticas do Dockerfile](/develop/develop-images/dockerfile_best-practices/)
+- [Boas práticas do Dockerfile](/develop/develop-images/dockerfile_best-practices/)
 - [Imagens base](/build/building/base-images/)
 - [Gordon](/ai/gordon/) — O assistente de IA do Docker pode gerar um Dockerfile
   para o seu projeto.

@@ -16,7 +16,7 @@ translation_status: ready
 
 title: Use o Docker Compose
 weight: 80
-linkTitle: "Parte 7: Use o Docker Compose"
+linkTitle: "Parte 7: use o Docker Compose"
 keywords: >-
   primeiros passos, configuração, orientação, início rápido, introdução,
   conceitos, contêineres, docker desktop

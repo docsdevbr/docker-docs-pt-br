@@ -72,7 +72,7 @@ bind mounts funcionam.
    diretório definido nas configurações de compartilhamento de arquivos do
    Docker Desktop.
    Essa configuração define quais partes do seu sistema de arquivos podem ser
-   compartilhadas com os containers.
+   compartilhadas com os contêineres.
    Para detalhes sobre como acessar essa configuração, consulte
    [Compartilhamento de arquivos](/manuals/desktop/settings-and-maintenance/settings.md#file-sharing).
 

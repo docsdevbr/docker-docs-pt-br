@@ -26,7 +26,7 @@ summary: >-
   conteinerização, começando com conceitos básicos e procedimentos de
   instalação.
   Avance por meio de exercícios práticos que abrangem comandos essenciais do
-  Docker, criação de imagens e orquestração de contêineres.
+  Docker, construção de imagens e orquestração de contêineres.
 layout: series
 params:
   proficiencyLevel: Iniciante
