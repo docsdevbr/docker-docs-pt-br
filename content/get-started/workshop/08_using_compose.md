@@ -10,28 +10,38 @@
 # The original work was translated from English into Brazilian Portuguese.
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
-title: Use Docker Compose
+source_url: https://github.com/docker/docs/blob/main/content/get-started/workshop/08_using_compose.md
+source_revision: 70d0c07c698bfc18bbe08b44c85f9dc859bd7718
+translation_status: ready
+
+title: Use o Docker Compose
 weight: 80
-linkTitle: "Part 7: Use Docker Compose"
-keywords: get started, setup, orientation, quickstart, intro, concepts, containers,
-  docker desktop
-description: Using Docker Compose for multi-container applications
+linkTitle: "Parte 7: Use o Docker Compose"
+keywords: >-
+  primeiros passos, configuração, orientação, início rápido, introdução,
+  conceitos, contêineres, docker desktop
+description: Usando o Docker Compose para aplicações multicontêineres
 aliases:
- - /get-started/08_using_compose/
- - /guides/workshop/08_using_compose/
+  - /get-started/08_using_compose/
+  - /guides/workshop/08_using_compose/
 ---
-[Docker Compose](/manuals/compose/_index.md) is a tool that helps you define and
-share multi-container applications. With Compose, you can create a YAML file to define the services
-and with a single command, you can spin everything up or tear it all down.
 
-The big advantage of using Compose is you can define your application stack in a file, keep it at the root of
-your project repository (it's now version controlled), and easily enable someone else to contribute to your project.
-Someone would only need to clone your repository and start the app using Compose. In fact, you might see quite a few projects
-on GitHub/GitLab doing exactly this now.
+O [Docker Compose](/manuals/compose/_index.md) é uma ferramenta que ajuda você a
+definir e compartilhar aplicações multicontêineres.
+Com o Compose, você pode criar um arquivo YAML para definir os serviços e, com
+um único comando, iniciar ou encerrar toda a aplicação.
 
-## Create the Compose file
+A grande vantagem de usar o Compose é que você pode definir a pilha da sua
+aplicação em um arquivo, mantê-lo na raiz do repositório do projeto (passando
+assim a contar com controle de versão) e permitir facilmente que outras pessoas
+contribuam com o seu projeto.
+Basta que a pessoa clone o repositório e inicie a aplicação usando o Compose.
+Na verdade, é possível encontrar muitos projetos no GitHub ou GitLab que adotam
+exatamente essa prática atualmente.
 
-In the `getting-started-app` directory, create a file named `compose.yaml`.
+## Crie o arquivo Compose
+
+No diretório `getting-started-app`, crie um arquivo chamado `compose.yaml`.
 
 ```text
 ├── getting-started-app/
@@ -39,68 +49,77 @@ In the `getting-started-app` directory, create a file named `compose.yaml`.
 │ ├── compose.yaml
 │ ├── node_modules/
 │ ├── package.json
+│ ├── package-lock.json
 │ ├── spec/
-│ ├── src/
-│ └── yarn.lock
+│ └── src/
 ```
 
-## Define the app service
+## Defina o serviço da aplicação
 
-In [part 6](./07_multi_container.md), you used the following command to start the application service.
+Na [parte 6](./07_multi_container.md), você usou o seguinte comando para iniciar
+o serviço da aplicação.
 
 ```console
 $ docker run -dp 127.0.0.1:3000:3000 \
-  -w /app -v "$(pwd):/app" \
+  -w /app -v ".:/app" \
   --network todo-app \
   -e MYSQL_HOST=mysql \
   -e MYSQL_USER=root \
   -e MYSQL_PASSWORD=secret \
   -e MYSQL_DB=todos \
-  node:18-alpine \
-  sh -c "yarn install && yarn run dev"
+  node:24-alpine \
+  sh -c "npm install && npm run dev"
 ```
 
-You'll now define this service in the `compose.yaml` file.
+Agora, você definirá esse serviço no arquivo `compose.yaml`.
 
-1. Open `compose.yaml` in a text or code editor, and start by defining the name and image of the first service (or container) you want to run as part of your application.
-   The name will automatically become a network alias, which will be useful when defining your MySQL service.
+1. Abra o `compose.yaml` em um editor de texto ou de código e comece definindo o
+   nome e a imagem do primeiro serviço (ou contêiner) que você deseja executar
+   como parte da sua aplicação.
+   O nome se tornará automaticamente um alias de rede, o que será útil ao
+   definir o seu serviço MySQL.
 
    ```yaml
    services:
      app:
-       image: node:18-alpine
+       image: node:24-alpine
    ```
 
-2. Typically, you will see `command` close to the `image` definition, although there is no requirement on ordering. Add the `command` to your `compose.yaml` file.
+2. Normalmente, você verá o `command` próximo à definição da `image`, embora não
+   haja exigência quanto à ordem.
+   Adicione o `command` ao seu arquivo `compose.yaml`.
 
    ```yaml
    services:
      app:
-       image: node:18-alpine
-       command: sh -c "yarn install && yarn run dev"
+       image: node:24-alpine
+       command: sh -c "npm install && npm run dev"
    ```
 
-3. Now migrate the `-p 127.0.0.1:3000:3000` part of the command by defining the `ports` for the service.
+3. Agora, migre a parte `-p 127.0.0.1:3000:3000` do comando definindo as `ports`
+   para o serviço.
 
    ```yaml
    services:
      app:
-       image: node:18-alpine
-       command: sh -c "yarn install && yarn run dev"
+       image: node:24-alpine
+       command: sh -c "npm install && npm run dev"
        ports:
          - 127.0.0.1:3000:3000
    ```
 
-4. Next, migrate both the working directory (`-w /app`) and the volume mapping
-   (`-v "$(pwd):/app"`) by using the `working_dir` and `volumes` definitions.
+4. Em seguida, migre tanto o diretório de trabalho (`-w /app`) quanto o
+   mapeamento de volume (`-v ".:/app"`) usando as definições `working_dir` e
+   `volumes`.
 
-    One advantage of Docker Compose volume definitions is you can use relative paths from the current directory.
+   Uma vantagem das definições de volume no Docker Compose é que você pode usar
+   caminhos relativos a partir do diretório atual.
 
    ```yaml
    services:
      app:
-       image: node:18-alpine
-       command: sh -c "yarn install && yarn run dev"
+       image: node:24-alpine
+       command: sh -c "npm install && npm run dev"
        ports:
          - 127.0.0.1:3000:3000
        working_dir: /app
@@ -108,13 +127,14 @@ You'll now define this service in the `compose.yaml` file.
          - ./:/app
    ```
 
-5. Finally, you need to migrate the environment variable definitions using the `environment` key.
+5. Por fim, você precisa migrar as definições de variáveis de ambiente usando a
+   chave `environment`.
 
    ```yaml
    services:
      app:
-       image: node:18-alpine
-       command: sh -c "yarn install && yarn run dev"
+       image: node:24-alpine
+       command: sh -c "npm install && npm run dev"
        ports:
          - 127.0.0.1:3000:3000
        working_dir: /app
@@ -127,9 +147,10 @@ You'll now define this service in the `compose.yaml` file.
          MYSQL_DB: todos
    ```
 
-### Define the MySQL service
+### Defina o serviço MySQL
 
-Now, it's time to define the MySQL service. The command that you used for that container was the following:
+Agora, é hora de definir o serviço MySQL.
+O comando que você usou para esse contêiner foi o seguinte:
 
 ```console
 $ docker run -d \
@@ -140,7 +161,9 @@ $ docker run -d \
   mysql:8.0
 ```
 
-1. First define the new service and name it `mysql` so it automatically gets the network alias. Also specify the image to use as well.
+1. Primeiro, defina o novo serviço e nomeie-o como `mysql` para que ele obtenha
+   automaticamente o alias de rede.
+   Especifique também a imagem a ser usada.
 
    ```yaml
 
@@ -151,17 +174,18 @@ $ docker run -d \
        image: mysql:8.0
    ```
 
-2. Next, define the volume mapping. When you ran the container with `docker
-   run`, Docker created the named volume automatically. However, that doesn't
-   happen when running with Compose. You need to define the volume in the
-   top-level `volumes:` section and then specify the mountpoint in the service
-   config. By simply providing only the volume name, the default options are
-   used.
+2. Em seguida, defina o mapeamento de volume.
+   Quando você executou o contêiner com `docker run`, o Docker criou o volume
+   nomeado automaticamente.
+   No entanto, isso não acontece ao executar com o Compose.
+   Você precisa definir o volume na seção de nível superior `volumes:` e, então,
+   especificar o ponto de montagem na configuração do serviço.
+   Ao fornecer apenas o nome do volume, as opções padrão são usadas.
 
    ```yaml
    services:
      app:
-       # The app service definition
+       # A definição do serviço da aplicação
      mysql:
        image: mysql:8.0
        volumes:
@@ -171,12 +195,12 @@ $ docker run -d \
      todo-mysql-data:
    ```
 
-3. Finally, you need to specify the environment variables.
+3. Por fim, você precisa especificar as variáveis de ambiente.
 
    ```yaml
    services:
      app:
-       # The app service definition
+       # A definição do serviço da aplicação
      mysql:
        image: mysql:8.0
        volumes:
@@ -189,13 +213,13 @@ $ docker run -d \
      todo-mysql-data:
    ```
 
-At this point, your complete `compose.yaml` should look like this:
+Neste ponto, o seu arquivo `compose.yaml` completo deve ficar assim:
 
 ```yaml
 services:
   app:
-    image: node:18-alpine
-    command: sh -c "yarn install && yarn run dev"
+    image: node:24-alpine
+    command: sh -c "npm install && npm run dev"
     ports:
       - 127.0.0.1:3000:3000
     working_dir: /app
@@ -219,20 +243,22 @@ volumes:
   todo-mysql-data:
 ```
 
-## Run the application stack
+## Execute a pilha da aplicação
 
-Now that you have your `compose.yaml` file, you can start your application.
+Agora que você tem o arquivo `compose.yaml`, pode iniciar a sua aplicação.
 
-1. Make sure no other copies of the containers are running first. Use `docker ps` to list the containers and `docker rm -f <ids>` to remove them.
+1. Certifique-se de que não haja outras cópias dos contêineres em execução.
+   Use `docker ps` para listar os contêineres e `docker rm -f <ids>` para
+   removê-los.
 
-2. Start up the application stack using the `docker compose up` command. Add the
-   `-d` flag to run everything in the background.
+2. Inicie a pilha da aplicação usando o comando `docker compose up`.
+   Adicione a flag `-d` para executar tudo em segundo plano.
 
    ```console
    $ docker compose up -d
    ```
 
-    When you run the previous command, you should see output like the following:
+   Ao executar o comando anterior, você deverá ver uma saída como a seguinte:
 
    ```plaintext
    Creating network "app_default" with the default driver
@@ -241,61 +267,81 @@ Now that you have your `compose.yaml` file, you can start your application.
    Creating app_mysql_1 ... done
    ```
 
-    You'll notice that Docker Compose created the volume as well as a network. By default, Docker Compose automatically creates a network specifically for the application stack (which is why you didn't define one in the Compose file).
+   Você notará que o Docker Compose criou o volume, bem como uma rede.
+   Por padrão, o Docker Compose cria automaticamente uma rede específica para a
+   pilha da aplicação (e é por isso que você não definiu uma no arquivo
+   Compose).
 
-3. Look at the logs using the `docker compose logs -f` command. You'll see the logs from each of the services interleaved
-    into a single stream. This is incredibly useful when you want to watch for timing-related issues. The `-f` flag follows the
-    log, so will give you live output as it's generated.
+3. Verifique os logs usando o comando `docker compose logs -f`.
+   Você verá os logs de cada um dos serviços intercalados em um único fluxo.
+   Isso é extremamente útil quando você deseja monitorar problemas relacionados
+   a questões de tempo (timing).
+   A flag `-f` acompanha o log, fornecendo assim uma saída em tempo real à
+   medida que ele é gerado.
 
-    If you have run the command already, you'll see output that looks like this:
+   Se você já tiver executado o comando, verá uma saída semelhante a esta:
 
-    ```plaintext
-    mysql_1  | 2019-10-03T03:07:16.083639Z 0 [Note] mysqld: ready for connections.
-    mysql_1  | Version: '8.0.31'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server (GPL)
-    app_1    | Connected to mysql db at host mysql
-    app_1    | Listening on port 3000
-    ```
+   ```plaintext
+   mysql_1  | 2019-10-03T03:07:16.083639Z 0 [Note] mysqld: ready for connections.
+   mysql_1  | Version: '8.0.31'  socket: '/var/run/mysqld/mysqld.sock'  port: 3306  MySQL Community Server (GPL)
+   app_1    | Connected to mysql db at host mysql
+   app_1    | Listening on port 3000
+   ```
 
-    The service name is displayed at the beginning of the line (often colored) to help distinguish messages. If you want to
-    view the logs for a specific service, you can add the service name to the end of the logs command (for example,
-    `docker compose logs -f app`).
+   O nome do serviço é exibido no início da linha (geralmente colorido) para
+   distinguir as mensagens.
+   Se você quiser visualizar os logs de um serviço específico, pode adicionar o
+   nome do serviço ao final do comando de logs (por exemplo,
+   `docker compose logs -f app`).
 
-4. At this point, you should be able to open your app in your browser on [http://localhost:3000](http://localhost:3000) and see it running.
+4. Neste ponto, você deve conseguir abrir sua aplicação no navegador em
+   [http://localhost:3000](http://localhost:3000) e vê-la em execução.
 
-## See the app stack in Docker Desktop Dashboard
+## Veja a pilha da aplicação no Dashboard do Docker Desktop
 
-If you look at the Docker Desktop Dashboard, you'll see that there is a group named **getting-started-app**. This is the project name from Docker
-Compose and used to group the containers together. By default, the project name is simply the name of the directory that the
-`compose.yaml` was located in.
+Se você olhar para o Dashboard do Docker Desktop, verá que existe um grupo
+chamado **getting-started-app**.
+Esse é o nome do projeto definido no Docker Compose e usado para agrupar os
+contêineres.
+Por padrão, o nome do projeto é simplesmente o nome do diretório onde o arquivo
+`compose.yaml` está localizado.
 
-If you expand the stack, you'll see the two containers you defined in the Compose file. The names are also a little
-more descriptive, as they follow the pattern of `<service-name>-<replica-number>`. So, it's very easy to
-quickly see what container is your app and which container is the mysql database.
+Se você expandir a stack, verá os dois contêineres que definiu no arquivo
+Compose.
+Os nomes também são um pouco mais descritivos, pois seguem o padrão `<nome-do-serviço>-<número-da-réplica>`.
+Assim, é muito fácil identificar rapidamente qual contêiner é a sua aplicação e
+qual é o banco de dados MySQL.
 
-## Tear it all down
+## Remova tudo
 
-When you're ready to tear it all down, simply run `docker compose down` or hit the trash can on the Docker Desktop Dashboard
-for the entire app. The containers will stop and the network will be removed.
+Quando estiver pronto para remover tudo, basta executar `docker compose down`
+ou clicar no ícone de lixeira no Dashboard do Docker Desktop referente a toda a
+aplicação.
+Os contêineres serão interrompidos e a rede será removida.
 
 > [!WARNING]
 >
-> By default, named volumes in your compose file are not removed when you run `docker compose down`. If you want to
->remove the volumes, you need to add the `--volumes` flag.
+> Por padrão, volumes nomeados no seu arquivo compose não são removidos quando
+> você executa `docker compose down`.
+> Se quiser remover os volumes, você precisa adicionar a flag `--volumes`.
 >
-> The Docker Desktop Dashboard does not remove volumes when you delete the app stack.
+> O Dashboard do Docker Desktop não remove volumes quando você exclui a pilha da
+> aplicação.
 
-## Summary
+## Resumo
 
-In this section, you learned about Docker Compose and how it helps you simplify
-the way you define and share multi-service applications.
+Nesta seção, você aprendeu sobre o Docker Compose e como ele ajuda a simplificar
+a maneira como você define e compartilha aplicações de múltiplos serviços.
 
-Related information:
- - [Compose overview](/manuals/compose/_index.md)
- - [Compose file reference](/reference/compose-file/_index.md)
- - [Compose CLI reference](/reference/cli/docker/compose/_index.md)
+Informações relacionadas:
 
-## Next steps
+- [Visão geral do Compose](/manuals/compose/_index.md)
+- [Referência do arquivo Compose](/reference/compose-file/_index.md)
+- [Referência da CLI do Compose](/reference/cli/docker/compose/)
 
-Next, you'll learn about a few best practices you can use to improve your Dockerfile.
+## Próximos passos
 
-{{< button text="Image-building best practices" url="09_image_best.md" >}}
+A seguir, você conhecerá algumas práticas recomendadas para melhorar seu
+Dockerfile.
+
+{{< button text="Boas práticas para a construção de imagens" url="09_image_best.md" >}}
