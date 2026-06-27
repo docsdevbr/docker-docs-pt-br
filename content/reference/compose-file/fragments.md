@@ -116,7 +116,7 @@ services:
 
 > [!NOTE]
 >
-> A [mesclagem YAML](https://yaml.org/type/merge.html) aplica-se apenas a
+> A [mesclagem do YAML](https://yaml.org/type/merge.html) aplica-se apenas a
 > mapeamentos e não pode ser usada com sequências.
 
 No exemplo acima, as variáveis de ambiente devem ser declaradas usando a sintaxe

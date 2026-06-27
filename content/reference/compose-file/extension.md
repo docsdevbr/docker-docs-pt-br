@@ -10,21 +10,31 @@
 # The original work was translated from English into Brazilian Portuguese.
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
-title: Extensions
-description: Understand how to use extensions
-keywords: compose, compose specification, extensions, compose file reference
+source_url: https://github.com/docker/docs/blob/main/content/reference/compose-file/extension.md
+source_revision: 4c6f75f19facf9fcba938315035addd2949f180b
+translation_status: ready
+
+title: Extensões
+description: >-
+  Defina e reutilize fragmentos personalizados com extensões no Docker Compose.
+keywords: >-
+  compose, especificação do compose, extensões, referência do arquivo compose
 aliases:
- - /compose/compose-file/11-extension/
+  - /compose/compose-file/11-extension/
 weight: 80
 ---
+
 {{% include "compose/extension.md" %}}
 
-Extensions can also be used with [anchors and aliases](fragments.md).
+As extensões também podem ser usadas com [âncoras e apelidos](fragments.md).
 
-They also can be used within any structure in a Compose file where user-defined keys are not expected.
-Compose uses those to enable experimental features, the same way browsers add support for [custom CSS features](https://www.w3.org/TR/2011/REC-CSS2-20110607/syndata.html#vendor-keywords)
+Elas também podem ser usadas em qualquer estrutura de um arquivo Compose onde
+não se espera a presença de chaves definidas pela pessoa usuária.
+O Compose as usa para habilitar recursos experimentais, da mesma forma que
+navegadores adicionam suporte a
+[recursos CSS personalizados](https://www.w3.org/TR/2011/REC-CSS2-20110607/syndata.html#vendor-keywords).
 
-## Example 1
+## Exemplo 1
 
 ```yml
 x-custom:
@@ -48,7 +58,7 @@ service:
         x-azure-region: "france-central"
 ```
 
-## Example 2
+## Exemplo 2
 
 ```yml
 x-env: &env
@@ -65,10 +75,13 @@ services:
     image: another-image:latest
 ```
 
-In this example, the environment variables do not belong to either of the services. They’ve been lifted out completely into the `x-env` extension field.
-This defines a new node which contains the environment field. The `&env` YAML anchor is used so both services can reference the extension field’s value as `*env`.
+Neste exemplo, as variáveis de ambiente não pertencem a nenhum dos serviços.
+Elas foram totalmente extraídas para o campo de extensão `x-env`.
+Isso define um novo nó que contém o campo de ambiente.
+A âncora YAML `&env` é usada para que ambos os serviços possam referenciar o
+valor do campo de extensão como `*env`.
 
-## Example 3
+## Exemplo 3
 
 ```yml
 x-function: &function
@@ -83,14 +96,14 @@ x-function: &function
      constraints:
        - 'node.platform.os == linux'
 services:
- # Node.js gives OS info about the node (Host)
+ # O Node.js fornece informações do sistema operacional sobre o nó (host).
  nodeinfo:
    <<: *function
    image: functions/nodeinfo:latest
    environment:
      no_proxy: "gateway"
      https_proxy: $https_proxy
- # Uses `cat` to echo back response, fastest function to execute.
+ # Usa `cat` para exibir a resposta; é a função mais rápida de executar.
  echoit:
    <<: *function
    image: functions/alpine:health
@@ -100,12 +113,15 @@ services:
      https_proxy: $https_proxy
 ```
 
-The `nodeinfo` and `echoit` services both include the `x-function` extension via the `&function` anchor, then set their specific image and environment.
+Os serviços `nodeinfo` e `echoit` incluem a extensão `x-function` por meio da
+âncora `&function` e, em seguida, definem suas respectivas imagens e variáveis
+de ambiente.
 
-## Example 4
+## Exemplo 4
 
-Using [YAML merge](https://yaml.org/type/merge.html) it is also possible to use multiple extensions and share
-and override additional attributes for specific needs:
+Usando a [mescalgem do YAML](https://yaml.org/type/merge.html) também é possível
+empregar múltiplas extensões, bem como compartilhar e sobrescrever atributos
+adicionais para atender a necessidades específicas:
 
 ```yml
 x-environment: &default-environment
@@ -123,23 +139,29 @@ services:
 
 > [!NOTE]
 >
-> [YAML merge](https://yaml.org/type/merge.html) only applies to mappings, and can't be used with sequences.
+> A [mesclagem do YAML](https://yaml.org/type/merge.html) aplica-se apenas a
+> mapeamentos e não pode ser usada com sequências.
 >
-> In the example above, the environment variables are declared using the `FOO: BAR` mapping syntax, while the sequence syntax `- FOO=BAR` is only valid when no fragments are involved.
+> No exemplo acima, as variáveis de ambiente são declaradas usando a sintaxe de
+> mapeamento `FOO: BAR`, enquanto a sintaxe de sequência `- FOO=BAR` só é válida
+> quando não há fragmentos envolvidos.
 
-## Informative Historical Notes
+## Notas históricas informativas
 
-This section is informative. At the time of writing, the following prefixes are known to exist:
+Esta seção é informativa.
+No momento da redação deste documento, sabe-se da existência dos seguintes
+prefixos:
 
-| Prefix     | Vendor/Organization |
-| ---------- | ------------------- |
-| docker     | Docker              |
-| kubernetes | Kubernetes          |
+| Prefixo    | Fornecedor/Organização |
+| ---------- | ---------------------- |
+| docker     | Docker                 |
+| kubernetes | Kubernetes             |
 
-## Specifying byte values
+## Especificação de valores de bytes
 
-Values express a byte value as a string in `{amount}{byte unit}` format:
-The supported units are `b` (bytes), `k` or `kb` (kilo bytes), `m` or `mb` (mega bytes) and `g` or `gb` (giga bytes).
+Os valores expressam uma quantidade de bytes como uma string no formato
+`{quantidade}{unidade de byte}`: as unidades suportadas são `b` (bytes), `k` ou
+`kb` (kilobytes), `m` ou `mb` (megabytes) e `g` ou `gb` (gigabytes).
 
 ```text
     2b
@@ -149,11 +171,12 @@ The supported units are `b` (bytes), `k` or `kb` (kilo bytes), `m` or `mb` (mega
     1gb
 ```
 
-## Specifying durations
+## Especificando durações
 
-Values express a duration as a string in the form of `{value}{unit}`.
-The supported units are `us` (microseconds), `ms` (milliseconds), `s` (seconds), `m` (minutes) and `h` (hours).
-Values can combine multiple values without separator.
+Os valores expressam uma duração como uma string no formato `{valor}{unidade}`.
+As unidades suportadas são `us` (microssegundos), `ms` (milissegundos), `s`
+(segundos), `m` (minutos) e `h` (horas).
+Os valores podem combinar múltiplos valores sem separador.
 
 ```text
   10ms

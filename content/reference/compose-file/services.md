@@ -333,8 +333,8 @@ comando vazio.
 > executado automaticamente no contexto da instrução
 > [`SHELL`](/reference/dockerfile.md#shell-form) definida na imagem.
 > Se o seu `command` depender de recursos específicos do shell, como a expansão
-> de variáveis de ambiente, você precisará executá-lo explicitamente dentro de
-> um shell.
+> de variáveis de ambiente, você precisará executá-lo explicitamente em um
+> shell.
 > Por exemplo:
 >
 > ```yaml
