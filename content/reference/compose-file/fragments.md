@@ -10,20 +10,31 @@
 # The original work was translated from English into Brazilian Portuguese.
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
-title: Fragments
-description: Understand how to use fragments
-keywords: compose, compose specification, fragments, compose file reference
+source_url: https://github.com/docker/docs/blob/main/content/reference/compose-file/fragments.md
+source_revision: 4c6f75f19facf9fcba938315035addd2949f180b
+translation_status: ready
+
+title: Fragmentos
+description: Reutilize configurações com âncoras e fragmentos YAML.
+keywords: >-
+  compose, especificação do compose, fragmentos, referência do arquivo compose
 aliases:
- - /compose/compose-file/10-fragments/
+  - /compose/compose-file/10-fragments/
 weight: 70
 ---
+
 {{% include "compose/fragments.md" %}}
 
-Anchors are created using the `&` sign. The sign is followed by an alias name. You can use this alias with the `*` sign later to reference the value following the anchor. Make sure there is no space between the `&` and the `*` characters and the following alias name.
+Âncoras são criadas usando o símbolo `&`.
+Esse símbolo é seguido por um apelido.
+Você pode usar esse apelido posteriormente com o símbolo `*` para referenciar o
+valor que segue a âncora.
+Certifique-se de que não haja espaço entre os caracteres `&` e `*` e o nome do
+apelido que os segue.
 
-You can use more than one anchor and alias in a single Compose file.
+Você pode usar mais de uma âncora e apelido em um único arquivo Compose.
 
-## Example 1
+## Exemplo 1
 
 ```yml
 volumes:
@@ -32,11 +43,16 @@ volumes:
   metrics: *default-volume
 ```
 
-In the example above, a `default-volume` anchor is created based on the `db-data` volume. It is later reused by the alias `*default-volume` to define the `metrics` volume.
+No exemplo acima, uma âncora `default-volume` é criada com base no volume
+`db-data`.
+Ela é posteriormente reutilizada pelo apelido `*default-volume` para definir o
+volume `metrics`.
 
-Anchor resolution takes place before [variables interpolation](interpolation.md), so variables can't be used to set anchors or aliases.
+A resolução de âncoras ocorre antes da
+[interpolação de variáveis](interpolation.md); portanto, variáveis não podem ser
+usadas para definir âncoras ou apelidos.
 
-## Example 2
+## Exemplo 2
 
 ```yml
 services:
@@ -51,14 +67,18 @@ services:
     environment: *env
 ```
 
-If you have an anchor that you want to use in more than one service, use it in conjunction with an [extension](extension.md) to make your Compose file easier to maintain.
+Se você tiver uma âncora que deseja usar em mais de um serviço, use-a em
+conjunto com uma [extensão](extension.md) para facilitar a manutenção do seu
+arquivo Compose.
 
-## Example 3
+## Exemplo 3
 
-You may want to partially override values. Compose follows the rule outlined by [YAML merge type](https://yaml.org/type/merge.html).
+Você pode querer substituir valores parcialmente.
+O Compose segue a regra definida pelo
+[tipo de mesclagem do YAML](https://yaml.org/type/merge.html).
 
-In the following example, `metrics` volume specification uses alias
-to avoid repetition but overrides `name` attribute:
+No exemplo a seguir, a especificação do volume `metrics` usa um apelido para
+evitar repetições, mas substitui o atributo `name`:
 
 ```yml
 services:
@@ -76,9 +96,9 @@ volumes:
     name: "metrics"
 ```
 
-## Example 4
+## Exemplo 4
 
-You can also extend the anchor to add additional values.
+Você também pode estender a âncora para adicionar valores extras.
 
 ```yml
 services:
@@ -96,6 +116,9 @@ services:
 
 > [!NOTE]
 >
-> [YAML merge](https://yaml.org/type/merge.html) only applies to mappings, and can't be used with sequences.
+> A [mesclagem YAML](https://yaml.org/type/merge.html) aplica-se apenas a
+> mapeamentos e não pode ser usada com sequências.
 
-In example above, the environment variables must be declared using the `FOO: BAR` mapping syntax, while the sequence syntax `- FOO=BAR` is only valid when no fragments are involved.
+No exemplo acima, as variáveis de ambiente devem ser declaradas usando a sintaxe
+de mapeamento `FOO: BAR`, enquanto a sintaxe de sequência `- FOO=BAR` só é
+válida quando não há fragmentos envolvidos.
