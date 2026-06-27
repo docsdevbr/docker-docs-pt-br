@@ -75,15 +75,14 @@ Eis o porquê:
 
 É aí que o Docker Compose entra em ação.
 
-O Docker Compose define toda a sua aplicação com vários contêineres em um único
+O Docker Compose define toda a sua aplicação multicontêineres em um único
 arquivo YAML chamado `compose.yml`.
 Este arquivo especifica as configurações de todos os seus contêineres, suas
 dependências, variáveis de ambiente e até mesmo volumes e redes.
 Com o Docker Compose:
 
 - Você não precisa executar vários comandos `docker run`.
-  Basta definir toda a sua aplicação com múltiplos contêineres em um único
-  arquivo YAML.
+  Basta definir toda a sua aplicação multicontêineres em um único arquivo YAML.
   Isso centraliza a configuração e simplifica o gerenciamento.
 - Você pode executar contêineres em uma ordem específica e gerenciar conexões de
   rede facilmente.

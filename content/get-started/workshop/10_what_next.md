@@ -10,54 +10,111 @@
 # The original work was translated from English into Brazilian Portuguese.
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
-title: What next after the Docker workshop
+source_url: https://github.com/docker/docs/blob/main/content/get-started/workshop/10_what_next.md
+source_revision: f0e4e4790191aaee83f9375dce56ada3971c6773
+translation_status: ready
+
+title: O que vem depois do workshop do Docker
 weight: 100
-linkTitle: "Part 9: What next"
-keywords: get started, setup, orientation, quickstart, intro, concepts, containers,
-  docker desktop
-description: Making sure you have more ideas of what you could do next with your application
+linkTitle: "Parte 9: o que vem a seguir"
+keywords: >-
+  primeiros passos, configuração, orientação, início rápido, introdução,
+  conceitos, contêineres, docker desktop, ia, executor de modelos, mcp, agentes,
+  imagens reforçadas, segurança
+description: >-
+  Explore os próximos passos após concluir o workshop do Docker, incluindo a
+  segurança de suas imagens, desenvolvimento de IA e guias específicos por
+  linguagem.
 aliases:
- - /get-started/11_what_next/
- - /guides/workshop/10_what_next/
+  - /get-started/11_what_next/
+  - /guides/workshop/10_what_next/
+summary: >-
+  Agora que você concluiu o workshop do Docker, pode explorar a segurança de
+  suas imagens com Imagens Docker Reforçadas, criar aplicações com tecnologia de
+  IA e mergulhar em guias específicos por linguagem.
+notoc: true
+
+secure-images:
+- title: O que são Imagens Docker Reforçadas?
+  description: >-
+    Conheça imagens base seguras, minimalistas e prontas para produção, com
+    praticamente zero CVEs.
+  link: /dhi/explore/what/
+- title: Comece a usar a DHI
+  description: Baixe e execute sua primeira Imagem Docker Reforçada em minutos.
+  link: /dhi/get-started/
+- title: Use imagens reforçadas
+  description: Aprenda a usar a DHI em seus Dockerfiles e pipelines de CI/CD.
+  link: /dhi/how-to/use/
+- title: Explore o catálogo da DHI
+  description: >-
+    Confira as imagens reforçadas, variantes e atestados de segurança
+    disponíveis.
+  link: /dhi/how-to/explore/
+
+ai-development:
+- title: Docker Model Runner
+  description: >-
+    Execute e gerencie modelos de IA localmente usando comandos familiares do
+    Docker e APIs compatíveis com a OpenAI.
+  link: /ai/model-runner/
+- title: Kit de Ferramentas MCP
+  description: >-
+    Configure, gerencie e execute servidores MCP em contêineres para
+    potencializar seus agentes de IA.
+  link: /ai/mcp-catalog-and-toolkit/toolkit/
+- title: Crie agentes de IA com o Docker Agent
+  description: >-
+    Crie times de agentes de IA especializados que colaboram para resolver
+    problemas complexos.
+  link: /ai/docker-agent/
+- title: Use modelos de IA no Compose
+  description: >-
+    Defina dependências de modelos de IA em suas aplicações Docker Compose.
+  link: /ai/compose/models-and-compose/
+
+language-guides:
+- title: Node.js
+  description: Aprenda como conteinerizar e desenvolver aplicações Node.js.
+  link: /guides/language/nodejs/
+- title: Python
+  description: Crie e execute aplicações Python em contêineres.
+  link: /guides/language/python/
+- title: Java
+  description: Conteinerize aplicações Java com as boas práticas.
+  link: /guides/language/java/
+- title: Go
+  description: Desenvolva e implante aplicações Go usando Docker.
+  link: /guides/language/golang/
 ---
-Although you're done with the workshop, there's still a lot more to learn about containers.
 
-Here are a few other areas to look at next.
+Parabéns por concluir o workshop de Docker.
+Você aprendeu a conteinerizar aplicações, trabalhar com configurações
+multicontêineres, usar o Docker Compose e aplicar as melhores práticas de
+criação de imagens.
 
-## Container orchestration
+Veja o que explorar a seguir.
 
-Running containers in production is tough. You don't want to log into a machine and simply run a
-`docker run` or `docker compose up`. Why not? Well, what happens if the containers die? How do you
-scale across several machines? Container orchestration solves this problem. Tools like Kubernetes,
-Swarm, Nomad, and ECS all help solve this problem, all in slightly different ways.
+## Proteja suas imagens
 
-The general idea is that you have managers who receive the expected state. This state might be
-"I want to run two instances of my web app and expose port 80." The managers then look at all of the
-machines in the cluster and delegate work to worker nodes. The managers watch for changes (such as
-a container quitting) and then work to make the actual state reflect the expected state.
+Eleve o nível das suas habilidades de criação de imagens com as Imagens Docker
+Reforçadas — imagens base seguras, minimalistas e prontas para produção, agora
+gratuitas para todas as pessoas.
 
-## Cloud Native Computing Foundation projects
+{{< grid items="secure-images" >}}
 
-The CNCF is a vendor-neutral home for various open-source projects, including Kubernetes, Prometheus,
-Envoy, Linkerd, NATS, and more. You can view the [graduated and incubated projects here](https://www.cncf.io/projects/)
-and the entire [CNCF Landscape here](https://landscape.cncf.io/). There are a lot of projects to help
-solve problems around monitoring, logging, security, image registries, messaging, and more.
+## Construa com IA
 
-## Getting started video workshop
+O Docker facilita a execução local de modelos de IA e a criação de aplicações de
+IA com agentes.
+Explore as ferramentas de IA do Docker e comece a criar aplicações com
+tecnologia de IA.
 
-Docker recommends watching the video workshop from DockerCon 2022. Watch the entire video or use the following links to open the video at a particular section.
+{{< grid items="ai-development" >}}
 
-* [Docker overview and installation](https://youtu.be/gAGEar5HQoU)
-* [Pull, run, and explore containers](https://youtu.be/gAGEar5HQoU?t=1400)
-* [Build a container image](https://youtu.be/gAGEar5HQoU?t=3185)
-* [Containerize an app](https://youtu.be/gAGEar5HQoU?t=4683)
-* [Connect a DB and set up a bind mount](https://youtu.be/gAGEar5HQoU?t=6305)
-* [Deploy a container to the cloud](https://youtu.be/gAGEar5HQoU?t=8280)
+## Guias específicos por linguagem
 
-<iframe src="https://www.youtube-nocookie.com/embed/gAGEar5HQoU" style="max-width: 100%; aspect-ratio: 16 / 9;" width="560" height="auto" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+Aplique o que você aprendeu à sua linguagem de programação preferida com
+tutoriais práticos.
 
-## Creating a container from scratch
-
-If you'd like to see how containers are built from scratch, Liz Rice from Aqua Security has a fantastic talk in which she creates a container from scratch in Go. While the talk does not go into networking, using images for the filesystem, and other advanced topics, it gives a deep dive into how things are working.
-
-<iframe src="https://www.youtube-nocookie.com/embed/8fi7uSYlOdc" style="max-width: 100%; aspect-ratio: 16 / 9;" width="560" height="auto" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+{{< grid items="language-guides" >}}

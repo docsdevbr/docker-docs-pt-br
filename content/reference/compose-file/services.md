@@ -36,8 +36,8 @@ serviço.
 
 Cada serviço também pode incluir uma seção `build`, que define como criar a
 imagem Docker para o serviço.
-O Compose oferece suporte à criação de imagens Docker usando essa definição de
-serviço.
+O Compose oferece suporte à construção de imagens Docker usando essa definição
+de serviço.
 Se não for usada, a seção `build` é ignorada e o arquivo Compose ainda é
 considerado válido.
 O suporte à criação é um aspecto opcional da Especificação do Compose e é

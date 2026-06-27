@@ -46,7 +46,7 @@ Abaixo, listo alguns motivos para executar o contêiner separadamente:
 
 Existem ainda outros motivos.
 Portanto, conforme ilustrado no diagrama a seguir, o ideal é executar sua
-aplicação usando múltiplos contêineres.
+aplicação usando vários contêineres.
 
 ![Aplicação de tarefas conectada ao contêiner MySQL](images/multi-container.webp?w=350h=250)
 

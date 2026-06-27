@@ -18,7 +18,7 @@ title: Use bind mounts
 weight: 60
 linkTitle: "Parte 5: Use bind mounts"
 keywords: >-
-  introdução, configuração, orientação, guia rápido, conceitos, containers,
+  introdução, configuração, orientação, guia rápido, conceitos, contêineres,
   docker desktop
 description: Usando bind mounts em nossa aplicação.
 aliases:
