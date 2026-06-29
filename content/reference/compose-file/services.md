@@ -2521,7 +2521,7 @@ Os valores suportados são `true` ou `false`.
 
 `ulimits` substitui os `ulimits` padrão de um contêiner.
 Ele é especificado como um número inteiro para um limite único ou como um
-mapeamento para limites soft/hard.
+mapeamento para limites flexíveis/rígidos.
 
 ```yml
 ulimits:

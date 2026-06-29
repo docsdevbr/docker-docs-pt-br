@@ -10,45 +10,68 @@
 # The original work was translated from English into Brazilian Portuguese.
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
-title: Compose Build Specification
-description: Learn about the Compose Build Specification
-keywords: compose, compose specification, compose file reference, compose build specification
+source_url: https://github.com/docker/docs/blob/main/content/reference/compose-file/build.md
+source_revision: cbceafed09b61a5ca148211aa6db1e5ae2349e21
+translation_status: ready
+
+title: Especificação de Build do Compose
+description: Saiba mais sobre a Especificação de Build do Compose.
+keywords: >-
+  compose, especificação do compose, referência de arquivos do compose,
+  especificação de build do compose
 aliases:
- - /compose/compose-file/build/
+  - /compose/compose-file/build/
 weight: 130
 ---
+
 {{% include "compose/build.md" %}}
 
-In the former case, the whole path is used as a Docker context to execute a Docker build, looking for a canonical
-`Dockerfile` at the root of the directory. The path can be absolute or relative. If it is relative, it is resolved
-from the directory containing your Compose file. If it is absolute, the path prevents the Compose file from being portable so Compose displays a warning.
+Quando `build` é especificado como uma string, todo o caminho é usado como um
+contexto Docker para executar uma construção Docker, procurando por um
+`Dockerfile` canônico na raiz do diretório.
 
-In the latter case, build arguments can be specified, including an alternate `Dockerfile` location. The path can be absolute or relative. If it is relative, it is resolved
-from the directory containing your Compose file. If it is absolute, the path prevents the Compose file from being portable so Compose displays a warning.
+Quando `build` é especificado como uma estrutura detalhada, argumentos de
+construção podem ser especificados, incluindo um local alternativo para o
+`Dockerfile`.
 
-## Using `build` and `image`
+Em ambos os casos, o caminho pode ser absoluto ou relativo.
+Se for relativo, ele é resolvido a partir do diretório que contém seu arquivo
+Compose.
+Se for absoluto, o caminho impede que o arquivo Compose seja portátil, então o
+Compose exibe um aviso.
 
-When Compose is confronted with both a `build` subsection for a service and an `image` attribute, it follows the rules defined by the [`pull_policy`](services.md#pull_policy) attribute.
+## Usando `build` e `image`
 
-If `pull_policy` is missing from the service definition, Compose attempts to pull the image first and then builds from source if the image isn't found in the registry or platform cache.
+Quando o Compose se depara com uma subseção `build` para um serviço e um
+atributo `image`, ele segue as regras definidas pelo atributo
+[`pull_policy`](services.md#pull_policy).
 
+Se `pull_policy` estiver ausente da definição do serviço, o Compose tenta
+primeiro obter a imagem e, em seguida, compila a partir do código-fonte caso a
+imagem não seja encontrada no registro ou no cache da plataforma.
 
-## Publishing built images
+## Publicando imagens construídas
 
-Compose with `build` support offers an option to push built images to a registry. When doing so, it doesn't try to push service images without an `image` attribute. Compose warns you about the missing `image` attribute which prevents images being pushed.
+O Compose com suporte a `build` oferece uma opção para enviar imagens
+construídas para um registro.
+Ao fazer isso, ele não tenta enviar imagens de serviço sem um atributo `image`.
+O Compose alerta sobre a ausência do atributo `image`, o que impede o envio de
+imagens.
 
-## Illustrative example
+## Exemplo ilustrativo
 
-The following example illustrates Compose Build Specification concepts with a concrete sample application. The sample is non-normative.
+O exemplo a seguir ilustra os conceitos da Especificação de Build do Compose com
+uma aplicação de exemplo concreto.
+O exemplo não é normativo.
 
 ```yaml
 services:
   frontend:
-    image: example/webapp
+    image: exemplo/webapp
     build: ./webapp
 
   backend:
-    image: example/database
+    image: exemplo/database
     build:
       context: backend
       dockerfile: ../backend.Dockerfile
@@ -57,21 +80,42 @@ services:
     build: ~/custom
 ```
 
-When used to build service images from source, the Compose file creates three Docker images:
+Quando usado para construir imagens de serviço a partir do código-fonte, o
+arquivo Compose cria três imagens Docker:
 
-* `example/webapp`: A Docker image is built using `webapp` sub-directory, within the Compose file's parent folder, as the Docker build context. Lack of a `Dockerfile` within this folder throws an error.
-* `example/database`: A Docker image is built using `backend` sub-directory within the Compose file parent folder. `backend.Dockerfile` file is used to define build steps, this file is searched relative to the context path, which means `..` resolves to the Compose file's parent folder, so `backend.Dockerfile` is a sibling file.
-* A Docker image is built using the `custom` directory with the user's `$HOME` as the Docker context. Compose displays a warning about the non-portable path used to build image.
+- `exemplo/webapp`: uma imagem Docker é construída usando o subdiretório
+  `webapp`, dentro da pasta do arquivo Compose, como contexto de construção do
+  Docker.
+  A ausência de um arquivo `Dockerfile` dentro desta pasta retorna um erro.
+- `exemplo/database`: uma imagem Docker é construída usando o subdiretório`
+  `backend dentro da pasta do arquivo Compose.
+  O arquivo `backend.Dockerfile` é usado para definir as etapas de construção;
+  este arquivo é pesquisado em relação ao caminho de contexto, o que significa
+  que `..` resolve para a pasta do arquivo Compose, portanto,
+  `backend.Dockerfile` é um arquivo irmão.
+- Uma imagem Docker é construída usando o diretório `custom` com o `$HOME` do
+  usuário como contexto do Docker.
+  O Compose exibe um aviso sobre o caminho não portátil usado para construir a
+  imagem.
 
-On push, both `example/webapp` and `example/database` Docker images are pushed to the default registry. The `custom` service image is skipped as no `image` attribute is set and Compose displays a warning about this missing attribute.
+Ao enviar as imagens, tanto a imagem `exemplo/webapp` quanto a imagem
+`exemplo/database` do Docker são enviadas para o registro padrão.
+A imagem de serviço `custom` é ignorada, pois nenhum atributo `image` foi
+definido e o Compose exibe um aviso sobre a ausência desse atributo.
 
-## Attributes
+## Atributos
 
-The `build` subsection defines configuration options that are applied by Compose to build Docker images from source.
-`build` can be specified either as a string containing a path to the build context or as a detailed structure:
+A subseção `build` define as opções de configuração aplicadas pelo Compose para
+construir imagens Docker a partir do código-fonte.
 
-Using the string syntax, only the build context can be configured as either:
-- A relative path to the Compose file's parent folder. This path must be a directory and must contain a `Dockerfile`
+`build` pode ser especificado como uma string contendo o caminho para o contexto
+de construção ou como uma estrutura detalhada:
+
+Usando a sintaxe de string, apenas o contexto de construção pode ser configurado
+como:
+
+- Um caminho relativo para a pasta do arquivo Compose.
+  Este caminho deve ser um diretório e deve conter um arquivo `Dockerfile`.
 
   ```yml
   services:
@@ -79,89 +123,105 @@ Using the string syntax, only the build context can be configured as either:
       build: ./dir
   ```
 
-- A Git repository URL. Git URLs accept context configuration in their fragment section, separated by a colon (`:`).
-The first part represents the reference that Git checks out, and can be either a branch, a tag, or a remote reference.
-The second part represents a subdirectory inside the repository that is used as a build context.
+- Uma URL de repositório Git.
+  As URLs do Git aceitam configuração de contexto em sua seção de fragmento,
+  separada por dois pontos (`:`).
+  A primeira parte representa a referência que o Git extrai e pode ser um
+  branch, uma tag ou uma referência remota.
+  A segunda parte representa um subdiretório dentro do repositório usado como
+  contexto de construção.
 
   ```yml
   services:
     webapp:
-      build: https://github.com/mycompany/example.git#branch_or_tag:subdirectory
+      build: https://github.com/minhacompanhia/exemplo.git#branch_ou_tag:subdiretorio
   ```
 
-Alternatively `build` can be an object with fields defined as follows:
+Alternativamente, `build` pode ser um objeto com campos definidos da seguinte
+forma:
 
 ### `additional_contexts`
 
 {{< summary-bar feature_name="Build additional contexts" >}}
 
-`additional_contexts` defines a list of named contexts the image builder should use during image build.
+`additional_contexts` define uma lista de contextos nomeados que o construtor de
+imagens deve usar durante a construção da imagem.
 
-`additional_contexts` can be a mapping or a list:
+`additional_contexts` pode ser um mapeamento ou uma lista:
 
 ```yml
 build:
   context: .
   additional_contexts:
-    - resources=/path/to/resources
-    - app=docker-image://my-app:latest
-    - source=https://github.com/myuser/project.git
+    - resources=/caminho/para/resources
+    - app=docker-image://minha-app:latest
+    - source=https://github.com/meuusuario/projeto.git
 ```
 
 ```yml
 build:
   context: .
   additional_contexts:
-    resources: /path/to/resources
-    app: docker-image://my-app:latest
-    source: https://github.com/myuser/project.git
+    resources: /caminho/para/resources
+    app: docker-image://minha-app:latest
+    source: https://github.com/meuusuario/projeto.git
 ```
 
-When used as a list, the syntax follows the `NAME=VALUE` format, where `VALUE` is a string. Validation beyond that
-is the responsibility of the image builder (and is builder specific). Compose supports at least
-absolute and relative paths to a directory and Git repository URLs, like [context](#context) does. Other context flavours
-must be prefixed to avoid ambiguity with a `type://` prefix.
+Quando usado como uma lista, a sintaxe segue o formato `NOME=VALOR`, onde
+`VALOR` é uma string.
+A validação além disso é responsabilidade do construtor da imagem (e é
+específica do construtor).
+O Compose suporta pelo menos caminhos absolutos e relativos para um diretório e
+URLs de repositório Git, como faz o [context](#context).
+Outros tipos de contexto devem ser prefixados para evitar ambiguidade com um
+prefixo `tipo://`.
 
-Compose warns you if the image builder does not support additional contexts and may list
-the unused contexts.
+O Compose alerta se o construtor da imagem não suporta contextos adicionais e
+pode listar os contextos não usados.
 
-Illustrative examples of how this is used in Buildx can be found
-[here](https://github.com/docker/buildx/blob/master/docs/reference/buildx_build.md#-additional-build-contexts---build-context).
+Consulte a documentação de referência para
+[`docker buildx build --build-context`](https://github.com/docker/buildx/blob/master/docs/reference/buildx_build.md#-additional-build-contexts---build-context)
+para exemplos de uso.
 
-`additional_contexts` can also refer to an image built by another service.
-This allows a service image to be built using another service image as a base image, and to share
-layers between service images.
+`additional_contexts` também pode se referir a uma imagem criada por outro
+serviço.
+Isso permite que uma imagem de serviço seja construída usando outra imagem de
+serviço como imagem base e que camadas sejam compartilhadas entre imagens de
+serviço.
 
 ```yaml
 services:
- base:
-  build:
-    context: .
-    dockerfile_inline: |
-      FROM alpine
-      RUN ...
- my-service:
-  build:
-    context: .
-    dockerfile_inline: |
-      FROM base # image built for service base
-      RUN ...
-    additional_contexts:
-      base: service:base
+  base:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM alpine
+        RUN ...
+  my-service:
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM base # imagem criada para base de serviços
+        RUN ...
+      additional_contexts:
+        base: service:base
 ```
 
 ### `args`
 
-`args` define build arguments, that is Dockerfile `ARG` values.
+`args` define os argumentos de construção, ou seja, os valores de `ARG` do
+Dockerfile.
 
-Using the following Dockerfile as an example:
+Usando o seguinte Dockerfile como exemplo:
 
 ```Dockerfile
 ARG GIT_COMMIT
-RUN echo "Based on commit: $GIT_COMMIT"
+RUN echo "Baseado no commit: $GIT_COMMIT"
 ```
 
-`args` can be set in the Compose file under the `build` key to define `GIT_COMMIT`. `args` can be set as a mapping or a list:
+`args` pode ser definido no arquivo Compose, na chave `build`, para definir
+`GIT_COMMIT`.
+`args` pode ser definido como um mapeamento ou uma lista:
 
 ```yml
 build:
@@ -177,21 +237,71 @@ build:
     - GIT_COMMIT=cdc3b19
 ```
 
-Values can be omitted when specifying a build argument, in which case its value at build time must be obtained by user interaction,
-otherwise the build argument won't be set when building the Docker image.
+Os valores podem ser omitidos ao especificar um argumento de construção, caso em
+que seu valor no momento da construção deve ser obtido por interação da pessoa
+usuária.
+Caso contrário, o argumento de construção não será definido ao construir a
+imagem Docker.
 
 ```yml
 args:
   - GIT_COMMIT
 ```
 
+### `cache_from`
+
+`cache_from` define uma lista de fontes que o construtor de imagens deve usar
+para resolução de cache.
+
+A sintaxe de localização do cache segue o formato global
+`[NOME|tipo=TIPO[,CHAVE=VALOR]]`.
+O simples `NOME` é, na verdade, uma notação abreviada para
+`tipo=registro,ref=NOME`.
+
+As implementações do Compose Build podem suportar tipos personalizados.
+A especificação do Compose define os tipos canônicos que devem ser suportados:
+
+- `registry` para recuperar o cache de cosntrução de uma imagem OCI definida
+  pela chave `ref`.
+
+```yml
+build:
+  context: .
+  cache_from:
+    - alpine:latest
+    - type=local,src=caminho/para/o/cache
+    - type=gha
+```
+
+Os caches não suportados são ignorados e não impedem a criação de imagens.
+
+### `cache_to`
+
+`cache_to` define uma lista de locais de exportação a serem usados para
+compartilhar o cache de construção com construções futuras.
+
+```yml
+build:
+  context: .
+  cache_to:
+    - usuario/app:cache
+    - type=local,dest=caminho/para/o/cache
+```
+
+O destino do cache é definido usando a mesma sintaxe `type=TYPE[,KEY=VALUE]`
+definida por [`cache_from`](#cache_from).
+
+Caches não suportados são ignorados e não impedem a criação de imagens.
+
 ### `context`
 
-`context` defines either a path to a directory containing a Dockerfile, or a URL to a Git repository.
+`context` define o caminho para um diretório que contém um Dockerfile ou a URL
+de um repositório Git.
 
-When the value supplied is a relative path, it is interpreted as relative to the project directory.
-Compose warns you about the absolute path used to define the build context as those prevent the Compose file
-from being portable.
+Quando o valor fornecido é um caminho relativo, ele é interpretado como relativo
+ao diretório do projeto.
+O Compose alerta sobre caminhos absolutos usados para definir o contexto de
+construção, pois esses caminhos impedem que o arquivo Compose seja portátil.
 
 ```yml
 build:
@@ -201,57 +311,21 @@ build:
 ```yml
 services:
   webapp:
-    build: https://github.com/mycompany/webapp.git
+    build: https://github.com/minhacompanhia/webapp.git
 ```
 
-If not set explicitly, `context` defaults to project directory (`.`).
-
-### `cache_from`
-
-`cache_from` defines a list of sources the image builder should use for cache resolution.
-
-Cache location syntax follows the global format `[NAME|type=TYPE[,KEY=VALUE]]`. Simple `NAME` is actually a shortcut notation for `type=registry,ref=NAME`.
-
-Compose Build implementations may support custom types, the Compose Specification defines canonical types which must be supported:
-
-- `registry` to retrieve build cache from an OCI image set by key `ref`
-
-
-```yml
-build:
-  context: .
-  cache_from:
-    - alpine:latest
-    - type=local,src=path/to/cache
-    - type=gha
-```
-
-Unsupported caches are ignored and don't prevent you from building images.
-
-### `cache_to`
-
-`cache_to` defines a list of export locations to be used to share build cache with future builds.
-
-```yml
-build:
-  context: .
-  cache_to:
-   - user/app:cache
-   - type=local,dest=path/to/cache
-```
-
-Cache target is defined using the same `type=TYPE[,KEY=VALUE]` syntax defined by [`cache_from`](#cache_from).
-
-Unsupported caches are ignored and don't prevent you from building images.
+Se não for definido explicitamente, `context` assume como padrão o diretório do
+projeto (`.`).
 
 ### `dockerfile`
 
-`dockerfile` sets an alternate Dockerfile. A relative path is resolved from the build context.
-Compose warns you about the absolute path used to define the Dockerfile as it prevents Compose files
-from being portable.
+`dockerfile` define um Dockerfile alternativo.
+Um caminho relativo é resolvido a partir do contexto de construção.
+O Compose alerta sobre o caminho absoluto usado para definir o Dockerfile, pois
+isso impede que os arquivos Compose sejam portáteis.
 
-When set, `dockerfile_inline` attribute is not allowed and Compose
-rejects any Compose file having both set.
+Quando definido, o atributo `dockerfile_inline` não é permitido e o Compose
+rejeita qualquer arquivo Compose que tenha ambos definidos.
 
 ```yml
 build:
@@ -263,10 +337,13 @@ build:
 
 {{< summary-bar feature_name="Build dockerfile inline" >}}
 
-`dockerfile_inline` defines the Dockerfile content as an inlined string in a Compose file. When set, the `dockerfile`
-attribute is not allowed and Compose rejects any Compose file having both set.
+`dockerfile_inline` define o conteúdo do Dockerfile como uma string embutida em
+um arquivo Compose.
+Quando definido, o atributo `dockerfile` não é permitido e o Compose rejeita
+qualquer arquivo Compose que tenha ambos definidos.
 
-Use of YAML multi-line string syntax is recommended to define the Dockerfile content:
+Recomenda-se o uso da sintaxe de string multilinha YAML para definir o conteúdo
+do Dockerfile:
 
 ```yml
 build:
@@ -280,80 +357,94 @@ build:
 
 {{< summary-bar feature_name="Build entitlements" >}}
 
-`entitlements` defines extra privileged entitlements to be allowed during the build.
+`entitlements` define privilégios adicionais que serão permitidos durante a
+construção.
 
- ```yaml
- entitlements:
-   - network.host
-   - security.insecure
- ```
+```yaml
+entitlements:
+  - network.host
+  - security.insecure
+```
 
 ### `extra_hosts`
 
-`extra_hosts` adds hostname mappings at build-time. Use the same syntax as [`extra_hosts`](services.md#extra_hosts).
+`extra_hosts` adiciona mapeamentos de nomes de host em tempo de construção.
+Use a mesma sintaxe de [`extra_hosts`](services.md#extra_hosts).
 
 ```yml
 extra_hosts:
-  - "somehost=162.242.195.82"
-  - "otherhost=50.31.209.229"
-  - "myhostv6=::1"
+  - "algumhost=162.242.195.82"
+  - "outrohost=50.31.209.229"
+  - "meuhostv6=::1"
 ```
-IPv6 addresses can be enclosed in square brackets, for example:
+
+Endereços IPv6 podem ser delimitados por colchetes, por exemplo:
 
 ```yml
 extra_hosts:
-  - "myhostv6=[::1]"
+  - "meuhostv6=[::1]"
 ```
 
-The separator `=` is preferred, but `:` can also be used. Introduced in Docker Compose version [2.24.1](/manuals/compose/releases/release-notes.md#2241). For example:
+O separador `=` é preferencial, mas `:` também pode ser usado.
+Introduzido na versão
+[2.24.1](https://github.com/docker/compose/releases/tag/v2.24.1) do Docker
+Compose.
+Por exemplo:
 
 ```yml
 extra_hosts:
-  - "somehost:162.242.195.82"
-  - "myhostv6:::1"
+  - "algumhost:162.242.195.82"
+  - "meuhostv6:::1"
 ```
 
-Compose creates matching entry with the IP address and hostname in the container's network
-configuration, which means for Linux `/etc/hosts` will get extra lines:
+O Compose cria uma entrada correspondente com o endereço IP e o nome do host na
+configuração de rede do contêiner.
+Isso significa que, para o Linux, o arquivo `/etc/hosts` receberá linhas
+adicionais:
 
 ```text
-162.242.195.82  somehost
-50.31.209.229   otherhost
-::1             myhostv6
+162.242.195.82  algumhost
+50.31.209.229   outrohost
+::1             meuhostv6
 ```
 
 ### `isolation`
 
-`isolation` specifies a build’s container isolation technology. Like [isolation](services.md#isolation), supported values
-are platform specific.
+`isolation` especifica a tecnologia de isolamento de contêiner de uma
+construção.
+Assim como [isolation](services.md#isolation), os valores suportados são
+específicos da plataforma.
 
 ### `labels`
 
-`labels` add metadata to the resulting image. `labels` can be set either as an array or a map.
+`labels` adiciona metadados à imagem resultante.
+`labels` pode ser definido como uma matriz ou um mapa.
 
-It's recommended that you use reverse-DNS notation to prevent your labels from conflicting with other software.
+Recomenda-se o uso da notação DNS reversa para evitar conflitos entre seus
+rótulos e outros softwares.
 
 ```yml
 build:
   context: .
   labels:
-    com.example.description: "Accounting webapp"
-    com.example.department: "Finance"
-    com.example.label-with-empty-value: ""
+    com.example.description: "Aplicação web de contabilidade"
+    com.example.department: "Finanças"
+    com.example.rotulo-com-valor-vazio: ""
 ```
 
 ```yml
 build:
   context: .
   labels:
-    - "com.example.description=Accounting webapp"
-    - "com.example.department=Finance"
-    - "com.example.label-with-empty-value"
+    - "com.example.description=Aplicação web de contabilidade"
+    - "com.example.department=Finanças"
+    - "com.example.rotulo-com-valor-vazio"
 ```
 
 ### `network`
 
-Set the network containers connect to for the `RUN` instructions during build.
+Configure a rede à qual os contêineres se conectam para as instruções `RUN`
+durante a construção.
 
 ```yaml
 build:
@@ -364,10 +455,10 @@ build:
 ```yaml
 build:
   context: .
-  network: custom_network_1
+  network: rede_personalizada_1
 ```
 
-Use `none` to disable networking during build:
+Use `none` para desativar a rede durante a construção:
 
 ```yaml
 build:
@@ -377,13 +468,15 @@ build:
 
 ### `no_cache`
 
-`no_cache` disables image builder cache and enforces a full rebuild from source for all image layers. This only
-applies to layers declared in the Dockerfile, referenced images can be retrieved from local image store whenever tag
-has been updated on registry (see [pull](#pull)).
+`no_cache` desativa o cache do construtor de imagens e força uma reconstrução
+completa a partir do código-fonte para todas as camadas da imagem.
+Isso se aplica somente às camadas declaradas no Dockerfile; as imagens
+referenciadas podem ser recuperadas do armazenamento de imagens local sempre que
+a tag for atualizada no registro (consulte [pull](#pull)).
 
 ### `platforms`
 
-`platforms` defines a list of target [platforms](services.md#platform).
+`platforms` define uma lista de [plataformas](services.md#platform) de destino.
 
 ```yml
 build:
@@ -393,24 +486,28 @@ build:
     - "linux/arm64"
 ```
 
-When the `platforms` attribute is omitted, Compose includes the service's platform
-in the list of the default build target platforms.
+Quando o atributo `platforms` é omitido, o Compose inclui a plataforma do
+serviço na lista de plataformas de destino de construção padrão.
 
-When the `platforms` attribute is defined, Compose includes the service's
-platform, otherwise users won't be able to run images they built.
+Quando o atributo `platforms` é definido, o Compose inclui a plataforma do
+serviço; caso contrário, as pessoas usuárias não poderão executar as imagens que
+construíram.
 
-Composes reports an error in the following cases:
-- When the list contains multiple platforms but the implementation is incapable of storing multi-platform images.
-- When the list contains an unsupported platform.
+O Compose reporta um erro nos seguintes casos:
+
+- Quando a lista contém várias plataformas, mas a implementação não é capaz de
+  armazenar imagens multiplataforma.
+- Quando a lista contém uma plataforma não suportada.
 
   ```yml
   build:
     context: "."
     platforms:
       - "linux/amd64"
-      - "unsupported/unsupported"
+      - "naosuportada/naosuportada"
   ```
-- When the list is non-empty and does not contain the service's platform.
+
+- Quando a lista não estiver vazia e não contiver a plataforma do serviço.
 
   ```yml
   services:
@@ -426,7 +523,9 @@ Composes reports an error in the following cases:
 
 {{< summary-bar feature_name="Build privileged" >}}
 
-`privileged` configures the service image to build with elevated privileges. Support and actual impacts are platform specific.
+`privileged` configura a imagem do serviço para ser compilada com privilégios
+elevados.
+O suporte e os impactos reais variam de acordo com a plataforma.
 
 ```yml
 build:
@@ -434,29 +533,84 @@ build:
   privileged: true
 ```
 
+### `provenance`
+
+{{< summary-bar feature_name="Compose provenance" >}}
+
+`provenance` configura o construtor para adicionar uma
+[atestação de proveniência](https://slsa.dev/provenance/v0.2#schema) à imagem
+publicada.
+
+O valor pode ser um booleano para habilitar/desabilitar a atestação de
+proveniência ou uma string chave=valor para definir a configuração de
+proveniência.
+Você pode usar isso para selecionar o nível de detalhe a ser incluído na
+atestação de proveniência definindo o parâmetro `mode`.
+
+```yaml
+build:
+  context: .
+  provenance: true
+```
+
+```yaml
+build:
+  context: .
+  provenance: mode=max
+```
+
 ### `pull`
 
-`pull` requires the image builder to pull referenced images (`FROM` Dockerfile directive), even if those are already
-available in the local image store.
+`pull` exige que o construtor de imagens baixe as imagens referenciadas
+(diretiva `FROM` do Dockerfile), mesmo que elas já estejam disponíveis no
+armazenamento de imagens local.
+
+### `sbom`
+
+{{< summary-bar feature_name="Compose sbom" >}}
+
+`sbom` configura o construtor para adicionar uma
+[atestação de proveniência](https://slsa.dev/provenance/v0.2#schema) à imagem
+publicada.
+O valor pode ser um booleano para habilitar/desabilitar a atestação sbom ou uma
+string chave=valor para definir a configuração do gerador SBOM.
+Isso permite que você selecione uma imagem alternativa para o gerador SBOM
+(consulte
+https://github.com/moby/buildkit/blob/master/docs/attestations/sbom-protocol.md).
+
+```yaml
+build:
+  context: .
+  sbom: true
+```
+
+```yaml
+build:
+  context: .
+  sbom: generator=docker/scout-sbom-indexer:latest # Usa um gerador SBOM alternativo.
+```
 
 ### `secrets`
 
-`secrets` grants access to sensitive data defined by [secrets](services.md#secrets) on a per-service build basis. Two
-different syntax variants are supported: the short syntax and the long syntax.
+`secrets` concede acesso a dados sensíveis definidos por
+[secrets](services.md#secrets) para cada construção de serviço.
+Duas variantes de sintaxe são suportadas: a sintaxe curta e a sintaxe longa.
 
-Compose reports an error if the secret isn't defined in the
-[`secrets`](secrets.md) section of this Compose file.
+O Compose reporta um erro se o segredo não estiver definido na seção
+[`secrets`](secrets.md) deste arquivo Compose.
 
-#### Short syntax
+#### Sintaxe curta
 
-The short syntax variant only specifies the secret name. This grants the
-container access to the secret and mounts it as read-only to `/run/secrets/<secret_name>`
-within the container. The source name and destination mountpoint are both set
-to the secret name.
+A variante de sintaxe curta especifica apenas o nome do segredo.
+Isso concede ao contêiner acesso ao segredo e o monta como somente leitura em
+`/run/secrets/<nome_do_segredo>` dentro do contêiner.
+O nome de origem e o ponto de montagem de destino são ambos definidos com o nome
+do segredo.
 
-The following example uses the short syntax to grant the build of the `frontend` service
-access to the `server-certificate` secret. The value of `server-certificate` is set
-to the contents of the file `./server.cert`.
+O exemplo a seguir usa a sintaxe curta para conceder ao build do serviço
+`frontend` acesso ao segredo `server-certificate`.
+O valor de `server-certificate` é definido com o conteúdo do arquivo
+`./server.cert`.
 
 ```yml
 services:
@@ -470,25 +624,30 @@ secrets:
     file: ./server.cert
 ```
 
-#### Long syntax
+#### Sintaxe longa
 
-The long syntax provides more granularity in how the secret is created within
-the service's containers.
+A sintaxe longa oferece mais granularidade na forma como o segredo é criado nos
+contêineres do serviço.
 
-- `source`: The name of the secret as it exists on the platform.
-- `target`: The name of the file to be mounted in `/run/secrets/` in the
-  service's task containers. Defaults to `source` if not specified.
-- `uid` and `gid`: The numeric uid or gid that owns the file within
-  `/run/secrets/` in the service's task containers. Default value is `USER`.
-- `mode`: The [permissions](https://wintelguy.com/permissions-calc.pl) for the file to be mounted in `/run/secrets/`
-  in the service's task containers, in octal notation.
-  Default value is world-readable permissions (mode `0444`).
-  The writable bit must be ignored if set. The executable bit may be set.
+- `source`: o nome do segredo como ele existe na plataforma.
+- `target`: o ID do segredo conforme declarado no Dockerfile.
+  O padrão é `source` se não for especificado.
+- `uid` e `gid`: o uid ou gid numérico que possui o arquivo em `/run/secrets/`
+  nos contêineres da tarefa do serviço.
+  O valor padrão é `USER`.
+- `mode`: as [permissões](https://wintelguy.com/permissions-calc.pl) para o
+  arquivo a ser montado em `/run/secrets/` nos contêineres da tarefa do serviço,
+  em notação octal.
+  O valor padrão são permissões de leitura para todos (modo `0444`).
+  O bit de escrita deve ser ignorado se definido.
+  O bit de execução pode ser definido.
 
-The following example sets the name of the `server-certificate` secret file to `server.crt`
-within the container, sets the mode to `0440` (group-readable) and sets the user and group
-to `103`. The value of `server-certificate` secret is provided by the platform through a lookup and
-the secret lifecycle not directly managed by Compose.
+O exemplo a seguir define o nome do arquivo de segredo `server-certificate` como
+`server.crt` dentro do contêiner, define o modo como `0440` (leitura pelo grupo)
+e define o usuário e o grupo como `103`.
+O valor do segredo `server-certificate` é fornecido pela plataforma por meio de
+uma pesquisa e o ciclo de vida do segredo não é gerenciado diretamente pelo
+Compose.
 
 ```yml
 services:
@@ -497,7 +656,7 @@ services:
       context: .
       secrets:
         - source: server-certificate
-          target: server.cert
+          target: cert # ID do segredo no Dockerfile
           uid: "103"
           gid: "103"
           mode: 0440
@@ -506,56 +665,79 @@ secrets:
     external: true
 ```
 
-Service builds may be granted access to multiple secrets. Long and short syntax for secrets may be used in the
-same Compose file. Defining a secret in the top-level `secrets` must not imply granting any service build access to it.
-Such grant must be explicit within service specification as [secrets](services.md#secrets) service element.
+```dockerfile
+# Dockerfile
+FROM nginx
+RUN --mount=type=secret,id=cert,required=true,target=/root/cert ...
+```
+
+As construções de serviço podem ter acesso a vários segredos.
+Sintaxes longas e curtas para segredos podem ser usadas no mesmo arquivo
+Compose.
+Definir um segredo no `secrets` de nível superior não deve implicar conceder
+acesso a ele a nenhuma construção de serviço.
+Essa concessão deve ser explícita na especificação do serviço como o elemento de
+serviço [secrets](services.md#secrets).
 
 ### `ssh`
 
-`ssh` defines SSH authentications that the image builder should use during image build (e.g., cloning private repository).
+`ssh` define as autenticações SSH que o construtor de imagem deve usar durante a
+construção da imagem (por exemplo, clonar um repositório privado).
 
-`ssh` property syntax can be either:
-* `default`: Let the builder connect to the SSH-agent.
-* `ID=path`: A key/value definition of an ID and the associated path. It can be either a [PEM](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail) file, or path to ssh-agent socket.
+A sintaxe da propriedade `ssh` pode ser:
+
+- `default`: permite que o construtor se conecte ao agente SSH.
+- `ID=caminho`: uma definição de chave/valor de um ID e o caminho associado.
+  Pode ser um arquivo [PEM](https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail)
+  ou o caminho para o socket do agente SSH.
 
 ```yaml
 build:
   context: .
   ssh:
-    - default   # mount the default SSH agent
+    - default # monta o agente SSH padrão
 ```
-or
+
+ou
+
 ```yaml
 build:
   context: .
-  ssh: ["default"]   # mount the default SSH agent
+  ssh: ["default"] # monta o agente SSH padrão
 ```
 
-Using a custom id `myproject` with path to a local SSH key:
+Usando um ID personalizado `meuprojeto` com o caminho para uma chave SSH local:
+
 ```yaml
 build:
   context: .
   ssh:
-    - myproject=~/.ssh/myproject.pem
+    - meuprojeto=~/.ssh/meuprojeto.pem
 ```
 
-The image builder can then rely on this to mount the SSH key during build.
+O construtor de imagens pode então usar isso para montar a chave SSH durante a
+construção.
 
-For illustration, [SSH mounts](https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/reference.md#run---mounttypessh) can be used to mount the SSH key set by ID and access a secured resource:
+Por exemplo, as
+[montagens SSH](https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/reference.md#run---mounttypessh)
+podem ser usadas para montar a chave SSH definida por ID e acessar um recurso
+protegido:
 
 ```console
-RUN --mount=type=ssh,id=myproject git clone ...
+RUN --mount=type=ssh,id=meuprojeto git clone ...
 ```
 
 ### `shm_size`
 
-`shm_size` sets the size of the shared memory (`/dev/shm` partition on Linux) allocated for building Docker images. Specify
-as an integer value representing the number of bytes or as a string expressing a [byte value](extension.md#specifying-byte-values).
+`shm_size` define o tamanho da memória compartilhada (partição `/dev/shm` no
+Linux) alocada para a construção de imagens Docker.
+Especifique como um valor inteiro representando o número de bytes ou como uma
+string expressando um [valor de byte](extension.md#specifying-byte-values).
 
 ```yml
 build:
   context: .
-  shm_size: '2gb'
+  shm_size: "2gb"
 ```
 
 ```yaml
@@ -566,18 +748,21 @@ build:
 
 ### `tags`
 
-`tags` defines a list of tag mappings that must be associated to the build image. This list comes in addition to
-the `image` [property defined in the service section](services.md#image)
+`tags` define uma lista de mapeamentos de tags que devem ser associados à imagem
+de compilação.
+Esta lista é adicional à propriedade `image`
+[definida na seção de serviço](services.md#image).
 
 ```yml
 tags:
-  - "myimage:mytag"
-  - "registry/username/myrepos:my-other-tag"
+  - "minhaimagem:minhatag"
+  - "registro/usuario/meu-repo:minha-outra-tag"
 ```
 
 ### `target`
 
-`target` defines the stage to build as defined inside a multi-stage `Dockerfile`.
+`target` define o estágio a ser construído, conforme definido em um `Dockerfile`
+com vários estágios.
 
 ```yml
 build:
@@ -589,8 +774,9 @@ build:
 
 {{< summary-bar feature_name="Build ulimits" >}}
 
-`ulimits` overrides the default `ulimits` for a container. It's specified either as an integer for a single limit
-or as mapping for soft/hard limits.
+`ulimits` substitui o `ulimits` padrão para um contêiner.
+Ele é especificado como um número inteiro para um único limite ou como um
+mapeamento para limites flexíveis/rígidos.
 
 ```yml
 services:
