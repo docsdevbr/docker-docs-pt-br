@@ -10,93 +10,125 @@
 # The original work was translated from English into Brazilian Portuguese.
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
-title: Include
-description: Learn about include
-keywords: compose, compose specification, include, compose file reference
+source_url: https://github.com/docker/docs/blob/main/content/reference/compose-file/include.md
+source_revision: 4c6f75f19facf9fcba938315035addd2949f180b
+translation_status: ready
+
+linkTitle: Include
+title: Use include para modularizar arquivos Compose
+description: >-
+  Referencie arquivos Compose externos usando o elemento de nível superior
+  include.
+keywords: compose, especificação compose, include, referência de arquivo compose
 aliases:
- - /compose/compose-file/14-include/
+  - /compose/compose-file/14-include/
 weight: 110
 ---
+
 {{< summary-bar feature_name="Composefile include" >}}
 
-A Compose application can declare dependency on another Compose application. This is useful if:
-- You want to reuse other Compose files.
-- You need to factor out parts of your application model into separate Compose files so they can be managed separately or shared with others.
-- Teams need to keep a Compose file reasonably complicated for the limited amount of resources it has to declare for its own sub-domain within a larger deployment.
+Você pode reutilizar e modularizar configurações do Docker Compose incluindo
+outros arquivos Compose.
+Isso é útil se:
+- Você deseja reutilizar outros arquivos Compose.
+- Você precisa fatorar partes do seu modelo de aplicação em arquivos Compose
+  separados para poderem ser gerenciados separadamente ou compartilhados com
+  outras pessoas.
+- Os times precisam manter um arquivo Compose com apenas a complexidade
+  necessária para a quantidade limitada de recursos que ele precisa declarar
+  para seu próprio subdomínio em uma implantação maior.
 
-The `include` top-level section is used to define the dependency on another Compose application, or sub-domain.
-Each path listed in the `include` section is loaded as an individual Compose application model, with its own project directory, in order to resolve relative paths.
+A seção de nível superior `include` é usada para definir a dependência de outra
+aplicação Compose ou subdomínio.
+Cada caminho listado na seção `include` é carregado como um modelo de aplicação
+Compose individual, com seu próprio diretório de projeto, para resolver caminhos
+relativos.
 
-Once the included Compose application is loaded, all resource definitions are copied into the
-current Compose application model. Compose displays a warning if resource names conflict and doesn't
-try to merge them. To enforce this, `include` is evaluated after the Compose file(s) selected
-to define the Compose application model have been parsed and merged, so that conflicts
-between Compose files are detected.
+Assim que a aplicação Compose incluída é carregada, todas as definições de
+recursos são copiadas para o modelo de aplicação Compose atual.
+O Compose exibe um aviso se houver conflito de nomes de recursos e não tenta
+mesclá-los.
+Para garantir isso, `include` é avaliado após os arquivos Compose selecionados
+para definir o modelo de aplicação Compose serem analisados e mesclados, de
+forma que conflitos entre arquivos Compose sejam detectados.
 
-`include` applies recursively so an included Compose file which declares its own `include` section triggers those other files to be included as well.
+`include` aplica-se recursivamente, portanto, um arquivo Compose incluído que
+declara sua própria seção `include` aciona a inclusão desses outros arquivos
+também.
 
-Any volumes, networks, or other resources pulled in from the included Compose file can be used by the current Compose application for cross-service references. For example:
+Quaisquer volumes, redes ou outros recursos obtidos do arquivo Compose incluído
+podem ser usados pela aplicação Compose atual para referências entre serviços.
+Por exemplo:
 
 ```yaml
 include:
-  - my-compose-include.yaml  #with serviceB declared
+  - meu-include-compose.yaml  # com servico-b declarado
 services:
-  serviceA:
+  servico-a:
     build: .
     depends_on:
-      - serviceB #use serviceB directly as if it was declared in this Compose file
+      - servico-b # usa o servico-b diretamente como se estivesse declarado
+                  # neste arquivo Compose
 ```
 
-Compose also supports the use of interpolated variables with `include`. It's recommended that you [specify mandatory variables](interpolation.md). For example:
+O Compose também suporta o uso de variáveis interpoladas com `include`.
+Recomenda-se que você [especifique variáveis obrigatórias](interpolation.md).
+Por exemplo:
 
 ```text
 include:
   -${INCLUDE_PATH:?FOO}/compose.yaml
 ```
 
-## Short syntax
+## Sintaxe curta
 
-The short syntax only defines paths to other Compose files. The file is loaded with the parent
-folder as the project directory, and an optional `.env` file that is loaded to define any variables' default values
-by interpolation. The local project's environment can override those values.
+A sintaxe curta define apenas caminhos para outros arquivos Compose.
+O arquivo é carregado com a pasta pai como diretório do projeto e um arquivo
+`.env` opcional carregado para definir os valores padrão de quaisquer variáveis
+por interpolação.
+O ambiente local do projeto pode sobrescrever esses valores.
 
 ```yaml
 include:
   - ../commons/compose.yaml
-  - ../another_domain/compose.yaml
+  - ../outro_dominio/compose.yaml
 
 services:
   webapp:
     depends_on:
-      - included-service # defined by another_domain
+      - servico-incluido # definido por outro_dominio
 ```
 
-In the previous example, both `../commons/compose.yaml` and
-`../another_domain/compose.yaml` are loaded as individual Compose projects. Relative paths
-in Compose files being referred by `include` are resolved relative to their own Compose
-file path, not based on the local project's directory. Variables are interpolated using values set in the optional
-`.env` file in same folder and are overridden by the local project's environment.
+No exemplo anterior, tanto `../commons/compose.yaml` quanto
+`../outro_dominio/compose.yaml` são carregados como projetos Compose
+individuais.
+Caminhos relativos em arquivos Compose referenciados por `include` são
+resolvidos em relação ao seu próprio caminho de arquivo Compose, e não com base
+no diretório do projeto local.
+As variáveis são interpoladas usando valores definidos no arquivo opcional
+`.env` na mesma pasta e são sobrescritas pelo ambiente do projeto local.
 
-## Long syntax
+## Sintaxe longa
 
-The long syntax offers more control over the sub-project parsing:
+A sintaxe longa oferece mais controle sobre a análise do subprojeto:
 
 ```yaml
 include:
    - path: ../commons/compose.yaml
      project_directory: ..
-     env_file: ../another/.env
+     env_file: ../outro/.env
 ```
 
 ### `path`
 
-`path` is required and defines the location of the Compose file(s) to be parsed and included into the
-local Compose model.
+`path` é obrigatório e define a localização do(s) arquivo(s) Compose a serem
+analisados e incluídos no modelo Compose local.
 
-`path` can be set as:
+`path` pode ser definido como:
 
-- A string: When using a single Compose file.
-- A list of strings: When multiple Compose files need to be [merged together](merge.md) to define the Compose model for the local application.
+- Uma string: ao usar um único arquivo Compose.
+- Uma lista de strings: quando vários arquivos Compose precisam ser
+  [mesclados](merge.md) para definir o modelo Compose para a aplicação local.
 
 ```yaml
 include:
@@ -107,29 +139,35 @@ include:
 
 ### `project_directory`
 
-`project_directory` defines a base path to resolve relative paths set in the Compose file. It defaults to
-the directory of the included Compose file.
+`project_directory` define um caminho base para resolver caminhos relativos
+definidos no arquivo Compose.
+O padrão é o diretório do arquivo Compose incluído.
 
 ### `env_file`
 
-`env_file` defines an environment file(s) to use to define default values when interpolating variables
-in the Compose file being parsed. It defaults to `.env` file in the `project_directory` for the Compose
-file being parsed.
+`env_file` define um ou mais arquivos de ambiente para usar na definição de
+valores padrão ao interpolar variáveis no arquivo Compose que está sendo
+analisado.
+O padrão é o arquivo `.env` no `project_directory` do arquivo Compose que está
+sendo analisado.
 
-`env_file` can be set to either a string or a list of strings when multiple environment files need to be merged
-to define a project environment.
+`env_file` pode ser definido como uma string ou uma lista de strings quando
+vários arquivos de ambiente precisam ser mesclados para definir um ambiente de
+projeto.
 
 ```yaml
 include:
-   - path: ../another/compose.yaml
+   - path: ../outro/compose.yaml
      env_file:
-       - ../another/.env
-       - ../another/dev.env
+       - ../outro/.env
+       - ../outro/dev.env
 ```
 
-The local project's environment has precedence over the values set by the Compose file, so that the local project can
-override values for customization.
+O ambiente do projeto local tem precedência sobre os valores definidos pelo
+arquivo Compose, permitindo que o projeto local substitua os valores para
+personalização.
 
-## Additional resources
+## Recursos adicionais
 
-For more information on using `include`, see [Working with multiple Compose files](/manuals/compose/how-tos/multiple-compose-files/_index.md)
+Para obter mais informações sobre como usar `include`, consulte
+[Trabalhando com vários arquivos Compose](/manuals/compose/how-tos/multiple-compose-files/_index.md).
