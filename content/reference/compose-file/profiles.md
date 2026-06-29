@@ -10,30 +10,43 @@
 # The original work was translated from English into Brazilian Portuguese.
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
-title: Profiles
-description: Learn about profiles
-keywords: compose, compose specification, profiles, compose file reference
+source_url: https://github.com/docker/docs/blob/main/content/reference/compose-file/profiles.md
+source_revision: 4c6f75f19facf9fcba938315035addd2949f180b
+translation_status: ready
+
+linkTitle: Perfis
+title: Aprenda a usar perfis no Docker Compose
+description: Saiba mais sobre perfis.
+keywords: >-
+  compose, especificação do compose, perfis, referência de arquivo compose
 aliases:
- - /compose/compose-file/15-profiles/
+  - /compose/compose-file/15-profiles/
 weight: 120
 ---
-With profiles you can define a set of active profiles so your Compose application model is adjusted for various usages and environments.
 
-The [services](services.md) top-level element supports a `profiles` attribute to define a list of named profiles.
-Services without a `profiles` attribute are always enabled.
+Com perfis, você pode definir um conjunto de perfis ativos para que o modelo da
+sua aplicação Compose seja ajustado para diversos usos e ambientes.
 
-A service is ignored by Compose when none of the listed `profiles` match the active ones, unless the service is
-explicitly targeted by a command. In that case its profile is added to the set of active profiles.
+O elemento de nível superior [services](services.md) suporta um atributo
+`profiles` para definir uma lista de perfis nomeados.
+Serviços sem um atributo `profiles` estão sempre habilitados.
+
+Um serviço é ignorado pelo Compose quando nenhum dos `profiles` listados
+corresponde aos ativos, a menos que o serviço seja explicitamente selecionado
+por um comando.
+Nesse caso, seu perfil é adicionado ao conjunto de perfis ativos.
 
 > [!NOTE]
 >
-> All other top-level elements are not affected by `profiles` and are always active.
+> Todos os outros elementos de nível superior não são afetados por `profiles` e
+> estão sempre ativos.
 
-References to other services (by `links`, `extends` or shared resource syntax `service:xxx`) do not
-automatically enable a component that would otherwise have been ignored by active profiles. Instead
-Compose returns an error.
+Referências a outros serviços (por meio de `links`, `extends` ou sintaxe de
+recurso compartilhado `service:xxx`) não habilitam automaticamente um componente
+que, de outra forma, teria sido ignorado pelos perfis ativos.
+Em vez disso, o Compose retorna um erro.
 
-## Illustrative example
+## Exemplo ilustrativo
 
 ```yaml
 services:
@@ -60,22 +73,31 @@ services:
       - debug
 ```
 
-In the above example:
+No exemplo acima:
 
-- If the Compose application model is parsed with no profile enabled, it only contains the `web` service.
-- If the profile `test` is enabled, the model contains the services `test_lib` and `coverage_lib`, and service `web`, which is always enabled.
-- If the profile `debug` is enabled, the model contains both `web` and `debug_lib` services, but not `test_lib` and `coverage_lib`,
-  and as such the model is invalid regarding the `depends_on` constraint of `debug_lib`.
-- If the profiles `debug` and `test` are enabled, the model contains all services; `web`, `test_lib`, `coverage_lib` and `debug_lib`.
-- If Compose is executed with `test_lib` as the explicit service to run, `test_lib` and the `test` profile
-  are active even if `test` profile is not enabled.
-- If Compose is executed with `coverage_lib` as the explicit service to run, the service `coverage_lib` and the
-  profile `test` are active and `test_lib` is pulled in by the `depends_on` constraint.
-- If Compose is executed with `debug_lib` as the explicit service to run, again the model is
-  invalid regarding the `depends_on` constraint of `debug_lib`, since `debug_lib` and `test_lib` have no common `profiles`
-  listed.
-- If Compose is executed with `debug_lib` as the explicit service to run and profile `test` is enabled,
-  profile `debug` is automatically enabled and service `test_lib` is pulled in as a dependency starting both
-  services `debug_lib` and `test_lib`.
+- Se o modelo de aplicação Compose for analisado quando nenhum perfil estiver
+  habilitado, ele conterá apenas o serviço `web`.
+- Se o perfil `test` estiver habilitado, o modelo conterá os serviços `test_lib`
+  e `coverage_lib`, e o serviço `web`, que está sempre habilitado.
+- Se o perfil `debug` estiver habilitado, o modelo conterá os serviços `web` e
+  `debug_lib`, mas não `test_lib` e `coverage_lib`, e, portanto, o modelo será
+  inválido em relação à restrição `depends_on` de `debug_lib`.
+- Se os perfis `debug` e `test` estiverem habilitados, o modelo conterá todos os
+  serviços: `web`, `test_lib`, `coverage_lib` e `debug_lib`.
+- Se o Compose for executado com `test_lib` como o serviço explícito a ser
+  executado, `test_lib` e o perfil `test` estarão ativos mesmo que o perfil
+  `test` não esteja habilitado.
+- Se o Compose for executado com `coverage_lib` como o serviço explícito a ser
+  executado, o serviço `coverage_lib` e o perfil `test` estarão ativos e
+  `test_lib` será incluído pela restrição `depends_on`.
+- Se o Compose for executado com `debug_lib` como o serviço explícito a ser
+  executado, novamente o modelo será inválido em relação à restrição
+  `depends_on` de `debug_lib`, já que `debug_lib` e `test_lib` não possuem
+  `profiles` em comum listados.
+- Se o Compose for executado com `debug_lib` como o serviço explícito a ser
+  executado e o perfil `test` estiver habilitado, o perfil `debug` será
+  automaticamente habilitado e o serviço `test_lib` será incluído como uma
+  dependência, iniciando ambos os serviços `debug_lib` e `test_lib`.
 
-See how you can use `profiles` in [Docker Compose](/manuals/compose/how-tos/profiles.md).
+Aprenda a usar `profiles` em
+[Docker Compose](/manuals/compose/how-tos/profiles.md).
