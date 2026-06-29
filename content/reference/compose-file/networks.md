@@ -18,7 +18,7 @@ linkTitle: Redes
 title: Defina e gerencie redes no Docker Compose
 description: >-
   Aprenda como configurar e controlar redes usando o elemento de nível superior
-  `networks` no Docker Compose.
+  networks no Docker Compose.
 keywords: >-
   compose, especificação do compose, redes, referência de arquivo compose
 aliases:

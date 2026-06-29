@@ -16,8 +16,7 @@ translation_status: ready
 
 title: Segredos
 description: >-
-  Explore todos os atributos que o elemento de nível superior `secrets` pode
-  ter.
+  Explore todos os atributos que o elemento de nível superior secrets pode ter.
 keywords: >-
   compose, especificação do compose, segredos, referência de arquivo compose
 aliases:

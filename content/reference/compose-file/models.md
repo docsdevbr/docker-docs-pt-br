@@ -10,21 +10,31 @@
 # The original work was translated from English into Brazilian Portuguese.
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
-title: Models
-description: Learn about the models top-level element
-keywords: compose, compose specification, models, compose file reference
+source_url: https://github.com/docker/docs/blob/main/content/reference/compose-file/models.md
+source_revision: 479885a3d85077d831ab48c94cc78e80e6ead2fa
+translation_status: ready
+
+title: Modelos
+description: Saiba mais sobre o elemento de nível superior models.
+keywords: compose, especificação compose, modelos, referência de arquivo compose
 weight: 120
 ---
 
 {{< summary-bar feature_name="Compose models" >}}
 
-The top-level `models` section declares AI models that are used by your Compose application. These models are typically pulled as OCI artifacts, run by a model runner, and exposed as an API that your service containers can consume.
+A seção de nível superior `models` declara os modelos de IA usados pela sua
+aplicação Compose.
+Esses modelos são normalmente obtidos como artefatos OCI, executados por um
+executor de modelos e expostos como uma API que seus contêineres de serviço
+podem consumir.
 
-Services can only access models when explicitly granted by a [`models` attribute](services.md#models) within the `services` top-level element.
+Os serviços só podem acessar os modelos quando explicitamente concedido por um
+atributo [`models` attribute](services.md#models) dentro do elemento de nível
+superior `services`.
 
-## Examples
+## Exemplos
 
-### Example 1
+### Exemplo 1
 
 ```yaml
 services:
@@ -39,13 +49,15 @@ models:
     model: ai/model
 ```
 
-In this basic example:
+Neste exemplo básico:
 
- - The app service uses the `ai_model`.
- - The `ai_model` is defined as an OCI artifact (`ai/model`) that is pulled and served by the model runner.
- - Docker Compose injects connection info, for example `AI_MODEL_URL`, into the container.
+- O serviço app usa o `ai_model`.
+- O `ai_model` é definido como um artefato OCI (`ai/model`) que é obtido e
+  servido pelo executor de modelos.
+- O Docker Compose injeta informações de conexão, por exemplo, `AI_MODEL_URL`,
+  no contêiner.
 
-### Example 2
+### Exemplo 2
 
 ```yaml
 services:
@@ -64,17 +76,21 @@ models:
       - "--another-flag=42"
 ```
 
-In this advanced setup:
+Nesta configuração avançada:
 
- - The service app references `my_model` using the long syntax.
- - Compose injects the model runner's URL as the environment variable `MODEL_URL`.
+- O serviço app referencia `my_model` usando a sintaxe longa.
+- O Compose injeta a URL do executor de modelos como a variável de ambiente
+  `MODEL_URL`.
 
-## Attributes
+## Atributos
 
-- `model` (required): The OCI artifact identifier for the model. This is what Compose pulls and runs via the model runner.
-- `context_size`: Defines the maximum token context size for the model.
-- `runtime_flags`: A list of raw command-line flags passed to the inference engine when the model is started.
+- `model` (obrigatório): o identificador do artefato OCI para o modelo.
+  É isso que o Compose extrai e executa por meio do executor de modelos.
+- `context_size`: define o tamanho máximo do contexto de token para o modelo.
+- `runtime_flags`: uma lista de parâmetros de linha de comando brutos passados
+  para a engine de inferência quando o modelo é iniciado.
 
-## Additional resources
+## Recursos adicionais
 
-For more examples and information on using `model`, see [Use AI models in Compose](/manuals/ai/compose/models-and-compose.md)
+Para mais exemplos e informações sobre como usar `model`, consulte
+[Use modelos de IA no Compose](/manuals/ai/compose/models-and-compose.md).

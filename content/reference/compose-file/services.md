@@ -17,8 +17,7 @@ translation_status: ready
 linkTitle: Serviços
 title: Defina serviços no Docker Compose
 description: >-
-  Explore todos os atributos que o elemento de nível superior `services` pode
-  ter.
+  Explore todos os atributos que o elemento de nível superior services pode ter.
 keywords: >-
   compose, especificação do compose, serviços, referência do arquivo compose
 aliases:
