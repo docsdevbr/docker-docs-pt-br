@@ -10,52 +10,62 @@
 # The original work was translated from English into Brazilian Portuguese.
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
-title: Merge
-description: Learn about merging rules
-keywords: compose, compose specification, merge, compose file reference
+source_url: https://github.com/docker/docs/blob/main/content/reference/compose-file/merge.md
+source_revision: 4c6f75f19facf9fcba938315035addd2949f180b
+translation_status: ready
+
+linkTitle: Mesclagem
+title: Mescle arquivos Compose
+description: >-
+  Entenda como o Docker Compose mescla vários arquivos e resolve conflitos.
+keywords: >-
+  compose, especificação do compose, mesclar, referência de arquivos compose
 aliases:
- - /compose/compose-file/13-merge/
+  - /compose/compose-file/13-merge/
 weight: 100
 ---
+
 {{% include "compose/merge.md" %}}
 
-These rules are outlined below.
+Essas regras estão descritas abaixo.
 
-## Mapping
+## Mapeamento
 
-A YAML `mapping` gets merged by adding missing entries and merging the conflicting ones.
+Um `mapeamento` YAML é mesclado adicionando as entradas ausentes e mesclando as
+conflitantes.
 
-Merging the following example YAML trees:
+Mesclando as seguintes árvores YAML de exemplo:
 
 ```yaml
 services:
   foo:
-    key1: value1
-    key2: value2
+    chave1: valor1
+    chave2: valor2
 ```
 
 ```yaml
 services:
   foo:
-    key2: VALUE
-    key3: value3
+    chave2: VALOR
+    chave3: valor3
 ```
 
-Results in a Compose application model equivalent to the YAML tree:
+Resulta em um modelo de aplicação Compose equivalente à árvore YAML:
 
 ```yaml
 services:
   foo:
-    key1: value1
-    key2: VALUE
-    key3: value3
+    chave1: valor1
+    chave2: VALOR
+    chave3: valor3
 ```
 
-## Sequence
+## Sequência
 
-A YAML `sequence` is merged by appending values from the overriding Compose file to the previous one.
+Uma `sequence` YAML é mesclada adicionando os valores do arquivo Compose que a
+substitui ao arquivo anterior.
 
-Merging the following example YAML trees:
+Mesclar as seguintes árvores YAML de exemplo:
 
 ```yaml
 services:
@@ -71,7 +81,7 @@ services:
       - 8.8.8.8
 ```
 
-Results in a Compose application model equivalent to the YAML tree:
+Resulta em um modelo de aplicação Compose equivalente à árvore YAML:
 
 ```yaml
 services:
@@ -81,13 +91,16 @@ services:
       - 8.8.8.8
 ```
 
-## Exceptions
+## Exceções
 
-### Shell commands
+### Comandos do Shell
 
-When merging Compose files that use the services attributes [command](services.md#command), [entrypoint](services.md#entrypoint) and [healthcheck: `test`](services.md#healthcheck), the value is overridden by the latest Compose file, and not appended.
+Ao mesclar arquivos Compose que usam os atributos de serviço
+[command](services.md#command), [entrypoint](services.md#entrypoint) e
+[healthcheck: `test`](services.md#healthcheck), o valor é sobrescrito pelo
+arquivo Compose mais recente e não é anexado.
 
-Merging the following example YAML trees:
+Mesclar as seguintes árvores YAML de exemplo:
 
 ```yaml
 services:
@@ -101,7 +114,7 @@ services:
     command: ["echo", "bar"]
 ```
 
-Results in a Compose application model equivalent to the YAML tree:
+Resulta em um modelo de aplicação Compose equivalente à árvore YAML:
 
 ```yaml
 services:
@@ -109,21 +122,25 @@ services:
     command: ["echo", "bar"]
 ```
 
-### Unique resources
+### Recursos únicos
 
-Applies to the [ports](services.md#ports), [volumes](services.md#volumes), [secrets](services.md#secrets) and [configs](services.md#configs) services attributes.
-While these types are modeled in a Compose file as a sequence, they have special uniqueness requirements:
+Aplica-se aos atributos de serviço [ports](services.md#ports),
+[volumes](services.md#volumes), [secrets](services.md#secrets) e
+[configs](services.md#configs).
+Embora esses tipos sejam modelados em um arquivo Compose como uma sequência,
+eles possuem requisitos especiais de unicidade:
 
-| Attribute   | Unique key               |
-|-------------|--------------------------|
-| volumes     |  target                  |
-| secrets     |  target                  |
-| configs     |  target                  |
-| ports       |  {ip, target, published, protocol}   |
+| Atributo | Chave única                       |
+|----------|-----------------------------------|
+| volumes  | target                            |
+| secrets  | target                            |
+| configs  | target                            |
+| ports    | {ip, target, published, protocol} |
 
-When merging Compose files, Compose appends new entries that do not violate a uniqueness constraint and merge entries that share a unique key.
+Ao mesclar arquivos Compose, o Compose adiciona novas entradas que não violam
+uma restrição de unicidade e mescla entradas que compartilham uma chave única.
 
-Merging the following example YAML trees:
+Mesclar as seguintes árvores YAML de exemplo:
 
 ```yaml
 services:
@@ -139,7 +156,7 @@ services:
       - bar:/work
 ```
 
-Results in a Compose application model equivalent to the YAML tree:
+Resulta em um modelo de aplicação Compose equivalente à árvore YAML:
 
 ```yaml
 services:
@@ -148,18 +165,21 @@ services:
       - bar:/work
 ```
 
-### Reset value
+### Redefinir valor
 
-In addition to the previously described mechanism, an override Compose file can also be used to remove elements from your application model.
-For this purpose, the custom [YAML tag](https://yaml.org/spec/1.2.2/#24-tags) `!reset` can be set to
-override a value set by the overridden Compose file. A valid value for attribute must be provided,
-but will be ignored and target attribute will be set with type's default value or `null`.
+Além do mecanismo descrito anteriormente, um arquivo Compose de sobrescrita
+também pode ser usado para remover elementos do seu modelo de aplicação.
+Para isso, a [tag YAML](https://yaml.org/spec/1.2.2/#24-tags) personalizada
+`!reset` pode ser definida para sobrescrever um valor definido pelo arquivo
+Compose personalizado.
+Um valor válido para o atributo deve ser fornecido, mas será ignorado e o
+atributo de destino será definido com o valor padrão do tipo ou `null`.
 
-For readability, it is recommended to explicitly set the attribute value to the null (`null`) or empty
-array `[]` (with `!reset null` or `!reset []`) so that it is clear that resulting attribute will be
-cleared.
+Para facilitar a leitura, recomenda-se definir explicitamente o valor do
+atributo como nulo (`null`) ou um array vazio `[]` (com `!reset null` ou
+`!reset []`) para que fique claro que o atributo resultante será limpo.
 
-A base `compose.yaml` file:
+Um arquivo `compose.yaml` base:
 
 ```yaml
 services:
@@ -171,7 +191,7 @@ services:
       FOO: BAR
 ```
 
-And a `compose.override.yaml` file:
+E um arquivo `compose.override.yaml`:
 
 ```yaml
 services:
@@ -182,7 +202,7 @@ services:
       FOO: !reset null
 ```
 
-Results in:
+Resultam em:
 
 ```yaml
 services:
@@ -190,14 +210,17 @@ services:
     image: myapp
 ```
 
-### Replace value
+### Substituir valor
 
 {{< summary-bar feature_name="Compose replace file" >}}
 
-While `!reset` can be used to remove a declaration from a Compose file using an override file, `!override` allows you
-to fully replace an attribute, bypassing the standard merge rules. A typical example is to fully replace a resource definition, to rely on a distinct model but using the same name.
+Embora `!reset` possa ser usado para remover uma declaração de um arquivo
+Compose usando um arquivo de sobrescrita, `!override` permite que você substitua
+completamente um atributo, ignorando as regras de mesclagem padrão.
+Um exemplo típico é substituir completamente uma definição de recurso, para
+depender de um modelo distinto, mas usando o mesmo nome.
 
-A base `compose.yaml` file:
+Um arquivo `compose.yaml` base:
 
 ```yaml
 services:
@@ -207,7 +230,8 @@ services:
       - "8080:80"
 ```
 
-To remove the original port, but expose a new one, the following override file is used:
+Para remover a porta original e expor uma nova, usa-se o seguinte arquivo de
+sobrescrita:
 
 ```yaml
 services:
@@ -216,7 +240,7 @@ services:
       - "8443:443"
 ```
 
-This results in:
+Isso resulta em:
 
 ```yaml
 services:
@@ -226,9 +250,11 @@ services:
       - "8443:443"
 ```
 
-If `!override` had not been used, both `8080:80` and `8443:443` would be exposed as per the [merging rules outlined above](#sequence).
+Se `!override` não tivesse sido usado, tanto `8080:80` quanto `8443:443` seriam
+expostos conforme as [regras de mesclagem descritas acima](#sequência).
 
-## Additional resources
+## Recursos adicionais
 
-For more information on how merge can be used to create a composite Compose file, see [Working with multiple Compose files](/manuals/compose/how-tos/multiple-compose-files/_index.md)
-
+Para obter mais informações sobre como o merge pode ser usado para criar um
+arquivo Compose composto, consulte
+[Trabalhando com vários arquivos Compose](/manuals/compose/how-tos/multiple-compose-files/_index.md).
