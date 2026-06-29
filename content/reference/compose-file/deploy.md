@@ -10,27 +10,39 @@
 # The original work was translated from English into Brazilian Portuguese.
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
-title: Compose Deploy Specification
-description: Learn about the Compose Deploy Specification
-keywords: compose, compose specification, compose file reference, compose deploy specification
+source_url: https://github.com/docker/docs/blob/main/content/reference/compose-file/deploy.md
+source_revision: 70d0c07c698bfc18bbe08b44c85f9dc859bd7718
+translation_status: ready
+
+title: Especificação de Deploy do Compose
+description: Saiba mais sobre a Especificação de Deploy do Compose
+keywords: >-
+  compose, especificação do compose, referência de arquivo do compose,
+  especificação de deploy do Compose
 aliases:
- - /compose/compose-file/deploy/
+  - /compose/compose-file/deploy/
 weight: 140
 ---
+
 {{% include "compose/deploy.md" %}}
 
-## Attributes
+## Atributos
 
 ### `endpoint_mode`
 
-`endpoint_mode` specifies a service discovery method for external clients connecting to a service. The Compose Deploy Specification defines two canonical values:
+`endpoint_mode` especifica um método de descoberta de serviço para clientes
+externos que se conectam a um serviço.
+A Especificação de Deploy do Compose define dois valores canônicos:
 
-* `endpoint_mode: vip`: Assigns the service a virtual IP (VIP) that acts as the front end for clients to reach the service
-  on a network. Platform routes requests between the client and nodes running the service, without client knowledge of how
-  many nodes are participating in the service or their IP addresses or ports.
+* `endpoint_mode: vip`: atribui ao serviço um IP virtual (VIP) que atua como a
+  interface para os clientes acessarem o serviço em uma rede.
+  A plataforma roteia as requisições entre o cliente e os nós que executam o
+  serviço, sem que o cliente saiba quantos nós estão participando do serviço,
+  seus endereços IP ou portas.
 
-* `endpoint_mode: dnsrr`: Platform sets up DNS entries for the service such that a DNS query for the service name returns a
-  list of IP addresses (DNS round-robin), and the client connects directly to one of these.
+* `endpoint_mode: dnsrr`: a plataforma configura entradas DNS para o serviço de
+  forma que uma consulta DNS pelo nome do serviço retorne uma lista de endereços
+  IP (round-robin DNS), e o cliente se conecta diretamente a um deles.
 
 ```yml
 services:
@@ -46,8 +58,11 @@ services:
 
 ### `labels`
 
-`labels` specifies metadata for the service. These labels are only set on the service and not on any containers for the service.
-This assumes the platform has some native concept of "service" that can match the Compose application model.
+`labels` especifica metadados para o serviço.
+Esses rótulos são definidos apenas no serviço e não em nenhum contêiner do
+serviço.
+Isso pressupõe que a plataforma tenha algum conceito nativo de "serviço" que
+possa corresponder ao modelo de aplicação Compose.
 
 ```yml
 services:
@@ -60,15 +75,22 @@ services:
 
 ### `mode`
 
-`mode` defines the replication model used to run a service or job. Options include:
+`mode` define o modelo de replicação usado para executar um serviço ou job
+(tarefa).
+As opções incluem:
 
-- `global`: Ensures exactly one task continuously runs per physical node until stopped.
-- `replicated`: Continuously runs a specified number of tasks across nodes until stopped (default).
-- `replicated-job`: Executes a defined number of tasks until a completion state (exits with code 0)'.
-   - Total tasks are determined by `replicas`.
-   - Concurrency can be limited using the `max-concurrent` option (CLI only).
-- `global-job`: Executes one task per physical node with a completion state (exits with code 0).
-   - Automatically runs on new nodes as they are added.
+- `global`: garante que exatamente uma tarefa seja executada continuamente por
+  nó físico até ser interrompida.
+- `replicated`: executa continuamente um número especificado de tarefas em todos
+  os nós até ser interrompida (padrão).
+- `replicated-job`: executa um número definido de tarefas até atingir um estado
+  de conclusão (termina com código 0).
+  - O número total de tarefas é determinado por `replicas`.
+  - A concorrência pode ser limitada usando a opção `max-concurrent` (somente
+    via CLI).
+- `global-job`: executa uma tarefa por nó físico com um estado de conclusão
+  (termina com código 0).
+  - Executa automaticamente em novos nós à medida que são adicionados.
 
 ```yml
 services:
@@ -90,31 +112,43 @@ services:
 ```
 
 > [!NOTE]
-> - Job modes (`replicated-job` and `global-job`) are designed for tasks that complete and exit with code 0.
-> - Completed tasks remain until explicitly removed.
-> - Options like `max-concurrent` for controlling concurrency are supported only via the CLI and are not available in Compose.
+>
+> - Os modos de trabalho (`replicated-job` e `global-job`) são projetados para
+>   tarefas que são concluídas e encerradas com o código 0.
+> - As tarefas concluídas permanecem até serem removidas explicitamente.
+> - Opções como `max-concurrent` para controlar a concorrência são suportadas
+>   apenas via CLI e não estão disponíveis no Compose.
 
-For more detailed information about job options and behavior, see the [Docker CLI documentation](/reference/cli/docker/service/create.md#running-as-a-job)
+Para obter informações mais detalhadas sobre opções e comportamento de tarefas,
+consulte a
+[documentação da CLI do Docker](/reference/cli/docker/service/create/#running-as-a-job).
 
 ### `placement`
 
-`placement` specifies constraints and preferences for the platform to select a physical node to run service containers.
+`placement` especifica restrições e preferências para a plataforma selecionar um
+nó físico para executar contêineres de serviço.
 
 #### `constraints`
 
-`constraints` defines a required property the platform's node must fulfill to run the service container. For a further example, see the [CLI reference docs](/reference/cli/docker/service/create.md#constraint).
+`constraints` define uma propriedade obrigatória que o nó da plataforma deve
+atender para executar o contêiner de serviço.
+Para mais exemplos, consulte a
+[documentação de referência da CLI](/reference/cli/docker/service/create/#constraint).
 
 ```yml
 deploy:
   placement:
     constraints:
-      - disktype=ssd
+      - node.labels.disktype==ssd
 ```
 
 #### `preferences`
 
-`preferences` defines a strategy (currently `spread` is the only supported strategy) to spread tasks evenly
-over the values of the datacenter node label. For a further example, see the [CLI reference docs](/reference/cli/docker/service/create.md#placement-pref)
+`preferences` define uma estratégia (atualmente `spread` é a única estratégia
+suportada) para distribuir as tarefas uniformemente entre os valores do rótulo
+do nó do datacenter.
+Para mais exemplos, consulte a
+[documentação de referência da CLI](/reference/cli/docker/service/create/#placement-pref).
 
 ```yml
 deploy:
@@ -125,8 +159,8 @@ deploy:
 
 ### `replicas`
 
-If the service is `replicated` (which is the default), `replicas` specifies the number of containers that should be
-running at any given time.
+Se o serviço for `replicated` (que é o padrão), `replicas` especifica o número
+de contêineres que devem estar em execução a qualquer momento.
 
 ```yml
 services:
@@ -139,11 +173,13 @@ services:
 
 ### `resources`
 
-`resources` configures physical resource constraints for container to run on platform. Those constraints can be configured
-as:
+`resources` configura as restrições de recursos físicos para que o contêiner
+seja executado na plataforma.
+Essas restrições podem ser configuradas da seguinte forma:
 
-- `limits`: The platform must prevent the container to allocate more.
-- `reservations`: The platform must guarantee the container can allocate at least the configured amount.
+- `limits`: a plataforma deve impedir que o contêiner aloque mais recursos.
+- `reservations`: a plataforma deve garantir que o contêiner possa alocar pelo
+  menos a quantidade configurada.
 
 ```yml
 services:
@@ -162,32 +198,43 @@ services:
 
 #### `cpus`
 
-`cpus` configures a limit or reservation for how much of the available CPU resources, as number of cores, a container can use.
+`cpus` configura um limite ou reserva para a quantidade de recursos de CPU
+disponíveis, em número de núcleos, que um contêiner pode usar.
 
 #### `memory`
 
-`memory` configures a limit or reservation on the amount of memory a container can allocate, set as a string expressing a [byte value](extension.md#specifying-byte-values).
+`memory` configura um limite ou reserva para a quantidade de memória que um
+contêiner pode alocar, definida como uma string que expressa um
+[valor em bytes](extension.md#specifying-byte-values).
 
 #### `pids`
 
-`pids` tunes a container’s PIDs limit, set as an integer.
+`pids` ajusta o limite de PIDs de um contêiner, definido como um número inteiro.
 
 #### `devices`
 
-`devices` configures reservations of the devices a container can use. It contains a list of reservations, each set as an object with the following parameters: `capabilities`, `driver`, `count`, `device_ids` and `options`.
+`devices` configura reservas dos dispositivos que um contêiner pode usar.
+Contém uma lista de reservas, cada uma definida como um objeto com os seguintes
+parâmetros: `capabilities`, `driver`, `count`, `device_ids` e `options`.
 
-Devices are reserved using a list of capabilities, making `capabilities` the only required field. A device must satisfy all the requested capabilities for a successful reservation.
+Os dispositivos são reservados usando uma lista de capacidades, tornando
+`capabilities` o único campo obrigatório.
+Um dispositivo deve atender a todas as capacidades solicitadas para que a
+reserva seja bem-sucedida.
 
 ##### `capabilities`
 
-`capabilities` are set as a list of strings, expressing both generic and driver specific capabilities.
-The following generic capabilities are recognized today:
+As `capabilities` são definidas como uma lista de strings, expressando
+capacidades genéricas e específicas do driver.
+As seguintes capacidades genéricas são reconhecidas atualmente:
 
-- `gpu`: Graphics accelerator
-- `tpu`: AI accelerator
+- `gpu`: acelerador gráfico
+- `tpu`: acelerador de IA
 
-To avoid name clashes, driver specific capabilities must be prefixed with the driver name.
-For example, reserving an NVIDIA CUDA-enabled accelerator might look like this:
+Para evitar conflitos de nomes, as capacidades específicas do driver devem ser
+prefixadas com o nome do driver.
+Por exemplo, reservar um acelerador NVIDIA com suporte a CUDA pode ser feito da
+seguinte forma:
 
 ```yml
 deploy:
@@ -199,7 +246,9 @@ deploy:
 
 ##### `driver`
 
-A different driver for the reserved device(s) can be requested using `driver` field. The value is specified as a string.
+É possível solicitar um driver diferente para o(s) dispositivo(s) reservado(s)
+usando o campo `driver`.
+O valor é especificado como uma string.
 
 ```yml
 deploy:
@@ -212,7 +261,11 @@ deploy:
 
 ##### `count`
 
-If `count` is set to `all` or not specified, Compose reserves all devices that satisfy the requested capabilities. Otherwise, Compose reserves at least the number of devices specified. The value is specified as an integer.
+Se `count` estiver definido como `all` ou não for especificado, o Compose
+reserva todos os dispositivos que atendem aos recursos solicitados.
+Caso contrário, o Compose reserva pelo menos o número de dispositivos
+especificado.
+O valor é especificado como um número inteiro.
 
 ```yml
 deploy:
@@ -223,11 +276,14 @@ deploy:
           count: 2
 ```
 
-`count` and `device_ids` fields are exclusive. Compose returns an error if both are specified.
+Os campos `count` e `device_ids` são exclusivos.
+O Compose retorna um erro se ambos forem especificados.
 
 ##### `device_ids`
 
-If `device_ids` is set, Compose reserves devices with the specified IDs provided they satisfy the requested capabilities. The value is specified as a list of strings.
+Se `device_ids` for definido, o Compose reserva os dispositivos com os IDs
+especificados, desde que atendam aos recursos solicitados.
+O valor é especificado como uma lista de strings.
 
 ```yml
 deploy:
@@ -238,11 +294,13 @@ deploy:
           device_ids: ["GPU-f123d1c9-26bb-df9b-1c23-4a731f61d8c7"]
 ```
 
-`count` and `device_ids` fields are exclusive. Compose returns an error if both are specified.
+Os campos `count` e `device_ids` são exclusivos.
+O Compose retorna um erro se ambos forem especificados.
 
 ##### `options`
 
-Driver specific options can be set with `options` as key-value pairs.
+Opções específicas do driver podem ser definidas com `options` como pares de
+chave-valor.
 
 ```yml
 deploy:
@@ -257,18 +315,35 @@ deploy:
 
 ### `restart_policy`
 
-`restart_policy` configures if and how to restart containers when they exit. If `restart_policy` is not set, Compose considers the `restart` field set by the service configuration.
+`restart_policy` configura se e como os contêineres devem ser reiniciados quando
+forem encerrados.
+Se `restart_policy` não estiver definido, o Compose considera o campo `restart`
+definido pela configuração do serviço.
 
-- `condition`. When set to:
-  - `none`, containers are not automatically restarted regardless of the exit status.
-  - `on-failure`, the container is restarted if it exits due to an error, which manifests as a non-zero exit code.
-  - `any` (default), containers are restarted regardless of the exit status.
-- `delay`: How long to wait between restart attempts, specified as a [duration](extension.md#specifying-durations). The default is 0, meaning restart attempts can occur immediately.
-- `max_attempts`: How many times to attempt to restart a container before giving up (default: never give up). If the restart does not
-  succeed within the configured `window`, this attempt doesn't count toward the configured `max_attempts` value.
-  For example, if `max_attempts` is set to '2', and the restart fails on the first attempt, more than two restarts must be attempted.
-- `window`: How long to wait before deciding if a restart has succeeded, specified as a [duration](extension.md#specifying-durations) (default:
-  decide immediately).
+- `condition`. Quando definido como:
+  - `none`, os contêineres não são reiniciados automaticamente,
+    independentemente do status de saída.
+  - `on-failure`, o contêiner é reiniciado se for encerrado devido a um erro,
+    que se manifesta como um código de saída diferente de zero.
+  - `any` (padrão), os contêineres são reiniciados independentemente do status
+    de saída.
+- `delay`: quanto tempo esperar entre as tentativas de reinicialização,
+  especificado como uma [duração](extension.md#specifying-durations).
+  O padrão é 0, o que significa que as tentativas de reinicialização podem
+  ocorrer imediatamente.
+- `max_attempts`: o número máximo de tentativas de reinicialização com falha
+  permitidas antes de desistir.
+  (Padrão: tentativas ilimitadas.)
+  Uma tentativa falha só conta para o limite de `max_attempts` se o contêiner
+  não reiniciar com sucesso dentro do tempo definido por `window`.
+  Por exemplo, se `max_attempts` estiver definido como `2` e o contêiner não
+  reiniciar dentro do período definido na primeira tentativa, o Compose
+  continuará tentando até que ocorram duas tentativas falhas, mesmo que isso
+  signifique tentar mais de duas vezes.
+- `window`: o tempo de espera após uma reinicialização para determinar se ela
+  foi bem-sucedida, especificado como uma
+  [duração](extension.md#specifying-durations) (padrão: o resultado é avaliado
+  imediatamente após a reinicialização).
 
 ```yml
 deploy:
@@ -281,27 +356,40 @@ deploy:
 
 ### `rollback_config`
 
-`rollback_config` configures how the service should be rollbacked in case of a failing update.
+`rollback_config` configura como o serviço deve ser revertido em caso de falha
+na atualização.
 
-- `parallelism`: The number of containers to rollback at a time. If set to 0, all containers rollback simultaneously.
-- `delay`: The time to wait between each container group's rollback (default 0s).
-- `failure_action`: What to do if a rollback fails. One of `continue` or `pause` (default `pause`)
-- `monitor`: Duration after each task update to monitor for failure `(ns|us|ms|s|m|h)` (default 0s).
-- `max_failure_ratio`: Failure rate to tolerate during a rollback (default 0).
-- `order`: Order of operations during rollbacks. One of `stop-first` (old task is stopped before starting new one),
-   or `start-first` (new task is started first, and the running tasks briefly overlap) (default `stop-first`).
+- `parallelism`: o número de contêineres a serem revertidos por vez.
+  Se definido como `0`, todos os contêineres serão revertidos simultaneamente.
+- `delay`: o tempo de espera entre a reversão de cada grupo de contêineres
+  (padrão: `0s`).
+- `failure_action`: o que fazer se uma reversão falhar.
+  Uma das opções `continue` ou `pause` (padrão: `pause`).
+- `monitor`: duração após cada atualização de tarefa para monitorar falhas
+  `(ns|us|ms|s|m|h)` (padrão: `0s`).
+- `max_failure_ratio`: taxa de falhas tolerada durante uma reversão (padrão:
+  `0`).
+- `order`: ordem das operações durante as reversões.
+  Uma das opções `stop-first` (a tarefa antiga é interrompida antes de iniciar a
+  nova), ou `start-first` (a nova tarefa é iniciada primeiro e as tarefas em
+  execução se sobrepõem brevemente) (o padrão é `stop-first`).
 
 ### `update_config`
 
-`update_config` configures how the service should be updated. Useful for configuring rolling updates.
+`update_config` configura como o serviço deve ser atualizado.
+Útil para configurar atualizações contínuas.
 
-- `parallelism`: The number of containers to update at a time.
-- `delay`: The time to wait between updating a group of containers.
-- `failure_action`: What to do if an update fails. One of `continue`, `rollback`, or `pause` (default: `pause`).
-- `monitor`: Duration after each task update to monitor for failure `(ns|us|ms|s|m|h)` (default 0s).
-- `max_failure_ratio`: Failure rate to tolerate during an update.
-- `order`: Order of operations during updates. One of `stop-first` (old task is stopped before starting new one),
-   or `start-first` (new task is started first, and the running tasks briefly overlap) (default `stop-first`).
+- `parallelism`: o número de contêineres a serem atualizados por vez.
+- `delay`: o tempo de espera entre as atualizações de um grupo de contêineres.
+- `failure_action`: o que fazer se uma atualização falhar.
+  Uma das opções `continue`, `rollback` ou `pause` (padrão: `pause`).
+- `monitor`: duração após cada atualização de tarefa para monitorar falhas
+  `(ns|us|ms|s|m|h)` (padrão: `0s`).
+- `max_failure_ratio`: taxa de falhas tolerada durante uma atualização.
+- `order`: ordem das operações durante as atualizações.
+  Uma das opções `stop-first` (a tarefa antiga é interrompida antes de iniciar a
+  nova), ou `start-first` (a nova tarefa é iniciada primeiro e as tarefas em
+  execução se sobrepõem brevemente) (padrão: `stop-first`).
 
 ```yml
 deploy:
