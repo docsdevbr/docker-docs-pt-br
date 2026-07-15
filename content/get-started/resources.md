@@ -11,13 +11,13 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/get-started/resources.md
-source_revision: 2c03c2dcd1b42c0ac923b955da8d68cc28f46d8a
+source_revision: 00124c06a0496cb9b3d923685ac843a0849981cb
 translation_status: ready
 
 title: Recursos educacionais
 keywords: >-
   primeiros passos, configuração, orientação, início rápido, introdução,
-  conceitos, Kubernetes, docker desktop
+  conceitos, kubernetes, docker desktop
 description: Recursos para começar a aprender Docker.
 ---
 
@@ -46,6 +46,13 @@ em compartilhar seu conhecimento sobre Docker com outras pessoas.
   A'râbi, outubro de 2025.
   Obtenha 50% de desconto na versão em PDF com o código `AHOYCAPTAIN` em
   [buy.DockerSecurity.io](https://buy.dockersecurity.io/).
+* [Docker for React.js Developers](https://www.dockerfrontend.com/), Kristiyan
+  Velkov.
+  Aprenda Docker a partir de uma perspectiva de front-end com exemplos práticos
+  e prontos para produção em aplicações React.js modernas.
+  Obtenha **30% de desconto** com o código `DOCKER30` em
+  [www.dockerfrontend.com](https://www.dockerfrontend.com/) ou
+  [www.kristiyanvelkov.com](https://www.kristiyanvelkov.com).
 * [Learn Docker in a Month of Lunches](https://www.manning.com/books/learn-docker-in-a-month-of-lunches),
   de Elton Stoneman.
   Use o código `stonemanpc` para obter 40% de desconto.
