@@ -15,10 +15,10 @@ source_revision: 70d0c07c698bfc18bbe08b44c85f9dc859bd7718
 translation_status: ready
 
 title: Especificação de Deploy do Compose
-description: Saiba mais sobre a Especificação de Deploy do Compose
+description: Saiba mais sobre a Especificação de Deploy do Compose.
 keywords: >-
   compose, especificação do compose, referência de arquivo do compose,
-  especificação de deploy do Compose
+  especificação de deploy do compose
 aliases:
   - /compose/compose-file/deploy/
 weight: 140
