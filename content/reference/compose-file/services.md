@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/reference/compose-file/services.md
-source_revision: 80faf488d21a7598b8101185bfa5ce5e38b4915b
+source_revision: 159fa357d8d657f1ff8e564a8840770f54e7103e
 translation_status: ready
 
 linkTitle: Serviços
@@ -2108,6 +2108,79 @@ services:
 Para mais informações, consulte
 [Use hooks de ciclo de vida](/manuals/compose/how-tos/lifecycle.md).
 
+### pre_start
+
+{{< summary-bar feature_name="Compose pre_start" >}}
+
+`pre_start` define uma sequência de contêineres de inicialização a serem
+executados antes do contêiner de serviço ser iniciado.
+Cada etapa é executada até a conclusão, na ordem declarada, e o contêiner de
+serviço só é iniciado após cada etapa ter retornado `0`.
+Um retorno diferente de zero impede a inicialização do serviço e de suas
+dependências.
+
+Ao contrário de `post_start` e `pre_stop`, que executam um comando dentro do
+contêiner de serviço em execução, cada etapa de `pre_start` é executada em seu
+próprio contêiner efêmero, criado após a criação do contêiner de serviço, mas
+antes de sua inicialização.
+Os valores possíveis são:
+
+- `command`: o comando a ser executado.
+  Opcional quando o ponto de entrada da imagem escolhida já executa o comando
+  desejado.
+- `image`: a imagem usada para o contêiner efêmero.
+  Se omitida, a imagem do serviço pai será usada.
+- `user`: o usuário que executará o comando.
+  Se não for definido, o padrão é o usuário declarado em `image` (ou o usuário
+  do comando principal do serviço quando `image` for omitido).
+- `privileged`: permite que o comando `pre_start` seja executado com acesso
+  privilegiado.
+- `working_dir`: o diretório de trabalho no qual o comando será executado.
+  Se não for definido, ele será executado no mesmo diretório de trabalho do
+  comando principal do serviço.
+- `environment`: define as variáveis de ambiente para executar o comando
+  `pre_start`.
+  O comando herda o `environment` definido para o comando principal do serviço,
+  e esta seção permite adicionar ou substituir valores.
+- `per_replica: false`: indica se o hook é executado uma vez para o serviço todo
+  antes que qualquer réplica seja iniciada.
+
+Um contêiner `pre_start` entra nas mesmas redes que o serviço, para poder
+acessar os serviços declarados em `depends_on`, e compartilha os volumes
+montados declarados pelo serviço, de modo que os arquivos que ele produz em um
+volume compartilhado sejam visíveis para o serviço.
+Com `per_replica: false` e um serviço escalonado, somente montagens
+compartilhadas entre réplicas (volumes nomeados, bind mounts) são utilizáveis.
+Montagens por instância (`tmpfs`, volumes anônimos) não podem ser acessadas por
+um contêiner de execução única.
+
+Uma etapa `pre_start` que já foi concluída com sucesso para sua definição atual
+não é executada novamente em um `up` subsequente, nem quando o contêiner de
+serviço é reiniciado sob sua política `restart`.
+Uma etapa é executada novamente quando sua definição muda, quando a execução
+anterior não foi bem-sucedida ou quando o serviço é recriado.
+
+```yaml
+services:
+  app:
+    image: myapp:latest
+    depends_on:
+      db:
+        condition: service_healthy
+    pre_start:
+      - command: ["./manage.py", "migrate"]
+      - image: busybox
+        command: sh -c 'chown -R 1000:1000 /data'
+    volumes:
+      - data:/data
+
+  db:
+    image: postgres:16
+
+volumes:
+  data:
+```
+
 ### `pre_stop`
 
 {{< summary-bar feature_name="Compose pre stop" >}}
@@ -2655,7 +2728,7 @@ na forma curta.
   referência de imagem Docker para uma montagem de imagem ou o nome de um volume
   definido na [chave de nível superior `volumes`](volumes.md).
   Não se aplica a montagens tmpfs.
-- `target`: o caminho no container onde o volume é montado.
+- `target`: o caminho no contêiner onde o volume é montado.
 - `read_only`: flag para definir o volume como somente leitura.
 - `bind`: usado para configurar opções adicionais de bind:
   - `propagation`: o modo de propagação usado para o bind.
@@ -2665,7 +2738,7 @@ na forma curta.
   - `selinux`: a opção de re-rotulagem do SELinux: `z` (compartilhado) ou `Z`
     (privado).
 - `volume`: configura opções adicionais de volume:
-  - `nocopy`: flag para desabilitar a cópia de dados de um container quando um
+  - `nocopy`: flag para desabilitar a cópia de dados de um contêiner quando um
     volume é criado.
   - `subpath`: caminho em um volume a ser montado em vez da raiz do volume.
 - `tmpfs`: configura opções adicionais de tmpfs:
