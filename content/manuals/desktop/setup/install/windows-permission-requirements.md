@@ -202,10 +202,10 @@ mantêm suas permissões originais.
 Os contêineres não têm acesso a nenhum arquivo do host além daqueles
 explicitamente compartilhados.
 
-## Isolamento de Contêiner Aprimorado
+## Isolamento Aprimorado de Contêiner
 
 Além disso, o Docker Desktop oferece suporte ao modo de
-[Isolamento de Contêiner Aprimorado](/manuals/enterprise/security/hardened-desktop/enhanced-container-isolation/_index.md)
+[Isolamento Aprimorado de Contêiner](/manuals/enterprise/security/hardened-desktop/enhanced-container-isolation/_index.md)
 (Enhanced Container Isolation, ou ECI), disponível apenas para clientes
 Business, que aumenta ainda mais a segurança dos contêineres sem impactar os
 fluxos de trabalho das pessoas desenvolvedoras.

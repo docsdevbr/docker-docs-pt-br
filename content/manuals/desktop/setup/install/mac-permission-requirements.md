@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/manuals/desktop/setup/install/mac-permission-requirements.md
-source_revision: f0e4e4790191aaee83f9375dce56ada3971c6773
+source_revision: f24a6af220fe945d5ace3cbc663d6f55c5e1fc53
 translation_status: ready
 
 description: >-
@@ -181,6 +181,20 @@ $ rm /Library/LaunchDaemons/com.docker.vmnetd.plist
 $ rm /Library/PrivilegedHelperTools/com.docker.vmnetd
 ```
 
+## Socket auxiliar do backend
+
+Além do [auxiliar privilegiado](#auxiliar-privilegiado) opcional, o processo de
+backend do Docker Desktop (`com.docker.backend`) usa um socket auxiliar interno
+(`~/Library/Containers/com.docker.docker/Data/forkexecd.sock`) para realizar
+operações de *fork* e execução de processos auxiliares como parte da operação
+do Docker Desktop.
+
+Ao contrário do auxiliar privilegiado, esse socket não é executado como `root`
+nem concede privilégios elevados.
+Ele pertence e é acessível apenas pelo mesmo usuário do macOS que está
+executando o Docker Desktop e está contido no contêiner da aplicação Docker
+Desktop.
+
 ## Contêineres executados como root dentro da VM Linux
 
 Com o Docker Desktop, o daemon do Docker e os contêineres são executados em uma
@@ -192,10 +206,10 @@ acessados a partir do host.
 Quaisquer diretórios do host montados em contêineres Docker ainda mantêm suas
 permissões originais.
 
-## Isolamento de contêiner aprimorado
+## Isolamento Aprimorado de Contêiner
 
 Além disso, o Docker Desktop oferece suporte ao
-[modo de Isolamento de Contêiner Aprimorado (Enhanced Container Isolation, ou ECI)](/manuals/enterprise/security/hardened-desktop/enhanced-container-isolation/_index.md),
+[modo de Isolamento Aprimorado de Contêiner (Enhanced Container Isolation, ou ECI)](/manuals/enterprise/security/hardened-desktop/enhanced-container-isolation/_index.md),
 disponível apenas para clientes Business, que protege ainda mais os contêineres
 sem impactar os fluxos de trabalho das pessoas desenvolvedoras.
 
