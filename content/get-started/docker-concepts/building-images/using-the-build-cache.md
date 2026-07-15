@@ -14,19 +14,23 @@ source_url: https://github.com/docker/docs/blob/main/content/get-started/docker-
 source_revision: 19961dd50fa5a23b4d9fabe272eb885b6a5311a9
 translation_status: ready
 
-title: Using the build cache
-keywords: concepts, build, images, container, docker desktop
-description: This concept page will teach you about the build cache, what changes invalidate the cache and how to effectively use the build cache.
-summary: |
-  Using the build cache effectively allows you to achieve faster builds by
-  reusing results from previous builds and skipping unnecessary steps. To
-  maximize cache usage and avoid resource-intensive and time-consuming
-  rebuilds, it's crucial to understand how cache invalidation works. In this
-  guide, you’ll learn how to use the Docker build cache efficiently for
-  streamlined Docker image development and continuous integration workflows.
+title: Usando o cache de construção
+keywords: conceitos, build, imagens, contêiner, docker desktop
+description: >-
+  Esta página de conceitos apresenta o cache de construção, explica quais
+  alterações invalidam o cache e mostra como usá-lo de forma eficaz.
+summary: >-
+  O uso eficaz do cache de construção permite realizar construções mais rápidas
+  ao reaproveitar resultados de construções anteriores e pular etapas
+  desnecessárias.
+  Para maximizar o uso do cache e evitar reconstruções demoradas que consomem
+  muitos recursos, é fundamental entender como funciona a invalidação do cache.
+  Neste guia, você aprenderá a usar o cache de construção do Docker de maneira
+  eficiente para otimizar o desenvolvimento de imagens Docker e os fluxos de
+  trabalho de integração contínua.
 weight: 4
 aliases:
- - /guides/docker-concepts/building-images/using-the-build-cache/
+  - /guides/docker-concepts/building-images/using-the-build-cache/
 ---
 
 {{< youtube-embed Ri6jMknjprY >}}
