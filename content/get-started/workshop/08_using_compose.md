@@ -20,7 +20,7 @@ linkTitle: "Parte 7: use o Docker Compose"
 keywords: >-
   primeiros passos, configuração, orientação, início rápido, introdução,
   conceitos, contêineres, docker desktop
-description: Usando o Docker Compose para aplicações multicontêineres
+description: Usando o Docker Compose para aplicações multicontêineres.
 aliases:
   - /get-started/08_using_compose/
   - /guides/workshop/08_using_compose/
