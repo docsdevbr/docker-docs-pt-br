@@ -21,7 +21,7 @@ description: >-
   Esta página conceitual ensinará a importância de uma aplicação
   multicontêineres e como ela difere de uma aplicação com um único contêiner.
 aliases:
- - /guides/docker-concepts/running-containers/multi-container-applications/
+  - /guides/docker-concepts/running-containers/multi-container-applications/
 ---
 
 {{< youtube-embed 1jUwR6F9hvM >}}
