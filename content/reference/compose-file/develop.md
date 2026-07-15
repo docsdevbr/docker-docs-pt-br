@@ -14,13 +14,11 @@ source_url: https://github.com/docker/docs/blob/main/content/reference/compose-f
 source_revision: f62d925a50f11aee9cef6f33e4bd215729143aaa
 translation_status: ready
 
-title: Especificação do Develop do Compose
-description: Saiba mais sobre a Especificação do Develop do Compose
+title: Especificação de Develop do Compose
+description: Saiba mais sobre a Especificação de Develop do Compose.
 keywords: >-
   compose, especificação do compose, referência de arquivo do compose,
-  especificação do develop do compose
-
-compose, compose specification, compose file reference, compose develop specification
+  especificação de develop do compose
 aliases:
   - /compose/compose-file/develop/
 weight: 150
