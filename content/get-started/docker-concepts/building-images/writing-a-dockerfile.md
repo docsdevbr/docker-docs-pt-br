@@ -17,7 +17,7 @@ translation_status: ready
 title: Escrevendo um Dockerfile
 keywords: conceitos, construção, imagens, contêiner, docker desktop
 description: >-
-  Esta página conceitual ensinará como criar imagens usando o Dockerfile.
+  Esta página conceitual ensinará como construir imagens usando o Dockerfile.
 summary: >-
   Dominar as práticas do Dockerfile é vital para aproveitar a tecnologia de
   contêineres de forma eficaz, aumentando a confiabilidade da aplicação e dando
