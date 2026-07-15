@@ -233,7 +233,7 @@ plataforma é baseada no kernel Linux.
 `cpu_rt_runtime` configura os parâmetros de alocação de CPU para plataformas com
 suporte a escalonador de tempo real.
 Pode ser um valor inteiro em microssegundos ou uma
-[duração](extension.md#specifying-durations).
+[duração](extension.md#especificando-durações).
 
 ```yml
  cpu_rt_runtime: '400ms'
@@ -245,7 +245,7 @@ Pode ser um valor inteiro em microssegundos ou uma
 `cpu_rt_period` configura os parâmetros de alocação de CPU para plataformas com
 suporte a escalonador de tempo real.
 Pode ser um valor inteiro usando microssegundos como unidade ou uma
-[duração](extension.md#specifying-durations).
+[duração](extension.md#especificando-durações).
 
 ```yml
  cpu_rt_period: '1400us'
@@ -1279,7 +1279,7 @@ healthcheck:
 ```
 
 `interval`, `timeout`, `start_period` e `start_interval` são
-[especificados como durações](extension.md#specifying-durations).
+[especificados como durações](extension.md#especificando-durações).
 Introduzidos na versão
 [2.20.2](https://github.com/docker/compose/releases/tag/v2.20.2) do Docker
 Compose.
@@ -1511,7 +1511,7 @@ chave-valor.
 
 `mem_limit` configura um limite para a quantidade de memória que um contêiner
 pode alocar, definido como uma string que expressa um
-[valor em bytes](extension.md#specifying-byte-values).
+[valor em bytes](extension.md#especificando-valores-em-bytes).
 
 Quando definido, `mem_limit` deve ser consistente com o atributo `limits.memory`
 na [Especificação de Deploy](deploy.md#memory).
@@ -1520,7 +1520,7 @@ na [Especificação de Deploy](deploy.md#memory).
 
 `mem_reservation` configura uma reserva na quantidade de memória que um
 contêiner pode alocar, definida como uma string que expressa um
-[valor em bytes](extension.md#specifying-byte-values).
+[valor em bytes](extension.md#especificando-valores-em-bytes).
 
 Quando definido, `mem_reservation` deve ser consistente com o atributo
 `reservations.memory` na [Especificação de Deploy](deploy.md#memory).
@@ -2482,7 +2482,7 @@ Para outros esquemas de rotulagem padrão que você pode substituir, consulte
 
 `shm_size` configura o tamanho da memória compartilhada (partição `/dev/shm` no
 Linux) permitida para o contêiner do serviço.
-É especificado como um [valor em bytes](extension.md#specifying-byte-values).
+É especificado como um [valor em bytes](extension.md#especificando-valores-em-bytes).
 
 ### `stdin_open`
 
@@ -2500,7 +2500,7 @@ Os valores suportados são `true` ou `false`.
 parar um contêiner, caso este não processe o sinal `SIGTERM` (ou qualquer sinal
 de parada especificado com [`stop_signal`](#stop_signal)), antes de enviar o
 sinal `SIGKILL`.
-É especificado como uma [duração](extension.md#specifying-durations).
+É especificado como uma [duração](extension.md#especificando-durações).
 
 ```yml
     stop_grace_period: 1s

@@ -205,7 +205,7 @@ disponíveis, em número de núcleos, que um contêiner pode usar.
 
 `memory` configura um limite ou reserva para a quantidade de memória que um
 contêiner pode alocar, definida como uma string que expressa um
-[valor em bytes](extension.md#specifying-byte-values).
+[valor em bytes](extension.md#especificando-valores-em-bytes).
 
 #### `pids`
 
@@ -328,7 +328,7 @@ definido pela configuração do serviço.
   - `any` (padrão), os contêineres são reiniciados independentemente do status
     de saída.
 - `delay`: quanto tempo esperar entre as tentativas de reinicialização,
-  especificado como uma [duração](extension.md#specifying-durations).
+  especificado como uma [duração](extension.md#especificando-durações).
   O padrão é 0, o que significa que as tentativas de reinicialização podem
   ocorrer imediatamente.
 - `max_attempts`: o número máximo de tentativas de reinicialização com falha
@@ -342,7 +342,7 @@ definido pela configuração do serviço.
   signifique tentar mais de duas vezes.
 - `window`: o tempo de espera após uma reinicialização para determinar se ela
   foi bem-sucedida, especificado como uma
-  [duração](extension.md#specifying-durations) (padrão: o resultado é avaliado
+  [duração](extension.md#especificando-durações) (padrão: o resultado é avaliado
   imediatamente após a reinicialização).
 
 ```yml

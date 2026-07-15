@@ -157,7 +157,7 @@ prefixos:
 | docker     | Docker                 |
 | kubernetes | Kubernetes             |
 
-## Especificação de valores de bytes
+## Especificando valores em bytes
 
 Os valores expressam uma quantidade de bytes como uma string no formato
 `{quantidade}{unidade de byte}`: as unidades suportadas são `b` (bytes), `k` ou

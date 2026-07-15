@@ -732,7 +732,7 @@ RUN --mount=type=ssh,id=meuprojeto git clone ...
 `shm_size` define o tamanho da memória compartilhada (partição `/dev/shm` no
 Linux) alocada para a construção de imagens Docker.
 Especifique como um valor inteiro representando o número de bytes ou como uma
-string expressando um [valor em bytes](extension.md#specifying-byte-values).
+string expressando um [valor em bytes](extension.md#especificando-valores-em-bytes).
 
 ```yml
 build:
