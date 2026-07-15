@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/manuals/desktop/setup/install/windows-install.md
-source_revision: f0e4e4790191aaee83f9375dce56ada3971c6773
+source_revision: 0ecd80cbfab0ef28929861e64685192ce43f9e65
 translation_status: ready
 
 description: >-
@@ -59,15 +59,15 @@ Ela não requer privilégios de administrador para instalar ou atualizar, e o
 backend WSL 2 usado atende às necessidades da grande maioria das pessoas
 usuárias do Docker Desktop.
 
-| | Por usuário (recomendado) | Todos os usuários |
-|---|---|---|
-| Local de instalação | `%LOCALAPPDATA%\Programs\DockerDesktop` | `C:\Program Files\Docker\Docker` |
-| Chaves de registro | Usuário atual (HKCU) | Máquina local (HKLM) |
-| Direitos de administrador para instalar | Não necessário | Necessário |
-| Direitos de administrador para atualizar | Não necessário | Necessário |
-| Backend de contêineres Linux | Somente WSL 2 | WSL 2 ou Hyper-V |
-| Contêineres do Windows | Não suportado | Suportado |
-| Segurança | Superfície de ataque menor; nenhum serviço de sistema privilegiado instalado | Requer serviço de sistema privilegiado; acesso mais amplo aos recursos do host |
+|                                             | Por usuário (recomendado)                                                    | Todos os usuários                                                              |
+|---------------------------------------------|------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
+| Local de instalação                         | `%LOCALAPPDATA%\Programs\DockerDesktop`                                      | `C:\Program Files\Docker\Docker`                                               |
+| Chaves de registro                          | Usuário atual (HKCU)                                                         | Máquina local (HKLM)                                                           |
+| Privilégios de administrador para instalar  | Não necessário                                                               | Necessário                                                                     |
+| Privilégios de administrador para atualizar | Não necessário                                                               | Necessário                                                                     |
+| Backend de contêineres Linux                | Somente WSL 2                                                                | WSL 2 ou Hyper-V                                                               |
+| Contêineres do Windows                      | Não suportado                                                                | Suportado                                                                      |
+| Segurança                                   | Superfície de ataque menor; nenhum serviço de sistema privilegiado instalado | Requer serviço de sistema privilegiado; acesso mais amplo aos recursos do host |
 
 Para obter mais informações, consulte [Entenda os requisitos de permissão para o Windows](windows-permission-requirements.md).
 
@@ -92,7 +92,7 @@ Para obter mais informações, consulte [Entenda os requisitos de permissão par
 * WSL versão 2.1.5 ou posterior.
   Para verificar sua versão, consulte
   [WSL: Verificação e instalação](#wsl-verificação-e-instalação).
-* Se você pretende usar o Isolamento de Contêiner Aprimorado (Enhanced Container
+* Se você pretende usar o Isolamento Aprimorado de Contêiner (Enhanced Container
   Isolation, ou ECI), certifique-se de estar usando o WSL versão 2.6 ou
   posterior.
   Isso é necessário porque o ECI depende de uma versão do kernel Linux de pelo
@@ -121,7 +121,7 @@ consulte [WSL](/manuals/desktop/features/wsl/_index.md).
 > [!NOTE]
 >
 > O Docker só oferece suporte ao Docker Desktop no Windows para as versões do
-> Windows que ainda estão dentro do
+> Windows que continuam dentro do
 > [ciclo de manutenção da Microsoft](https://support.microsoft.com/en-us/help/13853/windows-lifecycle-fact-sheet).
 > O Docker Desktop não é compatível com versões de servidor do Windows, como o
 > Windows Server 2019 ou o Windows Server 2022.
@@ -159,7 +159,7 @@ consulte [WSL](/manuals/desktop/features/wsl/_index.md).
 > [!NOTE]
 >
 > O Docker só oferece suporte ao Docker Desktop no Windows para as versões do
-> Windows que ainda estão dentro do
+> Windows que continuam dentro do
 > [ciclo de manutenção da Microsoft](https://support.microsoft.com/en-us/help/13853/windows-lifecycle-fact-sheet).
 > O Docker Desktop não é compatível com versões de servidor do Windows, como o
 > Windows Server 2019 ou o Windows Server 2022.
@@ -301,8 +301,24 @@ Windows:
 $ net localgroup docker-users <user> /add
 ```
 
-Consulte a seção [Flags do instalador](#flags-do-instalador) para ver quais flags o
-comando `install` aceita.
+> [!WARNING]
+>
+> A inclusão no grupo `docker-users` concede acesso ao socket do daemon do
+> Docker, o que equivale a conceder privilégios de administrador no host.
+> Adicione apenas usuários que precisem de acesso a contêineres do Windows ou ao
+> gerenciamento de VMs do Hyper-V.
+> Para contêineres do Linux que usam o backend do WSL 2, a inclusão nesse grupo
+> não é necessária.
+> Consulte
+> [Proteja o socket do daemon do Docker](/manuals/engine/security/protect-access.md)
+> para obter mais informações.
+
+Se você estiver realizando a implantação via MDM (como o Intune) e o grupo
+`docker-users` não for preenchido automaticamente, consulte
+[Por que o grupo `docker-users` não é preenchido quando o MSI é instalado com o Intune ou outra solução de MDM?](/manuals/enterprise/enterprise-deployment/faq.md#why-isnt-the-docker-users-group-populated-when-the-msi-is-installed-with-intune-or-another-mdm-solution).
+
+Consulte a seção [Flags do instalador](#flags-do-instalador) para ver quais
+flags o comando `install` aceita.
 
 > [!NOTE]
 >
@@ -514,9 +530,9 @@ sobre como instalar e executar o Docker Desktop sem precisar de privilégios de
 administrador.
 
 Se você for uma pessoa administradora de TI e suas pessoas usuárias não tiverem
-direitos de administrador e planejarem executar operações que exigem privilégios
-elevados, certifique-se de instalar o Docker Desktop usando a flag de instalação
-`--always-run-service`.
+privilégios de administrador e planejarem executar operações que exigem
+privilégios elevados, certifique-se de instalar o Docker Desktop usando a flag
+de instalação `--always-run-service`.
 Isso garante que essas ações ainda possam ser executadas sem solicitar a
 elevação de privilégios do Controle de Conta de Usuário (UAC).
 Consulte [Flags do instalador](#flags-do-instalador) para obter mais detalhes.
