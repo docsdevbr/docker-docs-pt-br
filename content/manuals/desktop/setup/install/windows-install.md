@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/manuals/desktop/setup/install/windows-install.md
-source_revision: 0ecd80cbfab0ef28929861e64685192ce43f9e65
+source_revision: cbc3a87b2e1951fb65077a253edd7e76ed522c5b
 translation_status: ready
 
 description: >-
@@ -52,10 +52,10 @@ _Para checksums, consulte as [Notas de lançamento](/manuals/desktop/release-not
 
 ## Modos de instalação
 
-O Docker Desktop oferece dois modos de instalação.
-A instalação por usuário (Beta) é recomendada para a maioria das pessoas
-usuárias.
-Ela não requer privilégios de administrador para instalar ou atualizar, e o
+O Docker Desktop oferece suporte a dois modos de instalação.
+A instalação por usuário é recomendada para a maioria das pessoas usuárias e é a
+opção selecionada por padrão no instalador.
+Ela não requer privilégios de administrador para instalação ou atualização, e o
 backend WSL 2 usado atende às necessidades da grande maioria das pessoas
 usuárias do Docker Desktop.
 
