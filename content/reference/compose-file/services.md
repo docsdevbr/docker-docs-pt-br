@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/reference/compose-file/services.md
-source_revision: 159fa357d8d657f1ff8e564a8840770f54e7103e
+source_revision: 6bdcc9db99a550cfd4329b4daf838840719c4cfe
 translation_status: ready
 
 linkTitle: Serviços
@@ -2142,23 +2142,33 @@ Os valores possíveis são:
   `pre_start`.
   O comando herda o `environment` definido para o comando principal do serviço,
   e esta seção permite adicionar ou substituir valores.
-- `per_replica: false`: indica se o hook é executado uma vez para o serviço todo
-  antes que qualquer réplica seja iniciada.
+- `per_replica: false`: indica se a etapa é executada uma vez para o serviço
+  todo antes que qualquer réplica seja iniciada.
 
-Um contêiner `pre_start` entra nas mesmas redes que o serviço, para poder
-acessar os serviços declarados em `depends_on`, e compartilha os volumes
-montados declarados pelo serviço, de modo que os arquivos que ele produz em um
-volume compartilhado sejam visíveis para o serviço.
-Com `per_replica: false` e um serviço escalonado, somente montagens
-compartilhadas entre réplicas (volumes nomeados, bind mounts) são utilizáveis.
-Montagens por instância (`tmpfs`, volumes anônimos) não podem ser acessadas por
-um contêiner de execução única.
+As etapas `pre_start` são executadas apenas depois que as condições de
+`depends_on` do serviço são satisfeitas; assim, uma etapa pode depender desses
+recursos da mesma forma que o comando principal do serviço.
+Um contêiner `pre_start` conecta-se às mesmas redes que o serviço — podendo,
+portanto, acessar os serviços declarados em `depends_on` — e compartilha as
+montagens de volume declaradas para o serviço, de modo que os arquivos gerados
+por ele em um volume compartilhado fiquem visíveis para o serviço.
 
-Uma etapa `pre_start` que já foi concluída com sucesso para sua definição atual
-não é executada novamente em um `up` subsequente, nem quando o contêiner de
-serviço é reiniciado sob sua política `restart`.
-Uma etapa é executada novamente quando sua definição muda, quando a execução
-anterior não foi bem-sucedida ou quando o serviço é recriado.
+Com `per_replica: false` e um serviço escalonado, apenas montagens
+compartilhadas entre réplicas (volumes nomeados, bind mounts) podem ser usadas.
+Montagens específicas de cada instância (`tmpfs`, volumes anônimos) não podem
+ser acessadas por uma execução única.
+Isso não é um erro.
+As etapas são executadas sem acesso a montagens específicas de instância.
+Dados que uma etapa com `per_replica: false` precise compartilhar com o serviço
+devem residir em um volume nomeado ou em um bind mount.
+
+Uma etapa `pre_start` que já tenha sido concluída com sucesso para sua definição
+atual não é executada novamente em um comando `up` subsequente, nem quando o
+contêiner do serviço é reiniciado conforme sua política de `restart`.
+Uma etapa é executada novamente quando sua definição é alterada, quando a
+execução anterior não obteve sucesso ou quando o serviço é recriado — por
+exemplo, após uma alteração na configuração do serviço ou uma recriação forçada
+explícita.
 
 ```yaml
 services:
@@ -2190,7 +2200,7 @@ que o contêiner seja parado.
 Esses hooks não serão executados se o contêiner parar por conta própria ou for
 encerrado abruptamente.
 
-A configuração é equivalente à de `post_start` (#post_start).
+A configuração é equivalente à de [`post_start`](#post_start).
 
 ### `privileged`
 
