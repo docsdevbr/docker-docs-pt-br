@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/get-started/docker-concepts/building-images/multi-stage-builds.md
-source_revision: fbcabd5b97fcfdf62d76e6735765d3388ed184d6
+source_revision: 406058190aac949a90bd1bad269070e262ad8cd1
 translation_status: ready
 
 title: Construções multiestágio
@@ -357,7 +357,7 @@ Agora que você tem o projeto, já pode criar o `Dockerfile`.
      Esta etapa recebeu o nome de `builder`.
 
    - A segunda etapa é uma nova etapa chamada `final`.
-     Ela usa uma imagem mais enxuta `eclipse-temurin:21.0.2_13-jre-jammy`,
+     Ela usa uma imagem mais enxuta `eclipse-temurin:21.0.8_9-jre-jammy`,
      contendo apenas o Java Runtime Environment (JRE) necessário para executar a
      aplicação.
      Esta imagem fornece um Java Runtime Environment (JRE) suficiente para
