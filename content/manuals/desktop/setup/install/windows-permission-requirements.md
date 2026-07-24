@@ -11,7 +11,7 @@
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
 source_url: https://github.com/docker/docs/blob/main/content/manuals/desktop/setup/install/windows-permission-requirements.md
-source_revision: f0e4e4790191aaee83f9375dce56ada3971c6773
+source_revision: cbc3a87b2e1951fb65077a253edd7e76ed522c5b
 translation_status: ready
 
 description: >-
@@ -39,7 +39,7 @@ As permissões necessárias para instalar e executar o Docker Desktop dependem d
 [modo de instalação](/manuals/desktop/setup/install/windows-install.md#modos-de-instalação)
 usado.
 
-### Instalação por usuário (Beta)
+### Instalação por usuário
 
 No modo por usuário, o Docker Desktop é instalado em
 `%LOCALAPPDATA%\Programs\DockerDesktop` e grava apenas nas chaves de registro do
