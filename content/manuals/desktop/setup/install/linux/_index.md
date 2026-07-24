@@ -10,101 +10,131 @@
 # The original work was translated from English into Brazilian Portuguese.
 # https://github.com/docsdevbr/docker-doc-pt-br/blob/-/LICENSES/Apache-2.0.txt
 
-description: Install Docker on Linux with ease using our step-by-step installation
-  guide covering system requirements, supported platforms, and where to go next.
-keywords: linux, docker linux install, docker linux, linux docker installation, docker
-  for linux, docker desktop for linux, installing docker on linux, docker download
-  linux, how to install docker on linux, linux vs docker engine, switch docker contexts
-title: Install Docker Desktop on Linux
+source_url: https://github.com/docker/docs/blob/main/content/manuals/desktop/setup/install/linux/_index.md
+source_revision: e16806830ae126a03c354e0752b31f0c17328b8a
+translation_status: ready
+
+description: >-
+  Instale o Docker no Linux com facilidade usando nosso guia passo a passo, que
+  aborda requisitos do sistema, plataformas suportadas e os próximos passos.
+keywords: >-
+  linux, instalação do docker no linux, docker linux, docker desktop para linux,
+  baixar docker para linux, como instalar docker no linux, alternar contextos do
+  docker
+title: Instale o Docker Desktop no Linux
 linkTitle: Linux
 weight: 60
 aliases:
-- /desktop/linux/install/
-- /desktop/install/linux/
-- /desktop/install/linux/
+  - /desktop/linux/install/
+  - /desktop/install/linux-install/
+  - /desktop/install/linux/
 ---
-> **Docker Desktop terms**
->
-> Commercial use of Docker Desktop in larger enterprises (more than 250
-> employees OR more than $10 million USD in annual revenue) requires a [paid
-> subscription](https://www.docker.com/pricing/).
 
-This page contains information about general system requirements, supported platforms, and instructions on how to install Docker Desktop for Linux.
+> **Termos do Docker Desktop**
+>
+> O uso comercial do Docker Desktop em empresas maiores (mais de 250 pessoas
+> funcionárias OU mais de US$ 10 milhões em receita anual) requer uma
+> [assinatura paga](https://www.docker.com/pricing?ref=Docs&refAction=DocsDesktopLinuxInstall).
+
+Esta página contém informações sobre requisitos gerais do sistema, plataformas
+suportadas e instruções para instalar o Docker Desktop para Linux.
 
 > [!IMPORTANT]
 >
->Docker Desktop on Linux runs a Virtual Machine (VM) which creates and uses a custom docker context, `desktop-linux`, on startup.
+> O Docker Desktop no Linux executa uma Máquina Virtual (VM) que cria e usa um
+> contexto Docker personalizado, `desktop-linux`, durante a inicialização.
 >
->This means images and containers deployed on the Linux Docker Engine (before installation) are not available in Docker Desktop for Linux.
+> Isso significa que imagens e contêineres implantados no Docker Engine para
+> Linux (antes da instalação) não ficam disponíveis no Docker Desktop para
+> Linux.
 >
-> {{< accordion title=" What is the difference between Docker Desktop for Linux and Docker Engine?" >}}
+> {{< accordion title="Docker Desktop vs. Docker Engine: qual é a diferença?" >}}
 
 > [!IMPORTANT]
 >
-> For commercial use of Docker Engine obtained via Docker Desktop within larger enterprises (exceeding 250 employees OR with annual revenue surpassing $10 million USD), a [paid subscription](https://www.docker.com/pricing/) is required.
+> Para o uso comercial da Docker Engine obtida por meio do Docker Desktop em
+> grandes empresas (com mais de 250 pessoas funcionárias ou receita anual
+> superior a US$ 10 milhões), é necessária uma
+> [assinatura paga](https://www.docker.com/pricing?ref=Docs&refAction=DocsDesktopLinuxInstall).
 
-Docker Desktop for Linux provides a user-friendly graphical interface that simplifies the management of containers and services. It includes Docker Engine as this is the core technology that powers Docker containers. Docker Desktop for Linux also comes with additional features like Docker Scout and Docker Extensions.
+O Docker Desktop para Linux oferece uma interface gráfica intuitiva que
+simplifica o gerenciamento de contêineres e serviços.
+Ele inclui a Docker Engine, visto que essa é a tecnologia central que sustenta
+os contêineres Docker.
+O Docker Desktop para Linux também conta com recursos adicionais, como o Docker
+Scout e as Docker Extensions.
 
-#### Installing Docker Desktop and Docker Engine
+### Instalação do Docker Desktop e da Docker Engine
 
-Docker Desktop for Linux and Docker Engine can be installed side-by-side on the
-same machine. Docker Desktop for Linux stores containers and images in an isolated
-storage location within a VM and offers
-controls to restrict [its resources](/manuals/desktop/settings-and-maintenance/settings.md#resources). Using a dedicated storage
-location for Docker Desktop prevents it from interfering with a Docker Engine
-installation on the same machine.
+O Docker Desktop para Linux e a Docker Engine podem ser instalados lado a lado
+na mesma máquina.
+O Docker Desktop para Linux armazena contêineres e imagens em um local de
+armazenamento isolado em uma VM e oferece controles para restringir
+[seus recursos](/manuals/desktop/settings-and-maintenance/settings.md#resources).
+O uso de um local de armazenamento dedicado para o Docker Desktop evita que ele
+interfira em uma instalação da Docker Engine na mesma máquina.
 
-While it's possible to run both Docker Desktop and Docker Engine simultaneously,
-there may be situations where running both at the same time can cause issues.
-For example, when mapping network ports (`-p` / `--publish`) for containers, both
-Docker Desktop and Docker Engine may attempt to reserve the same port on your
-machine, which can lead to conflicts ("port already in use").
+Embora seja possível executar o Docker Desktop e a Docker Engine
+simultaneamente, podem ocorrer situações em que a execução de ambos ao mesmo
+tempo cause problemas.
+Por exemplo, ao mapear portas de rede (`-p` / `--publish`) para contêineres,
+tanto o Docker Desktop quanto a Docker Engine podem tentar reservar a mesma
+porta na sua máquina, o que pode levar a conflitos ("port already in use").
 
-We generally recommend stopping the Docker Engine while you're using Docker Desktop
-to prevent the Docker Engine from consuming resources and to prevent conflicts
-as described above.
+Geralmente, recomendamos parar a Docker Engine enquanto você usa o Docker
+Desktop, para evitar que a Docker Engine consuma recursos e para prevenir
+conflitos como os descritos acima.
 
-Use the following command to stop the Docker Engine service:
+Use o seguinte comando para parar o serviço da Docker Engine:
 
 ```console
 $ sudo systemctl stop docker docker.socket containerd
 ```
 
-Depending on your installation, the Docker Engine may be configured to automatically
-start as a system service when your machine starts. Use the following command to
-disable the Docker Engine service, and to prevent it from starting automatically:
+Dependendo da sua instalação, a Docker Engine pode estar configurada para
+iniciar automaticamente como um serviço do sistema quando sua máquina for
+iniciada.
+Use o comando a seguir para desativar o serviço da Docker Engine e impedir que
+ele inicie automaticamente:
 
 ```console
 $ sudo systemctl disable docker docker.socket containerd
 ```
 
-### Switching between Docker Desktop and Docker Engine
+### Alternando entre o Docker Desktop e a Docker Engine
 
-The Docker CLI can be used to interact with multiple Docker Engines. For example,
-you can use the same Docker CLI to control a local Docker Engine and to control
-a remote Docker Engine instance running in the cloud. [Docker Contexts](/manuals/engine/manage-resources/contexts.md)
-allow you to switch between Docker Engines instances.
+A CLI do Docker pode ser usada para interagir com múltiplas instâncias da Docker
+Engine.
+Por exemplo, você pode usar a mesma CLI do Docker para controlar uma Docker
+Engine local e para controlar uma instância remota da Docker Engine em execução
+na nuvem.
+Os [contextos do Docker](/manuals/engine/manage-resources/contexts.md) permitem
+alternar entre instâncias da Docker Engine.
 
-When installing Docker Desktop, a dedicated "desktop-linux" context is created to
-interact with Docker Desktop. On startup, Docker Desktop automatically sets its
-own context (`desktop-linux`) as the current context. This means that subsequent
-Docker CLI commands target Docker Desktop. On shutdown, Docker Desktop resets
-the current context to the `default` context.
+Ao instalar o Docker Desktop, um contexto dedicado chamado "desktop-linux" é
+criado para interagir com o Docker Desktop.
+Na inicialização, o Docker Desktop define automaticamente seu próprio contexto
+(`desktop-linux`) como o contexto atual.
+Isso significa que os comandos subsequentes da CLI do Docker são direcionados ao
+Docker Desktop.
+Ao ser encerrado, o Docker Desktop redefine o contexto atual para o contexto
+`default`.
 
-Use the `docker context ls` command to view what contexts are available on your
-machine. The current context is indicated with an asterisk (`*`);
+Use o comando `docker context ls` para visualizar quais contextos estão
+disponíveis em sua máquina.
+O contexto atual é indicado por um asterisco (`*`).
 
 ```console
 $ docker context ls
 NAME            DESCRIPTION                               DOCKER ENDPOINT                                  ...
 default *       Current DOCKER_HOST based configuration   unix:///var/run/docker.sock                      ...
-desktop-linux                                             unix:///home/<user>/.docker/desktop/docker.sock  ...
+desktop-linux                                             unix:///home/<usuário>/.docker/desktop/docker.sock  ...
 ```
 
-If you have both Docker Desktop and Docker Engine installed on the same machine,
-you can run the `docker context use` command to switch between the Docker Desktop
-and Docker Engine contexts. For example, use the "default" context to interact
-with the Docker Engine:
+Se você tiver o Docker Desktop e a Docker Engine instalados na mesma máquina,
+pode executar o comando `docker context use` para alternar entre os contextos
+do Docker Desktop e da Docker Engine.
+Por exemplo, use o contexto "default" para interagir com a Docker Engine:
 
 ```console
 $ docker context use default
@@ -112,79 +142,110 @@ default
 Current context is now "default"
 ```
 
-And use the `desktop-linux` context to interact with Docker Desktop:
+E use o contexto `desktop-linux` para interagir com o Docker Desktop:
 
 ```console
 $ docker context use desktop-linux
 desktop-linux
 Current context is now "desktop-linux"
 ```
-Refer to the [Docker Context documentation](/manuals/engine/manage-resources/contexts.md) for more details.
+
+Consulte a
+[documentação do contexto do Docker](/manuals/engine/manage-resources/contexts.md)
+para obter mais detalhes.
 {{< /accordion >}}
 
-## Supported platforms
+## Plataformas suportadas
 
-Docker provides `.deb` and `.rpm` packages from the following Linux distributions
-and architectures:
+O Docker fornece pacotes `.deb` e `.rpm` para as seguintes distribuições Linux
+e arquiteturas:
 
-| Platform                | x86_64 / amd64          |
-|:------------------------|:-----------------------:|
-| [Ubuntu](ubuntu.md)                         | ✅  |
-| [Debian](debian.md)                         | ✅  |
-| [Red Hat Enterprise Linux (RHEL)](rhel.md)  | ✅  |
-| [Fedora](fedora.md)                         | ✅  |
+| Plataforma                                  | x86_64 / amd64 |
+|:--------------------------------------------|:--------------:|
+| [Ubuntu](ubuntu.md)                         |       ✅        |
+| [Debian](debian.md)                         |       ✅        |
+| [Red Hat Enterprise Linux (RHEL)](rhel.md)  |       ✅        |
+| [Fedora](fedora.md)                         |       ✅        |
 
+Um pacote experimental está disponível para distribuições baseadas em
+[Arch](archlinux.md).
+O Docker não testou nem verificou a instalação.
 
-An experimental package is available for [Arch](archlinux.md)-based distributions. Docker has not tested or verified the installation.
+O Docker oferece suporte ao Docker Desktop nas versões LTS atuais e anteriores
+das distribuições mencionadas, bem como na versão mais recente.
 
-Docker supports Docker Desktop on the current LTS release of the aforementioned distributions and the most recent version. As new versions are made available, Docker stops supporting the oldest version and supports the newest version.
+## Requisitos gerais do sistema
 
-## General system requirements
+Para instalar o Docker Desktop com sucesso, seu host Linux deve atender aos
+seguintes requisitos gerais:
 
-To install Docker Desktop successfully, your Linux host must meet the following general requirements:
+- Kernel de 64 bits e suporte da CPU para virtualização.
+- Suporte à virtualização KVM.
+  Siga as
+  [instruções de suporte à virtualização KVM](#kvm-virtualization-support) para
+  verificar se os módulos do kernel KVM estão habilitados e como conceder acesso
+  ao dispositivo KVM.
+- O QEMU deve estar na versão 5.2 ou superior.
+  Recomendamos atualizar para a versão mais recente.
+- Sistema de inicialização `systemd`.
+- Ambientes de desktop GNOME, KDE ou MATE são suportados, mas outros podem
+  funcionar.
+  - Em muitas distribuições Linux, o ambiente GNOME não oferece suporte nativo a
+    ícones na bandeja do sistema.
+    Para adicionar suporte a esses ícones, é necessário instalar uma extensão do
+    GNOME.
+    Por exemplo,
+    [AppIndicator](https://extensions.gnome.org/extension/615/appindicator-support/).
+- Pelo menos 4 GB de RAM.
+- Habilitar a configuração de mapeamento de ID em namespaces de usuário;
+  consulte
+  [Compartilhamento de arquivos](/manuals/desktop/troubleshoot-and-support/faqs/linuxfaqs.md#how-do-i-enable-file-sharing).
+  Observe que, para o Docker Desktop versão 4.35 e posteriores, isso não é mais
+  necessário.
+- Recomendado:
+  [Inicializar o `pass`](/manuals/desktop/setup/sign-in.md#credentials-management-for-linux-users)
+  para o gerenciamento de credenciais.
 
-- 64-bit kernel and CPU support for virtualization.
-- KVM virtualization support. Follow the [KVM virtualization support instructions](#kvm-virtualization-support) to check if the KVM kernel modules are enabled and how to provide access to the KVM device.
-- QEMU must be version 5.2 or later. We recommend upgrading to the latest version.
-- systemd init system.
-- Gnome, KDE, or MATE Desktop environment.
-  - For many Linux distributions, the Gnome environment does not support tray icons. To add support for tray icons, you need to install a Gnome extension. For example, [AppIndicator](https://extensions.gnome.org/extension/615/appindicator-support/).
-- At least 4 GB of RAM.
-- Enable configuring ID mapping in user namespaces, see [File sharing](/manuals/desktop/troubleshoot-and-support/faqs/linuxfaqs.md#how-do-i-enable-file-sharing). Note that for Docker Desktop version 4.35 and later, this is not required anymore.
-- Recommended: [Initialize `pass`](/manuals/desktop/setup/sign-in.md#credentials-management-for-linux-users) for credentials management.
-
-Docker Desktop for Linux runs a Virtual Machine (VM). For more information on why, see [Why Docker Desktop for Linux runs a VM](/manuals/desktop/troubleshoot-and-support/faqs/linuxfaqs.md#why-does-docker-desktop-for-linux-run-a-vm).
+O Docker Desktop para Linux executa uma Máquina Virtual (VM).
+Para mais informações sobre o motivo, consulte
+[Por que o Docker Desktop para Linux executa uma VM](/manuals/desktop/troubleshoot-and-support/faqs/linuxfaqs.md#why-does-docker-desktop-for-linux-run-a-vm).
 
 > [!NOTE]
 >
-> Docker does not provide support for running Docker Desktop for Linux in nested virtualization scenarios. We recommend that you run Docker Desktop for Linux natively on supported distributions.
+> O Docker não oferece suporte à execução do Docker Desktop para Linux em
+> cenários de virtualização aninhada.
+> Recomendamos executar o Docker Desktop para Linux nativamente em distribuições
+> suportadas.
 
-### KVM virtualization support
+### Suporte à virtualização KVM
 
+O Docker Desktop executa uma VM que requer
+[suporte ao KVM](https://www.linux-kvm.org).
 
-Docker Desktop runs a VM that requires [KVM support](https://www.linux-kvm.org).
-
-The `kvm` module should load automatically if the host has virtualization support. To load the module manually, run:
+O módulo `kvm` deve ser carregado automaticamente se o host possuir suporte para
+virtualização.
+Para carregar o módulo manualmente, execute:
 
 ```console
 $ modprobe kvm
 ```
 
-Depending on the processor of the host machine, the corresponding module must be loaded:
+Dependendo do processador da máquina host, o módulo correspondente deve ser
+carregado:
 
 ```console
-$ modprobe kvm_intel  # Intel processors
+$ modprobe kvm_intel  # Processadores Intel
 
-$ modprobe kvm_amd    # AMD processors
+$ modprobe kvm_amd    # Processadores AMD
 ```
 
-If the above commands fail, you can view the diagnostics by running:
+Se os comandos acima falharem, você pode visualizar os diagnósticos executando:
 
 ```console
 $ kvm-ok
 ```
 
-To check if the KVM modules are enabled, run:
+Para verificar se os módulos KVM estão habilitados, execute:
 
 ```console
 $ lsmod | grep kvm
@@ -194,30 +255,37 @@ kvm                  1089536  1 kvm_amd
 irqbypass              16384  1 kvm
 ```
 
-#### Set up KVM device user permissions
+#### Configure permissões de usuário para o dispositivo KVM
 
-
-To check ownership of `/dev/kvm`, run :
+Para verificar a propriedade de `/dev/kvm`, execute:
 
 ```console
 $ ls -al /dev/kvm
 ```
 
-Add your user to the kvm group in order to access the kvm device:
+Adicione seu usuário ao grupo `kvm` para acessar o dispositivo kvm:
 
 ```console
 $ sudo usermod -aG kvm $USER
 ```
 
-Sign out and sign back in so that your group membership is re-evaluated.
+Faça logout e login novamente para que sua associação ao grupo seja reavaliada.
 
-## Where to go next
+## Usando SDKs do Docker com o Docker Desktop
 
-- Install Docker Desktop for Linux for your specific Linux distribution:
-   - [Install on Ubuntu](ubuntu.md)
-   - [Install on Debian](debian.md)
-   - [Install on Red Hat Enterprise Linux (RHEL)](rhel.md)
-   - [Install on Fedora](fedora.md)
-   - [Install on Arch](archlinux.md)
+O Docker Desktop para Linux usa um socket específico do usuário em vez do socket
+de todo o sistema `/var/run/docker.sock`.
+SDKs e ferramentas do Docker que se conectam diretamente ao daemon do Docker
+precisam que a variável de ambiente `DOCKER_HOST` esteja definida para se
+conectarem ao Docker Desktop.
+Para detalhes sobre a configuração, consulte
+[Como usar SDKs do Docker com o Docker Desktop para Linux?](/manuals/desktop/troubleshoot-and-support/faqs/linuxfaqs.md#how-do-i-use-docker-sdks-with-docker-desktop-for-linux).
 
+## Próximos passos
 
+- Instale o Docker Desktop para Linux na sua distribuição Linux específica:
+  - [Instale no Ubuntu](ubuntu.md)
+  - [Instale no Debian](debian.md)
+  - [Instale no Red Hat Enterprise Linux (RHEL)](rhel.md)
+  - [Instale no Fedora](fedora.md)
+  - [Instale no Arch](archlinux.md)
